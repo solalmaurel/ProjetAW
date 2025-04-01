@@ -1,19 +1,32 @@
 import React from 'react';
 
 const App: React.FC = () => {
-  return (
-    <div className="min-h-screen flex flex-col">
-      <header className="bg-blue-500 text-white p-4">
-        <h1 className="text-2xl">Welcome to My React App</h1>
-      </header>
-      <main className="flex-1 p-4">
-        <p className="text-gray-700">This is a simple TSX page to test your React installation with Tailwind CSS.</p>
-      </main>
-      <footer className="bg-gray-200 p-4 text-center">
-        <p>&copy; 2023 My React App. All rights reserved.</p>
-      </footer>
-    </div>
-  );
+    return (
+        <div className="min-h-screen flex flex-col">
+            <header className="bg-white text-white p-4 flex justify-between">
+                <h1 className="text-2xl text-[#2196F3] font-bold">Étudiants Connectés</h1>
+                <nav className="flex text-[#023047] items-center space-x-3">
+                    <a href={"/"}>Accueil</a>
+                    <a href={"/"}>Forum</a>
+                    <a href={"/"}>Activités</a>
+                    <a href={"/"}>Calendrier</a>
+                    <div className="flex items-center space-x-3">
+                        <a href={"/"}>Se connecter</a>
+                        <a href={"/"}>S'inscrire</a>
+                    </div>
+                </nav>
+            </header>
+            <main className="bg-[#F6F6F6] flex-1 p-4">
+                <p className="text-gray-700">Bienvenue sur Étudiants Connectés</p>
+                <p className="text-gray-700">La plateforme où les étudiants s’entraident et partagent leurs
+                    expériences</p>
+            </main>
+            <footer className="bg-[#171717] p-4 text-center">
+                <p className="text-white">Projet conçu et réalisé par Solal MAUREL, Daphné NAVRATIL, Alexandre PERROT et
+                    Pierre SAUSSEREAU</p>
+            </footer>
+        </div>
+    );
 };
 
 export default App;
