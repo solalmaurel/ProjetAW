@@ -1,4 +1,4 @@
-package com.entraide.entraide;
+package com.entraide.model;
 
 import java.sql.Date;
 import java.util.List;
@@ -24,7 +24,7 @@ public class User {
     private int anneeDiplome;
     private String typeEtude;
     private boolean isAdherent;
-    private DateTimeFormat dateCotisation;
+    private Date dateCotisation;
     private boolean notifOffre;
     private boolean notifEvenement;
 
@@ -55,7 +55,7 @@ public class User {
     }
 
     public User(Long idUser, String nom, String prenom, String email, String password, boolean isAdmin,
-            int anneeDiplome, String typeEtude, boolean isAdherent, DateTimeFormat dateCotisation, boolean notifOffre,
+            int anneeDiplome, String typeEtude, boolean isAdherent, Date dateCotisation, boolean notifOffre,
             boolean notifEvenement, List<Message> messages, List<Discussion> discussionsCrees,
             List<Evenement> evenements, List<Discussion> discussionsAbonnes, Etablissement etablissement) {
         this.idUser = idUser;
