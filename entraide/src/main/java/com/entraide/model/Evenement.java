@@ -34,11 +34,6 @@ public class Evenement {
         this.adresse = adresse;
     }
 
-    public void addUtilisateur(User user) {
-        this.utilisateurs = user;
-    }
-
-
     public Long getIdEvenement() {
         return idEvenement;
     }
@@ -51,19 +46,19 @@ public class Evenement {
         isOnline = online;
     }
 
-    public DateTimeFormat getDateDebut() {
+    public Date getDateDebut() {
         return dateDebut;
     }
 
-    public void setDateDebut(DateTimeFormat dateDebut) {
-        this.dateDebut = dateDebut;
+    public void setDateDebut(Date dateDebut) {
+        this.dateDebut =  dateDebut;
     }
 
-    public DateTimeFormat getDateFin() {
+    public Date getDateFin() {
         return dateFin;
     }
 
-    public void setDateFin(DateTimeFormat dateFin) {
+    public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
     }
 
@@ -105,5 +100,9 @@ public class Evenement {
 
     public List<User> getUtilisateurs() {
         return utilisateurs;
+    }
+
+    public void setUtilisateurs(List<User> utilisateurs) {
+        this.utilisateurs = utilisateurs;
     }
 }
