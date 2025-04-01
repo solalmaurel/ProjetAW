@@ -25,7 +25,7 @@ public class Etablissement {
     @OneToMany(mappedBy = "etablissement")
     private List<User> users;
 
-     @OneToOne
+    @OneToOne
     @JoinColumn(name = "idAdresse")
     private Adresse adresse;
 

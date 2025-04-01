@@ -145,11 +145,11 @@ public class User {
         this.isAdherent = isAdherent;
     }
 
-    public DateTimeFormat getDateCotisation() {
+    public Date getDateCotisation() {
         return dateCotisation;
     }
 
-    public void setDateCotisation(DateTimeFormat dateCotisation) {
+    public void setDateCotisation(Date dateCotisation) {
         this.dateCotisation = dateCotisation;
     }
 
