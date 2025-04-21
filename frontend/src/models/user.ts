@@ -15,7 +15,7 @@ export interface User {
 
 const SPRING_API = process.env.REACT_APP_SPRING_URL_ENDPOINT;
 
-const createUser = async (user: User) : Promise<string> => {
+const createUser = async (user: User) : Promise<any> => {
 
     const url = `${SPRING_API}/user/create`;
     const response = await fetch(url, {
