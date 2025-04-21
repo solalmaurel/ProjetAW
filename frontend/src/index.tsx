@@ -4,13 +4,24 @@ import './index.css';
 import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
 import TestPage from "./pages/TestPage";
+import {BrowserRouter, Route, Routes} from "react-router";
+import LoginPage from "./pages/authentication/login";
+import RegisterPage from "./pages/authentication/register";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
-    <TestPage />
+      <BrowserRouter>
+          <Routes>
+              <Route path="/" element={<App/>} />
+              <Route path="test" element={<TestPage/>} />
+              <Route path="login" element={<LoginPage/>} />
+              <Route path="register" element={<RegisterPage/>} />
+          </Routes>
+      </BrowserRouter>
   </React.StrictMode>
 );
 
