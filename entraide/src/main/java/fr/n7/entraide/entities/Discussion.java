@@ -1,26 +1,34 @@
-package com.entraide.model;
+package fr.n7.entraide.entities;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class Discussion {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long idDiscussion;
+    private LocalDate dateCreation;
+    private String sujet;
     private List<Message> messages = new ArrayList<>();
-    private final int idDiscussion;
-    private final Date dateCreation;
-    private final String sujet;
 
-    public Discussion(int idDiscussion, String sujet, Date dateCreation) {
+    public Discussion() {
+    }
+
+    public Discussion(long idDiscussion, String sujet, LocalDate dateCreation) {
         this.idDiscussion = idDiscussion;
         this.sujet = sujet;
         this.dateCreation = dateCreation;
     }
 
-    public int getIdDiscussion() {
+    public long getIdDiscussion() {
         return idDiscussion;
     }
 
@@ -28,7 +36,7 @@ public class Discussion {
         return sujet;
     }
 
-    public Date getDateCreation() {
+    public LocalDate getDateCreation() {
         return dateCreation;
     }
 
@@ -49,4 +57,5 @@ public class Discussion {
                 ", messages=" + messages +
                 '}';
     }
+
 }

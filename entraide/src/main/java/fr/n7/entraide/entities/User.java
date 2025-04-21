@@ -1,6 +1,8 @@
 package fr.n7.entraide.entities;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -9,7 +11,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUser;
+    private long idUser;
     private String nom;
     private String prenom;
     private String email;
@@ -18,15 +20,44 @@ public class User {
     private int anneeDiplome;
     private String typeEtude;
     private boolean isAdherent;
-    private Date dateCotisation;
+    private LocalDate dateCotisation;
     private boolean notifOffre;
     private boolean notifEvenement;
 
+    @OneToMany(mappedBy = "user")
+    private List<Message> messages;
+
+    @OneToMany(mappedBy = "user")
+    private List<Discussion> discussionsCrees;
+
+    @ManyToMany
+    @JoinTable(name = "participe", joinColumns = @JoinColumn(name = "idUser"), inverseJoinColumns = @JoinColumn(name = "idEvenement"))
+    private List<Evenement> evenements;
+
+    @ManyToMany
+    @JoinTable(name = "estAbonne", joinColumns = @JoinColumn(name = "idUser"), inverseJoinColumns = @JoinColumn(name = "idDiscussion"))
+    private List<Discussion> discussionsAbonnes;
+
+    @ManyToOne
+    @JoinColumn(name = "idEtablissement")
+    private Etablissement etablissement;
+
     public User() {}
 
+    public User(Long idUser) {
+        this.idUser = idUser;
+    }
+
     public User(String nom, String prenom, String email, String password, boolean isAdmin,
-            int anneeDiplome, String typeEtude, boolean isAdherent, Date dateCotisation, boolean notifOffre,
-            boolean notifEvenement) {
+                int anneeDiplome, String typeEtude, boolean isAdherent, LocalDate dateCotisation, boolean notifOffre,
+                boolean notifEvenement) {
+        this(0, nom, prenom, email, password, isAdmin, anneeDiplome, typeEtude, isAdherent, dateCotisation, notifOffre, notifEvenement);
+    }
+
+    public User(long idUser, String nom, String prenom, String email, String password, boolean isAdmin,
+                int anneeDiplome, String typeEtude, boolean isAdherent, LocalDate dateCotisation, boolean notifOffre,
+                boolean notifEvenement) {
+        this.idUser = idUser;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
@@ -40,8 +71,12 @@ public class User {
         this.notifEvenement = notifEvenement;
     }
 
-    public Long getIdUser() {
+    public long getIdUser() {
         return idUser;
+    }
+
+    public void setIdUser(long idUser) {
+        this.idUser = idUser;
     }
 
     public String getNom() {
@@ -108,11 +143,11 @@ public class User {
         this.isAdherent = isAdherent;
     }
 
-    public Date getDateCotisation() {
+    public LocalDate getDateCotisation() {
         return dateCotisation;
     }
 
-    public void setDateCotisation(Date dateCotisation) {
+    public void setDateCotisation(LocalDate dateCotisation) {
         this.dateCotisation = dateCotisation;
     }
 

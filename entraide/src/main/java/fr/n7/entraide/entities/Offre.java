@@ -1,4 +1,4 @@
-package com.entraide.model;
+package fr.n7.entraide.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +12,7 @@ public class Offre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idOffre;
+    private long idOffre;
     private String nom;
     private String lien;
     private String typeOffre;
@@ -20,11 +20,24 @@ public class Offre {
     private LocalDate dateDebut;
     private LocalDate dateFin;
 
-    public Long getIdOffre() {
+    public Offre() {
+    }
+
+    public Offre(long idOffre, String nom, String lien, String typeOffre, String description, LocalDate dateDebut, LocalDate dateFin) {
+        this.idOffre = idOffre;
+        this.nom = nom;
+        this.lien = lien;
+        this.typeOffre = typeOffre;
+        this.description = description;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+    }
+
+    public long getIdOffre() {
         return idOffre;
     }
 
-    public void setIdOffre(Long idOffre) {
+    public void setIdOffre(long idOffre) {
         this.idOffre = idOffre;
     }
 
@@ -75,4 +88,5 @@ public class Offre {
     public void setDateFin(LocalDate dateFin) {
         this.dateFin = dateFin;
     }
+
 }

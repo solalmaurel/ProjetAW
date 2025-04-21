@@ -1,4 +1,4 @@
-package com.entraide.model;
+package fr.n7.entraide.entities;
 
 import java.util.List;
 
@@ -7,15 +7,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
 public class Adresse {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idAdresse;
+    private long idAdresse;
     private String numero;
     private String complement;
     private String rue;
@@ -29,11 +29,11 @@ public class Adresse {
     @OneToMany(mappedBy = "adresse")
     private List<Evenement> evenements;
 
-    public Long getIdAdresse() {
+    public long getIdAdresse() {
         return idAdresse;
     }
 
-    public void setIdAdresse(Long idAdresse) {
+    public void setIdAdresse(long idAdresse) {
         this.idAdresse = idAdresse;
     }
 
@@ -92,10 +92,5 @@ public class Adresse {
     public void setEvenements(List<Evenement> evenements) {
         this.evenements = evenements;
     }
-
-
-
-
-
 
 }

@@ -1,4 +1,4 @@
-package com.entraide.model;
+package fr.n7.entraide.entities;
 
 import java.util.List;
 
@@ -12,34 +12,38 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Entreprise {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idEntreprise;
+    private long idEntreprise;
     private String nom;
-    
+
     @ManyToOne
     @JoinColumn(name = "idAdresse")
     private Adresse adresse;
-    
+
     @OneToMany(mappedBy = "entreprise")
     private List<Offre> offres;
 
-    public Entreprise(Long idEntreprise) {
+    public Entreprise() {
+    }
+
+    public Entreprise(long idEntreprise) {
         this.idEntreprise = idEntreprise;
     }
 
-    public Entreprise(Long idEntreprise, String nom, Adresse adresse, List<Offre> offres) {
+    public Entreprise(long idEntreprise, String nom, Adresse adresse, List<Offre> offres) {
         this.idEntreprise = idEntreprise;
         this.nom = nom;
         this.adresse = adresse;
         this.offres = offres;
     }
 
-    public Long getIdEntreprise() {
+    public long getIdEntreprise() {
         return idEntreprise;
     }
 
-    public void setIdEntreprise(Long idEntreprise) {
+    public void setIdEntreprise(long idEntreprise) {
         this.idEntreprise = idEntreprise;
     }
 
@@ -66,4 +70,5 @@ public class Entreprise {
     public void setOffres(List<Offre> offres) {
         this.offres = offres;
     }
+
 }

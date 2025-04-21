@@ -1,19 +1,19 @@
-package com.entraide.model;
+package fr.n7.entraide.entities;
 
 import jakarta.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 public class Evenement {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final Long idEvenement;
+    private long idEvenement;
     private boolean isOnline;
-    private Date dateDebut;
-    private Date dateFin;
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
     private Theme theme;
     private float prixNormal;
     private float prixAdherent;
@@ -25,8 +25,10 @@ public class Evenement {
     @ManyToMany
     List<User> utilisateurs;
 
-    public Evenement(Long idEvenement) {
+    public Evenement() {
+    }
 
+    public Evenement(long idEvenement) {
         this.idEvenement = idEvenement;
     }
 
@@ -34,7 +36,7 @@ public class Evenement {
         this.adresse = adresse;
     }
 
-    public Long getIdEvenement() {
+    public long getIdEvenement() {
         return idEvenement;
     }
 
@@ -46,19 +48,19 @@ public class Evenement {
         isOnline = online;
     }
 
-    public Date getDateDebut() {
+    public LocalDate getDateDebut() {
         return dateDebut;
     }
 
-    public void setDateDebut(Date dateDebut) {
-        this.dateDebut =  dateDebut;
+    public void setDateDebut(LocalDate dateDebut) {
+        this.dateDebut = dateDebut;
     }
 
-    public Date getDateFin() {
+    public LocalDate getDateFin() {
         return dateFin;
     }
 
-    public void setDateFin(Date dateFin) {
+    public void setDateFin(LocalDate dateFin) {
         this.dateFin = dateFin;
     }
 
@@ -105,4 +107,5 @@ public class Evenement {
     public void setUtilisateurs(List<User> utilisateurs) {
         this.utilisateurs = utilisateurs;
     }
+
 }
