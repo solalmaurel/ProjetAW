@@ -1,4 +1,4 @@
-package com.entraide.entraide;
+package fr.n7.entraide;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

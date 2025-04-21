@@ -1,4 +1,4 @@
-package com.entraide.entraide;
+package fr.n7.entraide;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
