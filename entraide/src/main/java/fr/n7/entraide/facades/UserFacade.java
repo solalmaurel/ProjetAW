@@ -25,7 +25,7 @@ public class UserFacade {
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable("id") Long id) {
+    public User getUser(@PathVariable("id") long id) {
         Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isEmpty()) throw new RuntimeException("User not found");
         return optionalUser.get();
