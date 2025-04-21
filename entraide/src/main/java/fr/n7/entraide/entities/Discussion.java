@@ -4,10 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Discussion {
@@ -17,6 +14,8 @@ public class Discussion {
     private long idDiscussion;
     private LocalDate dateCreation;
     private String sujet;
+
+    @OneToMany(mappedBy = "discussion")
     private List<Message> messages = new ArrayList<>();
 
     public Discussion() {

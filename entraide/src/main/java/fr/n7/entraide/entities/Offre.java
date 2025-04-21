@@ -1,9 +1,6 @@
 package fr.n7.entraide.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -19,6 +16,9 @@ public class Offre {
     private String description;
     private LocalDate dateDebut;
     private LocalDate dateFin;
+
+    @ManyToOne
+    Entreprise entreprise;
 
     public Offre() {
     }

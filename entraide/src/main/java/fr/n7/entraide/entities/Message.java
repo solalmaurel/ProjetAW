@@ -13,32 +13,43 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idMessage;
     private LocalDate date;
-    private List<String> message = new ArrayList<>();
+    private String message;
+
+    @ManyToOne
+    @JoinColumn(name="idDiscussion")
+    private Discussion discussion;
 
     public Message() {
     }
 
-    public Message(int idMessage, List<String> message, LocalDate date) {
+    public Message(long idMessage, LocalDate date, String message) {
         this.idMessage = idMessage;
-        this.message = message;
         this.date = date;
+        this.message = message;
     }
 
-    public long getId() {
+    public long getIdMessage() {
         return idMessage;
     }
 
-    public List<String> getMessage() {
-        return message;
+    public void setIdMessage(long idMessage) {
+        this.idMessage = idMessage;
     }
 
     public LocalDate getDate() {
         return date;
     }
 
-    @Override
-    public String toString() {
-        return "(" + date + ") : " + String.join(" ", message);
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
 }

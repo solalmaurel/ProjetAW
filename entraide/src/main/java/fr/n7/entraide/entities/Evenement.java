@@ -19,7 +19,7 @@ public class Evenement {
     private float prixAdherent;
     private String description;
 
-    @OneToMany
+    @ManyToOne
     Adresse adresse;
 
     @ManyToMany
@@ -32,12 +32,26 @@ public class Evenement {
         this.idEvenement = idEvenement;
     }
 
-    public void setAdresse(Adresse adresse) {
+    public Evenement(long idEvenement, boolean isOnline, LocalDate dateDebut, LocalDate dateFin, Theme theme,
+                     float prixNormal, float prixAdherent, String description, Adresse adresse, List<User> utilisateurs) {
+        this.idEvenement = idEvenement;
+        this.isOnline = isOnline;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.theme = theme;
+        this.prixNormal = prixNormal;
+        this.prixAdherent = prixAdherent;
+        this.description = description;
         this.adresse = adresse;
+        this.utilisateurs = utilisateurs;
     }
 
     public long getIdEvenement() {
         return idEvenement;
+    }
+
+    public void setIdEvenement(long idEvenement) {
+        this.idEvenement = idEvenement;
     }
 
     public boolean isOnline() {
@@ -98,6 +112,10 @@ public class Evenement {
 
     public Adresse getAdresse() {
         return adresse;
+    }
+
+    public void setAdresse(Adresse adresse) {
+        this.adresse = adresse;
     }
 
     public List<User> getUtilisateurs() {

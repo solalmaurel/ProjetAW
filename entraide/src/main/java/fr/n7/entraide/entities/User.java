@@ -24,10 +24,12 @@ public class User {
     private boolean notifOffre;
     private boolean notifEvenement;
 
-    @OneToMany(mappedBy = "user")
+    @ManyToMany
+    @JoinTable(name = "aEcrit", joinColumns = @JoinColumn(name = "idUser"), inverseJoinColumns = @JoinColumn(name = "idMessage"))
     private List<Message> messages;
 
-    @OneToMany(mappedBy = "user")
+    @ManyToMany
+    @JoinTable(name = "aCree", joinColumns = @JoinColumn(name = "idUser"), inverseJoinColumns = @JoinColumn(name = "idDiscussion"))
     private List<Discussion> discussionsCrees;
 
     @ManyToMany
