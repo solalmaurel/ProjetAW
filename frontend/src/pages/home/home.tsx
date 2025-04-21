@@ -1,6 +1,6 @@
 import React from 'react';
 
-const App: React.FC = () => {
+const HomePage: React.FC = () => {
     return (
         <div className="min-h-screen flex flex-col">
             <header className="bg-white text-white p-4 flex justify-between">
@@ -11,8 +11,8 @@ const App: React.FC = () => {
                     <a href={"/"}>Activités</a>
                     <a href={"/"}>Calendrier</a>
                     <div className="flex items-center space-x-3">
-                        <a href={"/"}>Se connecter</a>
-                        <a href={"/"}>S'inscrire</a>
+                        <a href={"/login"}>Se connecter</a>
+                        <a href={"/register"}>S'inscrire</a>
                     </div>
                 </nav>
             </header>
@@ -29,4 +29,4 @@ const App: React.FC = () => {
     );
 };
 
-export default App;
+export default HomePage;
