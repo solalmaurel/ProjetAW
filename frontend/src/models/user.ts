@@ -13,7 +13,7 @@ export interface User {
     notifEvenement: boolean;
 }
 
-const SPRING_API = process.env.SPRING_URL_ENDPOINT;
+const SPRING_API = process.env.REACT_APP_SPRING_URL_ENDPOINT;
 
 const createUser = async (user: User) : Promise<string> => {
 

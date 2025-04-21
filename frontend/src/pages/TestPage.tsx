@@ -9,7 +9,7 @@ export default function TestPage() {
             <br/>
             <button onClick={createUserListener}>Create user in Spring</button>
             <br/>
-            <button onClick={getUserListener}>Get user 22</button>
+            <button onClick={getUserListener}>Get user 1</button>
         </div>
     )
 
@@ -39,7 +39,7 @@ function createUserListener() {
 
 function getUserListener() {
 
-    const promise = findUserById(22); // on get l'user avec l'id 22, envoi de la requete
+    const promise = findUserById(1); // on get l'user avec l'id 1, envoi de la requete
     promise.then(data => console.log(data)).catch(err => console.error(err)); // afficher l'user 22 s'il existe
 
 }
