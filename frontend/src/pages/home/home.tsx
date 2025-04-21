@@ -10,6 +10,7 @@ const HomePage: React.FC = () => {
                     <a href={"/"}>Forum</a>
                     <a href={"/"}>Activités</a>
                     <a href={"/"}>Calendrier</a>
+                    <a href={"/offers"}>Offres</a>
                     <div className="flex items-center space-x-3">
                         <a href={"/login"}>Se connecter</a>
                         <a href={"/register"}>S'inscrire</a>
