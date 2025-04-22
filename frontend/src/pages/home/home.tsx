@@ -4,7 +4,7 @@ const HomePage: React.FC = () => {
     return (
         <div className="min-h-screen flex flex-col">
             <header className="bg-white text-white p-4 flex justify-between">
-                <h1 className="text-2xl text-[#2196F3] font-bold">Étudiants Connectés</h1>
+                <h1 className="text-2xl text-[#2196F3] font-bold">Entraide Étudiante</h1>
                 <nav className="flex text-[#023047] items-center space-x-3">
                     <a href={"/"}>Accueil</a>
                     <a href={"/"}>Forum</a>
@@ -18,7 +18,7 @@ const HomePage: React.FC = () => {
                 </nav>
             </header>
             <main className="bg-[#F6F6F6] flex-1 p-4">
-                <p className="text-gray-700">Bienvenue sur Étudiants Connectés</p>
+                <p className="text-gray-700">Bienvenue sur Entraide Étudiante</p>
                 <p className="text-gray-700">La plateforme où les étudiants s’entraident et partagent leurs
                     expériences</p>
             </main>
