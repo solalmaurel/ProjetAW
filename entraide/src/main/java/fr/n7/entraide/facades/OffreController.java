@@ -35,4 +35,14 @@ public class OffreController {
         offreRepository.save(offre);
         return ResponseHandler.generateResponse("Offer created successfully", HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getOffreById(@PathVariable("id") Long id) {
+        Optional<Offre> optionalOffre = offreRepository.findById(id);
+        if (optionalOffre.isPresent()) {
+            return ResponseHandler.generateResponse("Offer found successfully", HttpStatus.OK);
+        } else {
+            return ResponseHandler.generateResponse("Offer not found", HttpStatus.NOT_FOUND);
+        }
+    }
 }

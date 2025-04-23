@@ -1,15 +1,12 @@
 package fr.n7.entraide.entities;
 
-<<<<<<< HEAD:entraide/src/main/java/com/entraide/model/Offre.java
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-=======
 import jakarta.persistence.*;
->>>>>>> 28f74639c1043981111df9e5bde99f70a6fa0287:entraide/src/main/java/fr/n7/entraide/entities/Offre.java
 
 import java.time.LocalDate;
 
@@ -18,12 +15,8 @@ public class Offre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<<<<<<< HEAD:entraide/src/main/java/com/entraide/model/Offre.java
-    private Long idOffre;
-    
-=======
+
     private long idOffre;
->>>>>>> 28f74639c1043981111df9e5bde99f70a6fa0287:entraide/src/main/java/fr/n7/entraide/entities/Offre.java
     private String nom;
     private String lien;
 
@@ -40,7 +33,7 @@ public class Offre {
     public Offre() {
     }
 
-    public Offre(long idOffre, String nom, String lien, String typeOffre, String description, LocalDate dateDebut, LocalDate dateFin) {
+    public Offre(long idOffre, String nom, String lien, TypeOffre typeOffre, String description, LocalDate dateDebut, LocalDate dateFin) {
         this.idOffre = idOffre;
         this.nom = nom;
         this.lien = lien;
