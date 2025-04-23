@@ -33,7 +33,7 @@ function NavBar({user}: { user: User }) {
     return (
         <nav className="border-r-1 border-r min-w-72 p-3 flex flex-col space-y-8">
             <span className="flex justify-center">
-                <h1 className="text-2xl text-[#2196F3] font-bold">Entraide Étudiante</h1>
+                <a href="/" className="text-2xl text-[#2196F3] font-bold">Entraide Étudiante</a>
             </span>
             <div className="flex flex-col space-y-4">
                 <span className="flex flex-row items-center space-x-3 bg-gray-200 p-2 rounded-lg">
