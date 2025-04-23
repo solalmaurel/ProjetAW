@@ -8,12 +8,12 @@
 		<version>3.4.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.entraide</groupId>
+	<groupId>fr.n7</groupId>
 	<artifactId>entraide</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>war</packaging>
 	<name>entraide</name>
-	<description>Demo project for Spring Boot</description>
+	<description>A N7 project to help students</description>
 	<url/>
 	<licenses>
 		<license/>
