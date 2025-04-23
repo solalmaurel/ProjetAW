@@ -11,6 +11,7 @@ import OfferPage from "./pages/offers/offers";
 import ProfilePage from "./pages/profile/profile";
 import ForumPage from "./pages/forum/forum";
 import EventPage from "./pages/events/events";
+import Discussion from "./pages/forum/discussion";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -26,7 +27,10 @@ root.render(
               <Route path="register" element={<RegisterPage/>} />
               <Route path="offers" element={<OfferPage/>} />
               <Route path="profile" element={<ProfilePage/>} />
-              <Route path="forum" element={<ForumPage/>} />
+              <Route path="forum">
+                  <Route index element={<ForumPage />}/>
+                  <Route path="discussion" element={<Discussion/>}/>
+              </Route>
               <Route path="events" element={<EventPage/>} />
           </Routes>
       </BrowserRouter>
