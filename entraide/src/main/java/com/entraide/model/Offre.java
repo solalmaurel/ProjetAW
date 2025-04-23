@@ -1,6 +1,8 @@
 package com.entraide.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,9 +15,13 @@ public class Offre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOffre;
+    
     private String nom;
     private String lien;
-    private String typeOffre;
+
+    @Enumerated(EnumType.STRING)
+    private TypeOffre typeOffre;
+
     private String description;
     private LocalDate dateDebut;
     private LocalDate dateFin;
@@ -44,11 +50,11 @@ public class Offre {
         this.lien = lien;
     }
 
-    public String getTypeOffre() {
+    public TypeOffre getTypeOffre() {
         return typeOffre;
     }
 
-    public void setTypeOffre(String typeOffre) {
+    public void setTypeOffre(TypeOffre typeOffre) {
         this.typeOffre = typeOffre;
     }
 
