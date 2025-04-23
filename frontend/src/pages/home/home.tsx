@@ -7,9 +7,8 @@ const HomePage: React.FC = () => {
                 <h1 className="text-2xl text-[#2196F3] font-bold">Entraide Étudiante</h1>
                 <nav className="flex text-[#023047] items-center space-x-3">
                     <a href={"/"}>Accueil</a>
-                    <a href={"/"}>Forum</a>
-                    <a href={"/"}>Activités</a>
-                    <a href={"/"}>Calendrier</a>
+                    <a href={"/forum"}>Forum</a>
+                    <a href={"/events"}>Évenements</a>
                     <a href={"/offers"}>Offres</a>
                     <div className="flex items-center space-x-3">
                         <a href={"/login"}>Se connecter</a>
