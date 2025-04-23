@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.n7.entraide.entities.Offre;
-import fr.n7.entraide.entities.User;
 import fr.n7.entraide.repositories.OffreRepository;
 import fr.n7.entraide.utils.ResponseHandler;
 

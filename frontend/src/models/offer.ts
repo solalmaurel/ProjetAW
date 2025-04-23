@@ -6,7 +6,7 @@ export interface Offer {
     description: string;
     dateDebut: Date;
     dateFin: Date;
-    entreprise: string| undefined; // ??? 
+    //entreprise: string| undefined; // ??? 
 }
 
 const SPRING_API = process.env.REACT_APP_SPRING_URL_ENDPOINT;

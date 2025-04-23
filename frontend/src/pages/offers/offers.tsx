@@ -1,5 +1,5 @@
 import React, {JSX, useState} from 'react';
-import {Offer} from '../../models/offer';
+import {createOffer, Offer} from '../../models/offer';
 import Footer from "../../layout/footer";
 import NavBar from "../../layout/navbar";
 
@@ -17,7 +17,7 @@ export default function OfferPage(): JSX.Element {
         description: '',
         dateDebut: new Date(),
         dateFin: new Date(),
-        entreprise: ''
+        //entreprise: ''
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -36,22 +36,27 @@ export default function OfferPage(): JSX.Element {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setOffers([...offers, newOffer]);
-        setShowForm(false);
-        setNewOffer({
-            idOffre: Date.now(), // Utiliser un identifiant unique basé sur le timestamp
-            nom: '',
-            lien: '',
-            typeOffre: typeOffreValues[0], // Valeur par défaut
-            description: '',
-            dateDebut: new Date(),
-            dateFin: new Date(),
-            entreprise: ''
-
-        });
+        try {
+            await createOffer(newOffer);
+            setOffers([...offers, newOffer]);
+            setShowForm(false);
+            setNewOffer({
+                idOffre: Date.now(), // Utiliser un identifiant unique basé sur le timestamp
+                nom: '',
+                lien: '',
+                typeOffre: typeOffreValues[0], // Valeur par défaut
+                description: '',
+                dateDebut: new Date(),
+                dateFin: new Date(),
+                //entreprise: '',
+            });
+        } catch (err) {
+            console.error("Error submitting offer:", err); 
+        }
     };
+    
 
     return (
         <div className="flex flex-col min-h-screen">
