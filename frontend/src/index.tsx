@@ -12,6 +12,7 @@ import ProfilePage from "./pages/profile/profile";
 import ForumPage from "./pages/forum/forum";
 import EventPage from "./pages/events/events";
 import Discussion from "./pages/forum/discussion";
+import CreateForm from './pages/forum/create-post';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -30,6 +31,7 @@ root.render(
               <Route path="forum">
                   <Route index element={<ForumPage />}/>
                   <Route path="discussion" element={<Discussion/>}/>
+                  <Route path="create" element={<CreateForm/>}/>
               </Route>
               <Route path="events" element={<EventPage/>} />
           </Routes>

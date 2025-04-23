@@ -17,7 +17,7 @@ export default function MessageBox({message}: {message: Message}) : JSX.Element 
             <p>{message.message}</p>
             <span className="flex flex-row items-center justify-between">
                 <p className="text-gray-500">Postée le {message.date.toLocaleDateString()}</p>
-                <button className="bg-green-300 w-fit p-3 py-2 rounded-lg font-semibold hover:bg-green-400">Répondre</button>
+                <a href="#reply" className="bg-green-300 w-fit p-3 py-2 rounded-lg font-semibold hover:bg-green-400">Répondre</a>
             </span>
         </div>
     );

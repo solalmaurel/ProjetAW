@@ -11,7 +11,7 @@ export default function ForumPage(): JSX.Element {
             <div className="p-5 flex flex-col flex-grow space-y-3">
                 <span className="flex flex-row space-x-6">
                     <input className="border border-1 rounded-lg p-3 w-full" type="text" placeholder="Rechercher une discussion" />
-                    <button className="text-nowrap p-3 rounded-lg bg-blue-500 hover:bg-blue-800 text-white">Créer un nouveau post</button>
+                    <a href="/forum/create" className="text-nowrap p-3 rounded-lg bg-blue-500 hover:bg-blue-800 text-white">Créer un nouveau post</a>
                 </span>
                 <DiscussionPreview />
                 <DiscussionPreview />
