@@ -1,44 +1,157 @@
-import {JSX} from "react";
-import {Offer} from "../../models/offer";
+import React, { JSX, useState } from 'react';
+import { Offer } from '../../models/offer';
+
+// Définir les valeurs possibles pour typeOffre
+const typeOffreValues = ['REDUCTION', 'EVENEMENT'];
 
 export default function OfferPage(): JSX.Element {
     const [offers, setOffers] = useState<Offer[]>([]);
-    //const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const [showForm, setShowForm] = useState<boolean>(false);
+    const [newOffer, setNewOffer] = useState<Offer>({
+        idOffre: Date.now(), // Utiliser un identifiant unique basé sur le timestamp
+        nom: '',
+        lien: '',
+        typeOffre: typeOffreValues[0], // Valeur par défaut
+        description: '',
+        dateDebut: new Date(),
+        dateFin: new Date(),
+        entreprise: ''
+    });
 
-    useEffect(() => {
-        const fetchOffers = async () => {
-            try {
-                const response = await axios.get('/offre');
-                setOffers(response.data);
-                //setLoading(false);
-            } catch (err) {
-                setError('Erreur lors de la récupération des offres');
-                //setLoading(false);
-            }
-        };
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setNewOffer({
+            ...newOffer,
+            [name]: value,
+        });
+    };
 
-        fetchOffers();
-    }, []);
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'dateDebut' | 'dateFin') => {
+        const value = new Date(e.target.value);
+        setNewOffer({
+            ...newOffer,
+            [field]: value,
+        });
+    };
 
-    //if (loading) {
-    //    return <div>Chargement...</div>;
-    //}
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setOffers([...offers, newOffer]);
+        setShowForm(false);
+        setNewOffer({
+            idOffre: Date.now(), // Utiliser un identifiant unique basé sur le timestamp
+            nom: '',
+            lien: '',
+            typeOffre: typeOffreValues[0], // Valeur par défaut
+            description: '',
+            dateDebut: new Date(),
+            dateFin: new Date(),
+            entreprise: ''
 
-    if (error) {
-        return <div>{error}</div>;
-    }
+        });
+    };
 
     return (
         <div className="p-5 w-dvw">
-            <h1 className="font-semibold text-3xl">Offres disponible</h1>
+            <h1 className="font-semibold text-3xl">Offres disponibles</h1>
             <div className="flex flex-col space-y-8 w-full justify-center items-center mt-10">
                 <span className="flex flex-row space-x-6 w-5/6">
                     <input className="border border-1 rounded-lg p-5 w-full" type="text" placeholder="Rechercher une offre"/>
-                    <button className="w-52 rounded-xl bg-blue-600 text-white">Créer une offre</button>
+                    <button className="w-52 rounded-xl bg-blue-600 text-white" onClick={() => setShowForm(true)}>
+                        Créer une offre
+                    </button>
                 </span>
+                {showForm && (
+                    <form className="w-5/6 p-5 border border-1 rounded-lg" onSubmit={handleSubmit}>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2">Nom de l'offre</label>
+                            <input
+                                type="text"
+                                name="nom"
+                                value={newOffer.nom}
+                                onChange={handleInputChange}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2">Lien de l'offre</label>
+                            <input
+                                type="text"
+                                name="lien"
+                                value={newOffer.lien}
+                                onChange={handleInputChange}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2">Type d'offre</label>
+                            <select
+                                name="typeOffre"
+                                value={newOffer.typeOffre}
+                                onChange={handleInputChange}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            >
+                                {typeOffreValues.map((value) => (
+                                    <option key={value} value={value}>
+                                        {value === 'REDUCTION' ? 'Réduction' : 'Événement'}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2">Description</label>
+                            <textarea
+                                name="description"
+                                value={newOffer.description}
+                                onChange={handleInputChange}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2">Date de début</label>
+                            <input
+                                type="date"
+                                name="dateDebut"
+                                value={newOffer.dateDebut.toISOString().split('T')[0]}
+                                onChange={(e) => handleDateChange(e, 'dateDebut')}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2">Date de fin</label>
+                            <input
+                                type="date"
+                                name="dateFin"
+                                value={newOffer.dateFin.toISOString().split('T')[0]}
+                                onChange={(e) => handleDateChange(e, 'dateFin')}
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            />
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <button
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="submit"
+                            >
+                                Créer
+                            </button>
+                            <button
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="button"
+                                onClick={() => setShowForm(false)}
+                            >
+                                Annuler
+                            </button>
+                        </div>
+                    </form>
+                )}
                 <span className="flex flex-row justify-between items-center w-5/6">
-                    <h3 className="font-semibold text-2xl">3 offres</h3>
+                    <h3 className="font-semibold text-2xl">{offers.length} offres</h3>
                     <h3 className="text-lg">Tri par le plus récent</h3>
                 </span>
                 {offers.map((offer) => (
@@ -49,7 +162,7 @@ export default function OfferPage(): JSX.Element {
     );
 }
 
-function OfferCard({offer} : {offer : Offer}) {
+function OfferCard({ offer }: { offer: Offer }) {
     return (
         <a href={offer.lien} className="flex flex-row border border-1 rounded-lg w-5/6 min-h-48 hover:border-black">
             <div className="w-1/6 rounded-l-lg bg-amber-300" />
