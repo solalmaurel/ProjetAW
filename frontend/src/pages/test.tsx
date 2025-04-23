@@ -40,6 +40,6 @@ function createUserListener() {
 function getUserListener() {
 
     const promise = findUserById(1); // on get l'user avec l'id 1, envoi de la requete
-    promise.then(data => console.log(data)).catch(err => console.error(err)); // afficher l'user 22 s'il existe
+    promise.then(data => console.log(data)).catch(err => console.error(err)); // afficher l'user 1 s'il existe
 
 }

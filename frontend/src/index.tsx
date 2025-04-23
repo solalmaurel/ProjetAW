@@ -6,7 +6,11 @@ import {BrowserRouter, Route, Routes} from "react-router";
 import LoginPage from "./pages/authentication/login";
 import RegisterPage from "./pages/authentication/register";
 import HomePage from "./pages/home/home";
-import TestPage from "./pages/TestPage";
+import TestPage from "./pages/test";
+import OfferPage from "./pages/offers/offers";
+import ProfilePage from "./pages/profile/profile";
+import ForumPage from "./pages/forum/forum";
+import EventPage from "./pages/events/events";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -20,6 +24,10 @@ root.render(
               <Route path="test" element={<TestPage/>} />
               <Route path="login" element={<LoginPage/>} />
               <Route path="register" element={<RegisterPage/>} />
+              <Route path="offers" element={<OfferPage/>} />
+              <Route path="profile" element={<ProfilePage/>} />
+              <Route path="forum" element={<ForumPage/>} />
+              <Route path="events" element={<EventPage/>} />
           </Routes>
       </BrowserRouter>
   </React.StrictMode>
