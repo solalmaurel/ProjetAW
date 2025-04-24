@@ -1,9 +1,9 @@
-import React, { useState, useEffect, JSX } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createOffer, getAllOffers, Offer } from '../../models/offer';
 import Footer from "../../layout/footer";
 import NavBar from "../../layout/navbar";
+import { JSX } from 'react/jsx-runtime';
 
-// Définir les valeurs possibles pour typeOffre
 const typeOffreValues = ['REDUCTION', 'EVENEMENT'];
 
 export default function OfferPage(): JSX.Element {
@@ -11,6 +11,7 @@ export default function OfferPage(): JSX.Element {
     const [filteredOffers, setFilteredOffers] = useState<Offer[]>([]);
     const [showForm, setShowForm] = useState<boolean>(false);
     const [inputText, setInputText] = useState("");
+    const [selectedType, setSelectedType] = useState<string | null>(null); 
     const [newOffer, setNewOffer] = useState<Offer>({
         idOffre: null,
         nom: '',
@@ -19,7 +20,6 @@ export default function OfferPage(): JSX.Element {
         description: '',
         dateDebut: new Date(),
         dateFin: new Date(),
-        //entreprise: '',
     });
 
     // Pour la création d'offres
@@ -75,17 +75,24 @@ export default function OfferPage(): JSX.Element {
     }, []);
 
     useEffect(() => {
-        if (inputText === '') {
-            setFilteredOffers(offers); 
-        } else {
-            const filtered = offers.filter((offer) =>
+        let filtered = offers;
+
+        // Pour filtrer par type d'offre
+        if (selectedType) {
+            filtered = filtered.filter((offer) => offer.typeOffre === selectedType);
+        }
+
+        // Pour filtrer selon le texte recherché
+        if (inputText) {
+            filtered = filtered.filter((offer) =>
                 offer.nom.toLowerCase().includes(inputText.toLowerCase()) ||
                 offer.description.toLowerCase().includes(inputText.toLowerCase())
             );
-            setFilteredOffers(filtered); 
         }
-    }, [inputText, offers]); 
-    
+
+        setFilteredOffers(filtered); 
+    }, [inputText, selectedType, offers]); 
+
     return (
         <div className="flex flex-col min-h-screen">
             <NavBar />
@@ -98,8 +105,20 @@ export default function OfferPage(): JSX.Element {
                             type="text"
                             placeholder="Rechercher une offre"
                             value={inputText}
-                            onChange={(e) => setInputText(e.target.value)} // Mettre à jour l'état de l'input
+                            onChange={(e) => setInputText(e.target.value)} 
                         />
+                        <select
+                            className="border border-1 rounded-lg p-5 w-30"
+                            value={selectedType || ''}
+                            onChange={(e) => setSelectedType(e.target.value)} 
+                        >
+                            <option value="">Tous les types</option>
+                            {typeOffreValues.map((value) => (
+                                <option key={value} value={value}>
+                                    {value === 'REDUCTION' ? 'Réduction' : 'Événement'}
+                                </option>
+                            ))}
+                        </select>
                         <button
                             className="w-52 rounded-xl bg-blue-600 text-white"
                             onClick={() => setShowForm(true)}
