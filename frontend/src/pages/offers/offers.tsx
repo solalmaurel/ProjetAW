@@ -120,7 +120,7 @@ export default function OfferPage(): JSX.Element {
                             ))}
                         </select>
                         <button
-                            className="w-52 rounded-xl bg-blue-600 text-white"
+                            className="w-52 rounded-xl bg-blue-500 hover:bg-blue-800 text-white"
                             onClick={() => setShowForm(true)}
                         >
                             Créer une offre
