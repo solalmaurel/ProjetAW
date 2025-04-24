@@ -245,9 +245,14 @@ function OfferCard({ offer }: { offer: Offer }) {
                 </div>
                 <div className="flex flex-row justify-between items-center">
                     <p className="text-[#7f7f7f]">Postée le {new Date(offer.dateDebut).toLocaleDateString()}</p>
-                    <button className="border border-1 border-black rounded-full px-3 py-1.5 hover:bg-black hover:text-white">
+                    <a
+                        href={offer.lien}
+                        className="border border-1 border-black rounded-full px-3 py-1.5 hover:bg-black hover:text-white text-center"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         Voir l'offre
-                    </button>
+                    </a>
                 </div>
             </div>
         </a>
