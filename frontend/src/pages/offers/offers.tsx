@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createOffer, getAllOffers, Offer } from '../../models/offer';
+import { createOffer, deleteOffer, getAllOffers, Offer } from '../../models/offer';
 import Footer from "../../layout/footer";
 import NavBar from "../../layout/navbar";
 import { JSX } from 'react/jsx-runtime';
@@ -91,7 +91,17 @@ export default function OfferPage(): JSX.Element {
         }
 
         setFilteredOffers(filtered); 
-    }, [inputText, selectedType, offers]); 
+    }, [inputText, selectedType, offers]);
+
+    // Supprimer des offres
+    const handleDeleteOffer = async (id: number) => {
+        try {
+            await deleteOffer(id);
+            setOffers(prev => prev.filter(offer => offer.idOffre !== id));
+        } catch (err) {
+            console.error("Erreur lors de la suppression :", err);
+        }
+    };
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -220,7 +230,7 @@ export default function OfferPage(): JSX.Element {
                         <h3 className="text-lg">Tri par le plus récent</h3>
                     </span>
                     {filteredOffers.map((offer) => (
-                        <OfferCard key={offer.idOffre} offer={offer} />
+                        <OfferCard key={offer.idOffre} offer={offer} onDelete={handleDeleteOffer} />
                     ))}
                 </div>
             </div>
@@ -229,8 +239,8 @@ export default function OfferPage(): JSX.Element {
     );
 }
 
-function OfferCard({ offer }: { offer: Offer }) {
-        return (
+function OfferCard({ offer, onDelete }: { offer: Offer; onDelete: (id: number) => void }) {    
+    return (
             <a href={offer.lien} className="flex flex-row border border-1 rounded-lg w-5/6 min-h-48 hover:border-black">
                 <div className="w-1/6 rounded-l-lg bg-amber-300" />
                 <div className="flex flex-col justify-between p-5 w-full">
@@ -244,7 +254,11 @@ function OfferCard({ offer }: { offer: Offer }) {
                             <span className="bg-[#f6f6f6] px-2 rounded-sm">{new Date(offer.dateDebut).toLocaleDateString()}</span>
                             <span className="bg-[#f6f6f6] px-2 rounded-sm">{new Date(offer.dateFin).toLocaleDateString()}</span>
                         </div>
-                        <button className="bg-red-500 text-white border border-black rounded-full px-3 py-1.5 hover:bg-black hover:text-red">
+                        <button className="bg-red-500 text-white border border-black rounded-full px-3 py-1.5 hover:bg-black hover:text-red"
+                            onClick={(e) => {
+                                e.preventDefault(); // pour éviter le rediriger vers offer.lien
+                                onDelete(offer.idOffre!);
+                            }}>
                             Supprimer
                         </button>
                     </div>
@@ -262,5 +276,5 @@ function OfferCard({ offer }: { offer: Offer }) {
                     </div>
                 </div>
             </a>
-        );
-    }
+    );
+}

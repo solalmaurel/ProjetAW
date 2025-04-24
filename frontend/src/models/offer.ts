@@ -54,4 +54,21 @@ const getOfferById = async (id: number): Promise<Offer> => {
     return await response.json();
 };
 
+export const deleteOffer = async (id: number): Promise<void> => {
+    const url = `${SPRING_API}/offre/${id}`;
+    const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        cache: "no-store",
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`Erreur lors de la suppression (code ${response.status}): ${errorData.message || 'inconnue'}`);
+    }
+};
+
 export { createOffer, getAllOffers, getOfferById };
