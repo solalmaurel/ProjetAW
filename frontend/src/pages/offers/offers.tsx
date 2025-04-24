@@ -1,5 +1,5 @@
-import React, {JSX, useState} from 'react';
-import {createOffer, Offer} from '../../models/offer';
+import React, {JSX, useState, useEffect} from 'react';
+import {createOffer, getAllOffers, Offer} from '../../models/offer';
 import Footer from "../../layout/footer";
 import NavBar from "../../layout/navbar";
 
@@ -10,15 +10,17 @@ export default function OfferPage(): JSX.Element {
     const [offers, setOffers] = useState<Offer[]>([]);
     const [showForm, setShowForm] = useState<boolean>(false);
     const [newOffer, setNewOffer] = useState<Offer>({
-        idOffre: null, // Utiliser un identifiant unique basé sur le timestamp
+        idOffre: null, 
         nom: '',
         lien: '',
-        typeOffre: typeOffreValues[0], // Valeur par défaut
+        typeOffre: typeOffreValues[0], 
         description: '',
         dateDebut: new Date(),
         dateFin: new Date(),
         //entreprise: ''
     });
+    
+    //Pour la création d'offres
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const {name, value} = e.target;
@@ -56,6 +58,21 @@ export default function OfferPage(): JSX.Element {
             console.error("Error submitting offer:", err); 
         }
     };
+
+    //Pour l'affichage des offres de la base de données
+    useEffect(() => {
+        const fetchOffers = async () => {
+            try {
+                const offers = await getAllOffers();
+                setOffers(offers);
+            } catch (err) {
+                console.error("Error fetching offers:", err);
+            }
+        };
+
+        fetchOffers();
+    }, []);
+
     
 
     return (
