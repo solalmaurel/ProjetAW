@@ -1,5 +1,5 @@
 export interface Offer {
-    idOffre: number;
+    idOffre: number | null;
     nom: string;
     lien: string;
     typeOffre: string; 

@@ -10,7 +10,7 @@ export default function OfferPage(): JSX.Element {
     const [offers, setOffers] = useState<Offer[]>([]);
     const [showForm, setShowForm] = useState<boolean>(false);
     const [newOffer, setNewOffer] = useState<Offer>({
-        idOffre: Date.now(), // Utiliser un identifiant unique basé sur le timestamp
+        idOffre: null, // Utiliser un identifiant unique basé sur le timestamp
         nom: '',
         lien: '',
         typeOffre: typeOffreValues[0], // Valeur par défaut
@@ -43,7 +43,7 @@ export default function OfferPage(): JSX.Element {
             setOffers([...offers, newOffer]);
             setShowForm(false);
             setNewOffer({
-                idOffre: Date.now(), // Utiliser un identifiant unique basé sur le timestamp
+                idOffre: null, // Utiliser un identifiant unique basé sur le timestamp
                 nom: '',
                 lien: '',
                 typeOffre: typeOffreValues[0], // Valeur par défaut
