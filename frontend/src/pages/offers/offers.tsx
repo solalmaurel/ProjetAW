@@ -1,5 +1,5 @@
-import React, {JSX, useState, useEffect} from 'react';
-import {createOffer, getAllOffers, Offer} from '../../models/offer';
+import React, { useState, useEffect, JSX } from 'react';
+import { createOffer, getAllOffers, Offer } from '../../models/offer';
 import Footer from "../../layout/footer";
 import NavBar from "../../layout/navbar";
 
@@ -8,22 +8,23 @@ const typeOffreValues = ['REDUCTION', 'EVENEMENT'];
 
 export default function OfferPage(): JSX.Element {
     const [offers, setOffers] = useState<Offer[]>([]);
+    const [filteredOffers, setFilteredOffers] = useState<Offer[]>([]);
     const [showForm, setShowForm] = useState<boolean>(false);
+    const [inputText, setInputText] = useState("");
     const [newOffer, setNewOffer] = useState<Offer>({
-        idOffre: null, 
+        idOffre: null,
         nom: '',
         lien: '',
-        typeOffre: typeOffreValues[0], 
+        typeOffre: typeOffreValues[0],
         description: '',
         dateDebut: new Date(),
         dateFin: new Date(),
-        //entreprise: ''
+        //entreprise: '',
     });
-    
-    //Pour la création d'offres
 
+    // Pour la création d'offres
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setNewOffer({
             ...newOffer,
             [name]: value,
@@ -45,26 +46,26 @@ export default function OfferPage(): JSX.Element {
             setOffers([...offers, newOffer]);
             setShowForm(false);
             setNewOffer({
-                idOffre: null, // Utiliser un identifiant unique basé sur le timestamp
+                idOffre: null,
                 nom: '',
                 lien: '',
-                typeOffre: typeOffreValues[0], // Valeur par défaut
+                typeOffre: typeOffreValues[0],
                 description: '',
                 dateDebut: new Date(),
                 dateFin: new Date(),
-                //entreprise: '',
             });
         } catch (err) {
-            console.error("Error submitting offer:", err); 
+            console.error("Error submitting offer:", err);
         }
     };
 
-    //Pour l'affichage des offres de la base de données
+    // Pour l'affichage des offres de la base de données
     useEffect(() => {
         const fetchOffers = async () => {
             try {
                 const offers = await getAllOffers();
                 setOffers(offers);
+                setFilteredOffers(offers); // Initialement, afficher toutes les offres
             } catch (err) {
                 console.error("Error fetching offers:", err);
             }
@@ -73,21 +74,39 @@ export default function OfferPage(): JSX.Element {
         fetchOffers();
     }, []);
 
-    
+    useEffect(() => {
+        if (inputText === '') {
+            setFilteredOffers(offers); // Si l'input est vide, afficher toutes les offres
+        } else {
+            const filtered = offers.filter((offer) =>
+                offer.nom.toLowerCase().includes(inputText.toLowerCase()) ||
+                offer.description.toLowerCase().includes(inputText.toLowerCase())
+            );
+            setFilteredOffers(filtered); // Filtrer les offres en fonction de l'input
+        }
+    }, [inputText, offers]); // L'effet s'exécute lorsque `inputText` ou `offers` change
 
     return (
         <div className="flex flex-col min-h-screen">
-            <NavBar/>
+            <NavBar />
             <div className="flex flex-col flex-grow p-5 w-dvw">
                 <h1 className="font-semibold text-3xl">Offres disponibles</h1>
                 <div className="flex flex-col space-y-8 w-full justify-center items-center mt-10">
-                <span className="flex flex-row space-x-6 w-5/6">
-                    <input className="border border-1 rounded-lg p-5 w-full" type="text"
-                           placeholder="Rechercher une offre"/>
-                    <button className="w-52 rounded-xl bg-blue-600 text-white" onClick={() => setShowForm(true)}>
-                        Créer une offre
-                    </button>
-                </span>
+                    <span className="flex flex-row space-x-6 w-5/6">
+                        <input
+                            className="border border-1 rounded-lg p-5 w-full"
+                            type="text"
+                            placeholder="Rechercher une offre"
+                            value={inputText}
+                            onChange={(e) => setInputText(e.target.value)} // Mettre à jour l'état de l'input
+                        />
+                        <button
+                            className="w-52 rounded-xl bg-blue-600 text-white"
+                            onClick={() => setShowForm(true)}
+                        >
+                            Créer une offre
+                        </button>
+                    </span>
                     {showForm && (
                         <form className="w-5/6 p-5 border border-1 rounded-lg" onSubmit={handleSubmit}>
                             <div className="mb-4">
@@ -178,23 +197,23 @@ export default function OfferPage(): JSX.Element {
                         </form>
                     )}
                     <span className="flex flex-row justify-between items-center w-5/6">
-                    <h3 className="font-semibold text-2xl">{offers.length} offres</h3>
-                    <h3 className="text-lg">Tri par le plus récent</h3>
-                </span>
-                    {offers.map((offer) => (
-                        <OfferCard key={offer.idOffre} offer={offer}/>
+                        <h3 className="font-semibold text-2xl">{filteredOffers.length} offres</h3>
+                        <h3 className="text-lg">Tri par le plus récent</h3>
+                    </span>
+                    {filteredOffers.map((offer) => (
+                        <OfferCard key={offer.idOffre} offer={offer} />
                     ))}
                 </div>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 }
 
-function OfferCard({offer}: { offer: Offer }) {
+function OfferCard({ offer }: { offer: Offer }) {
     return (
         <a href={offer.lien} className="flex flex-row border border-1 rounded-lg w-5/6 min-h-48 hover:border-black">
-            <div className="w-1/6 rounded-l-lg bg-amber-300"/>
+            <div className="w-1/6 rounded-l-lg bg-amber-300" />
             <div className="flex flex-col justify-between p-5 w-full">
                 <div>
                     <h2 className="text-2xl">{offer.nom}</h2>
@@ -202,14 +221,12 @@ function OfferCard({offer}: { offer: Offer }) {
                 </div>
                 <div className="flex flex-row space-x-3">
                     <span className="bg-[#f6f6f6] px-2 rounded-sm">{offer.typeOffre}</span>
-                    <span
-                        className="bg-[#f6f6f6] px-2 rounded-sm">{new Date(offer.dateDebut).toLocaleDateString()}</span>
+                    <span className="bg-[#f6f6f6] px-2 rounded-sm">{new Date(offer.dateDebut).toLocaleDateString()}</span>
                     <span className="bg-[#f6f6f6] px-2 rounded-sm">{new Date(offer.dateFin).toLocaleDateString()}</span>
                 </div>
                 <div className="flex flex-row justify-between items-center">
                     <p className="text-[#7f7f7f]">Postée le {new Date(offer.dateDebut).toLocaleDateString()}</p>
-                    <button
-                        className="border border-1 border-black rounded-full px-3 py-1.5 hover:bg-black hover:text-white">
+                    <button className="border border-1 border-black rounded-full px-3 py-1.5 hover:bg-black hover:text-white">
                         Voir l'offre
                     </button>
                 </div>
