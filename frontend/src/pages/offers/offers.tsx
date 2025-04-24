@@ -230,31 +230,37 @@ export default function OfferPage(): JSX.Element {
 }
 
 function OfferCard({ offer }: { offer: Offer }) {
-    return (
-        <a href={offer.lien} className="flex flex-row border border-1 rounded-lg w-5/6 min-h-48 hover:border-black">
-            <div className="w-1/6 rounded-l-lg bg-amber-300" />
-            <div className="flex flex-col justify-between p-5 w-full">
-                <div>
-                    <h2 className="text-2xl">{offer.nom}</h2>
-                    <h3>{offer.description}</h3>
+        return (
+            <a href={offer.lien} className="flex flex-row border border-1 rounded-lg w-5/6 min-h-48 hover:border-black">
+                <div className="w-1/6 rounded-l-lg bg-amber-300" />
+                <div className="flex flex-col justify-between p-5 w-full">
+                    <div>
+                        <h2 className="text-2xl">{offer.nom}</h2>
+                        <h3>{offer.description}</h3>
+                    </div>
+                    <div className="flex justify-between items-center w-full">
+                        <div className="flex flex-row space-x-3">
+                            <span className="bg-[#f6f6f6] px-2 rounded-sm">{offer.typeOffre}</span>
+                            <span className="bg-[#f6f6f6] px-2 rounded-sm">{new Date(offer.dateDebut).toLocaleDateString()}</span>
+                            <span className="bg-[#f6f6f6] px-2 rounded-sm">{new Date(offer.dateFin).toLocaleDateString()}</span>
+                        </div>
+                        <button className="bg-red-500 text-white border border-black rounded-full px-3 py-1.5 hover:bg-black hover:text-red">
+                            Supprimer
+                        </button>
+                    </div>
+    
+                    <div className="flex flex-row justify-between items-center">
+                        <p className="text-[#7f7f7f]">Postée le {new Date(offer.dateDebut).toLocaleDateString()}</p>
+                        <a
+                            href={offer.lien}
+                            className="border border-1 border-black rounded-full px-3 py-1.5 hover:bg-black hover:text-white text-center"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Voir l'offre
+                        </a>
+                    </div>
                 </div>
-                <div className="flex flex-row space-x-3">
-                    <span className="bg-[#f6f6f6] px-2 rounded-sm">{offer.typeOffre}</span>
-                    <span className="bg-[#f6f6f6] px-2 rounded-sm">{new Date(offer.dateDebut).toLocaleDateString()}</span>
-                    <span className="bg-[#f6f6f6] px-2 rounded-sm">{new Date(offer.dateFin).toLocaleDateString()}</span>
-                </div>
-                <div className="flex flex-row justify-between items-center">
-                    <p className="text-[#7f7f7f]">Postée le {new Date(offer.dateDebut).toLocaleDateString()}</p>
-                    <a
-                        href={offer.lien}
-                        className="border border-1 border-black rounded-full px-3 py-1.5 hover:bg-black hover:text-white text-center"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Voir l'offre
-                    </a>
-                </div>
-            </div>
-        </a>
-    );
-}
+            </a>
+        );
+    }
