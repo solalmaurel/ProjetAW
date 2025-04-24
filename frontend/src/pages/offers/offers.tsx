@@ -65,7 +65,7 @@ export default function OfferPage(): JSX.Element {
             try {
                 const offers = await getAllOffers();
                 setOffers(offers);
-                setFilteredOffers(offers); // Initialement, afficher toutes les offres
+                setFilteredOffers(offers); 
             } catch (err) {
                 console.error("Error fetching offers:", err);
             }
@@ -76,16 +76,16 @@ export default function OfferPage(): JSX.Element {
 
     useEffect(() => {
         if (inputText === '') {
-            setFilteredOffers(offers); // Si l'input est vide, afficher toutes les offres
+            setFilteredOffers(offers); 
         } else {
             const filtered = offers.filter((offer) =>
                 offer.nom.toLowerCase().includes(inputText.toLowerCase()) ||
                 offer.description.toLowerCase().includes(inputText.toLowerCase())
             );
-            setFilteredOffers(filtered); // Filtrer les offres en fonction de l'input
+            setFilteredOffers(filtered); 
         }
-    }, [inputText, offers]); // L'effet s'exécute lorsque `inputText` ou `offers` change
-
+    }, [inputText, offers]); 
+    
     return (
         <div className="flex flex-col min-h-screen">
             <NavBar />
