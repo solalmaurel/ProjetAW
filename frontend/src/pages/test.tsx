@@ -25,7 +25,7 @@ function createUserListener() {
         password: "unmotdepassesecurise",
         isAdmin: false,
         anneeDiplome: 2026,
-        typeEtude: "SN",
+        typeEtude: 0,
         isAdherent: false,
         dateCotisation: undefined,
         notifOffre: false,

@@ -12,7 +12,7 @@ export default function ProfilePage(): JSX.Element {
         password: "unmotdepassesecurise",
         isAdmin: true,
         anneeDiplome: 2,
-        typeEtude: "Diplôme d'ingénieur",
+        typeEtude: 0,
         isAdherent: false,
         dateCotisation: undefined,
         notifOffre: false,

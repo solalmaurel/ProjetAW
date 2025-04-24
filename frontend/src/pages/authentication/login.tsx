@@ -1,15 +1,27 @@
 import {FormEvent, JSX, useState} from "react";
+import {findUserByCredentials} from "../../models/user";
+import {useNavigate} from "react-router-dom";
 
 export default function LoginPage(): JSX.Element {
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault();
-        console.log(email, password);
-        //TODO: faire la logique du login
-    }
+        try {
+            await findUserByCredentials(email, password);
+            navigate("/profile");
+        } catch (e) {
+            if (e instanceof Error) {
+                setError(e.message);
+            } else {
+                setError("An unknown error occurred");
+            }
+        }
+    };
 
     return (
         <div className="w-dvw h-dvh flex items-center justify-center">
@@ -21,24 +33,41 @@ export default function LoginPage(): JSX.Element {
                 <form className="flex flex-col space-y-5" onSubmit={handleSubmit}>
                     <div className="flex flex-col">
                         <span className="font-semibold">Adresse e-mail</span>
-                        <input className="border border-[#adaba8] px-3 py-2 rounded-md" type="email" id="email"
-                               name="email" placeholder="Votre adresse e-mail" onChange={(e) => setEmail(e.target.value)} />
+                        <input
+                            className="border border-[#adaba8] px-3 py-2 rounded-md"
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Votre adresse e-mail"
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
                     </div>
                     <div className="flex flex-col">
                         <span className="font-semibold">Mot de passe</span>
-                        <input className="border border-[#adaba8] px-3 py-2 rounded-md" type="password" id="password"
-                               name="password" placeholder="Votre mot de passe" onChange={e => setPassword(e.target.value)}/>
+                        <input
+                            className="border border-[#adaba8] px-3 py-2 rounded-md"
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Votre mot de passe"
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
                     </div>
-                    <button className="text-white bg-[#0084FF] px-2 py-3 rounded-lg font-semibold" type="submit">Se
-                        connecter
+                    {error && <div className="text-red-500">{error}</div>}
+                    <button
+                        className="text-white bg-[#0084FF] px-2 py-3 rounded-lg font-semibold"
+                        type="submit"
+                    >
+                        Se connecter
                     </button>
                     <div className="flex flex-col items-center">
                         Vous n&apos;avez pas encore de compte ?
-                        <a href="/register" className="text-[#0084FF] underline underline-offset-2">Créer un compte</a>
+                        <a href="/register" className="text-[#0084FF] underline underline-offset-2">
+                            Créer un compte
+                        </a>
                     </div>
                 </form>
             </div>
         </div>
     );
-
 }
