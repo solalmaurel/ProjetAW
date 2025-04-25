@@ -1,24 +1,37 @@
 import {FormEvent, JSX, useState} from "react";
 import {findUserByCredentials} from "../../models/user";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
+import {useAuth} from "../../context/AuthContext";
 
 export default function LoginPage(): JSX.Element {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [error, setError] = useState<string | null>(null);
 
     const navigate = useNavigate();
+    const location = useLocation(); // Pour savoir d'où vient l'utilisateur
+    const { login } = useAuth(); // Récupérer la fonction login du contexte
+
+    // Déterminer où rediriger après connexion
+    const from = location.state?.from?.pathname || "/profile";
 
     const handleSubmit = async (e: FormEvent): Promise<void> => {
         e.preventDefault();
         try {
-            await findUserByCredentials(email, password);
-            navigate("/profile");
-        } catch (e) {
-            if (e instanceof Error) {
-                setError(e.message);
+            // Vérification des identifiants
+            const user = await findUserByCredentials(email, password);
+
+            // Enregistrer l'utilisateur dans le contexte
+            login(user, String(user.id));
+
+            // Naviguer vers la page voulue
+            navigate(from, { replace: true });
+
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message); // Afficher l'erreur de l'API (ex: "Identifiants invalides")
             } else {
-                setError("An unknown error occurred");
+                setError("Une erreur inconnue est survenue lors de la connexion.");
             }
         }
     };
