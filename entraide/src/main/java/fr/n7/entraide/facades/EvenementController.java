@@ -17,13 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.n7.entraide.entities.Evenement;
 import fr.n7.entraide.repositories.EvenementRepository;
+import fr.n7.entraide.entities.Adresse;
+import fr.n7.entraide.repositories.AdresseRepository;
 import fr.n7.entraide.utils.ResponseHandler;
 
 @RestController
 @RequestMapping("/evenement")
 public class EvenementController {
+
     @Autowired
     private EvenementRepository evenementRepository;
+
+    private AdresseRepository adresseRepository;
 
     @GetMapping
     public List<Evenement> getAllEvenements() {
@@ -32,6 +37,10 @@ public class EvenementController {
 
     @PostMapping(path = "/create", produces=MediaType.APPLICATION_JSON_VALUE ) 
     public ResponseEntity<Object> createEvenement(@RequestBody Evenement evenement) {
+        Adresse adresse = evenement.getAdresse();
+        if (adresse != null) {
+            adresseRepository.save(adresse);
+        }
         evenementRepository.save(evenement);
         return ResponseHandler.generateResponse("Evenement created successfully", HttpStatus.OK);
     }
