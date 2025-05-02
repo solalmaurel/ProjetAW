@@ -7,7 +7,7 @@ export interface Adresse {
     rue: string;
     codePostal: string;
     ville: string;
-    etablissement?: Etablissement; 
+    //etablissement?: Etablissement; 
     //evenements?: number[]; // Si besoin de référencer les événements, est ce que c'est nécessaire ?
 }
 

@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.n7.entraide.entities.Etablissement;
+import fr.n7.entraide.repositories.AdresseRepository;
 import fr.n7.entraide.repositories.EtablissementRepository;
 import fr.n7.entraide.utils.ResponseHandler;
 
 @RestController
 @RequestMapping("/etablissement")
 public class EtablissementController {
+
     @Autowired
     private EtablissementRepository etablissementRepository;
 
