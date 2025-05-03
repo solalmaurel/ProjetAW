@@ -30,6 +30,9 @@ export default function EventPage(): JSX.Element {
     const [showAdresseForm, setShowAdresseForm] = useState<boolean>(false);
     const [hoveredEvent, setHoveredEvent] = useState<Evenement | null>(null);
     const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
+    const [filteredAdresses, setFilteredAdresses] = useState<Adresse[]>([]);
+    const [searchAddress, setSearchAddress] = useState<string>('');
+    const [showAddressResults, setShowAddressResults] = useState<boolean>(false);
     const [filteredEvents, setFilteredEvents] = useState<Evenement[]>([]);
     const [newEvent, setNewEvent] = useState<Evenement>({
         nom : '',
@@ -141,6 +144,7 @@ export default function EventPage(): JSX.Element {
         const adressesData = await getAllAdresses();
         console.log("adressesData:", adressesData);
         setAdresses(adressesData);
+        setFilteredAdresses(adressesData);
         };
 
         fetchEvents();
@@ -158,6 +162,21 @@ export default function EventPage(): JSX.Element {
     
             setFilteredEvents(filtered); 
         }, [selectedTheme, events]);
+
+    useEffect(() => {
+        if (searchAddress) {
+            const filtered = adresses.filter(adresse =>
+                `${adresse.numero} ${adresse.rue} ${adresse.codePostal} ${adresse.ville}`
+                    .toLowerCase()
+                    .includes(searchAddress.toLowerCase())
+            );
+            setFilteredAdresses(filtered);
+            setShowAddressResults(true);
+        } else {
+            setFilteredAdresses(adresses);
+            setShowAddressResults(false);
+        }
+    }, [searchAddress, adresses]);
 
     // Supprimer des evenements
         const handleDeleteEvent = async (id: number) => {
@@ -196,6 +215,12 @@ export default function EventPage(): JSX.Element {
     
         const handleEventMouseLeave = () => {
             setHoveredEvent(null);
+        };
+
+        const handleAddressSelect = (adresse: Adresse) => {
+            setNewEvent({ ...newEvent, adresse });
+            setSearchAddress('');
+            setShowAddressResults(false);
         };
 
     return (
@@ -338,24 +363,40 @@ export default function EventPage(): JSX.Element {
                                 />
                             </div>
                             {!newEvent.isOnline && (
-                            <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Adresse</label>
-                                <select
-                                    name="adresse"
-                                    value={newEvent.adresse?.idAdresse || ''}
-                                    onChange={(e) => setNewEvent({ ...newEvent, adresse: adresses.find(addr => addr.idAdresse === parseInt(e.target.value)) })}
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                >
-                                    <option value="">Sélectionnez une adresse</option>
-                                    {adresses.map((adresse) => (
-                                        <option key={`${adresse.idAdresse}-${adresse.rue}`} value={adresse.idAdresse?.toString()}>
-                                            {`${adresse.numero} ${adresse.rue}, ${adresse.codePostal} ${adresse.ville}`}
-                                        </option>
-                                    ))}
-
-
-                                </select>
-                            </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">Adresse</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Rechercher une adresse..."
+                                        value={searchAddress}
+                                        onChange={(e) => setSearchAddress(e.target.value)}
+                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
+                                    />
+                                    {showAddressResults && (
+                                        <ul className="absolute z-10 bg-white border rounded w-full mt-1 max-h-48 overflow-y-auto">
+                                            {filteredAdresses.length > 0 ? (
+                                                filteredAdresses.map((adresse) => (
+                                                    <li
+                                                        key={adresse.idAdresse}
+                                                        className="px-3 py-2 hover:bg-gray-200 cursor-pointer"
+                                                        onClick={() => handleAddressSelect(adresse)}
+                                                    >
+                                                        {`${adresse.numero} ${adresse.rue}, ${adresse.codePostal} ${adresse.ville}`}
+                                                    </li>
+                                                ))
+                                            ) : (
+                                                <li className="px-3 py-2 text-gray-600">
+                                                    Pas d'adresse correspondant à la recherche, veuillez en créer une.
+                                                </li>
+                                            )}
+                                        </ul>
+                                    )}
+                                    {newEvent.adresse && (
+                                    <div className="mt-2">
+                                        <strong>Adresse sélectionnée :</strong> {newEvent.adresse.numero} {newEvent.adresse.rue}, {newEvent.adresse.codePostal} {newEvent.adresse.ville}
+                                     </div>
+                                    )}
+                                </div>
                             )}
                             {!newEvent.isOnline && (
                             <button
