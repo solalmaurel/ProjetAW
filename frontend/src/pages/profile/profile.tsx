@@ -1,5 +1,6 @@
 import React, {JSX} from "react";
 import {User} from "../../models/user";
+import {useAuth} from "../../context/AuthContext";
 
 export default function ProfilePage(): JSX.Element {
 
@@ -12,7 +13,7 @@ export default function ProfilePage(): JSX.Element {
         password: "unmotdepassesecurise",
         isAdmin: true,
         anneeDiplome: 2,
-        typeEtude: "Diplôme d'ingénieur",
+        typeEtude: 0,
         isAdherent: false,
         dateCotisation: undefined,
         notifOffre: false,
@@ -30,6 +31,12 @@ export default function ProfilePage(): JSX.Element {
 }
 
 function NavBar({user}: { user: User }) {
+    const { logout } = useAuth();
+
+    const handleLogout = () => {
+        logout();
+        window.location.href = '/';
+    };
     return (
         <nav className="border-r-1 border-r min-w-72 p-3 flex flex-col space-y-8">
             <span className="flex justify-center">
@@ -62,10 +69,18 @@ function NavBar({user}: { user: User }) {
             </div>
             <div className="flex flex-col h-full justify-end">
                 <span className="flex flex-row items-center space-x-3 p-2 rounded-lg">
-                    <div className="bg-red-300 rounded-full w-6 h-6"/>
-                    <a href="/profile" className="font-semibold">Se déconnecter</a>
-                </span>
+                    <div className="bg-red-300 rounded-full w-6 h-6" />
+                    <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="font-semibold cursor-pointer"
+                        bg-transparent border-none p-0 text-current
+                    >
+                    Se déconnecter
+                   </button>
+              </span>
             </div>
+
         </nav>
     );
 }

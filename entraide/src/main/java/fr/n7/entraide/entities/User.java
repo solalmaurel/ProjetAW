@@ -18,7 +18,7 @@ public class User {
     private String password;
     private boolean isAdmin;
     private int anneeDiplome;
-    private String typeEtude;
+    private TypeEtude typeEtude;
     private boolean isAdherent;
     private LocalDate dateCotisation;
     private boolean notifOffre;
@@ -51,13 +51,13 @@ public class User {
     }
 
     public User(String nom, String prenom, String email, String password, boolean isAdmin,
-                int anneeDiplome, String typeEtude, boolean isAdherent, LocalDate dateCotisation, boolean notifOffre,
+                int anneeDiplome, TypeEtude typeEtude, boolean isAdherent, LocalDate dateCotisation, boolean notifOffre,
                 boolean notifEvenement) {
         this(0, nom, prenom, email, password, isAdmin, anneeDiplome, typeEtude, isAdherent, dateCotisation, notifOffre, notifEvenement);
     }
 
     public User(long idUser, String nom, String prenom, String email, String password, boolean isAdmin,
-                int anneeDiplome, String typeEtude, boolean isAdherent, LocalDate dateCotisation, boolean notifOffre,
+                int anneeDiplome, TypeEtude typeEtude, boolean isAdherent, LocalDate dateCotisation, boolean notifOffre,
                 boolean notifEvenement) {
         this.idUser = idUser;
         this.nom = nom;
@@ -129,11 +129,11 @@ public class User {
         this.anneeDiplome = anneeDiplome;
     }
 
-    public String getTypeEtude() {
+    public TypeEtude getTypeEtude() {
         return typeEtude;
     }
 
-    public void setTypeEtude(String typeEtude) {
+    public void setTypeEtude(TypeEtude typeEtude) {
         this.typeEtude = typeEtude;
     }
 
@@ -186,4 +186,6 @@ public class User {
                 ", notifEvenement=" + notifEvenement +
                 '}';
     }
+
+
 }
