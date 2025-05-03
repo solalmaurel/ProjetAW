@@ -21,9 +21,15 @@ public class Evenement {
     private String description;
 
     @ManyToOne
+    @JoinColumn(name = "idAdresse")
     Adresse adresse;
 
     @ManyToMany
+    @JoinTable(
+        name = "evenement_utilisateur",
+        joinColumns = @JoinColumn(name = "evenement_id"),
+        inverseJoinColumns = @JoinColumn(name = "utilisateur_id")
+    )
     List<User> utilisateurs;
 
     public Evenement() {

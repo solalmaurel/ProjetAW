@@ -8,8 +8,6 @@ import { Evenement } from '../../models/evenement';
 import { createEvenement, getAllEvenements, deleteEvenement } from '../../models/evenement'; 
 import { Adresse, createAdresse, getAllAdresses } from "../../models/adresse";
 import { JSX } from 'react/jsx-runtime';
-import { createEvent } from "@testing-library/dom";
-import { env } from "process";
 
 const themeValues = ['SPORT',
     'LANGUES',
@@ -77,6 +75,9 @@ export default function EventPage(): JSX.Element {
         e.preventDefault();
         try {
             const createdEvent = await createEvenement(newEvent);
+            console.log("Adresse associée à l'événement : ", newEvent.adresse);
+
+            console.log("Created event:", createdEvent);
             setEvents([...events, createdEvent]);
             setShowForm(false);
             setNewEvent({
@@ -100,6 +101,8 @@ export default function EventPage(): JSX.Element {
         e.preventDefault();
         try {
             const createdAdresse = await createAdresse(newAdresse);
+            console.log("Created event:", createdAdresse);
+
             setAdresses([...adresses, createdAdresse]);
             setShowAdresseForm(false);
             setNewAdress({
@@ -122,11 +125,13 @@ export default function EventPage(): JSX.Element {
     useEffect(() => {
         const fetchEvents = async () => {
             const events = await getAllEvenements();
+            console.log(events);
             setEvents(events);
-            setFilteredEvents(events); 
+            setFilteredEvents(events);
         };
         const fetchAdresses = async () => {
         const adressesData = await getAllAdresses();
+        console.log("adressesData:", adressesData);
         setAdresses(adressesData);
         };
 
@@ -310,10 +315,12 @@ export default function EventPage(): JSX.Element {
                                 >
                                     <option value="">Sélectionnez une adresse</option>
                                     {adresses.map((adresse) => (
-                                        <option key={adresse.idAdresse} value={adresse.idAdresse?.toString()}>
+                                        <option key={`${adresse.idAdresse}-${adresse.rue}`} value={adresse.idAdresse?.toString()}>
                                             {`${adresse.numero} ${adresse.rue}, ${adresse.codePostal} ${adresse.ville}`}
                                         </option>
                                     ))}
+
+
                                 </select>
                             </div>
                             <button
@@ -352,7 +359,7 @@ export default function EventPage(): JSX.Element {
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     required
                                 />
-                            </div>
+                             </div>
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Complément</label>
                                 <input
@@ -361,7 +368,7 @@ export default function EventPage(): JSX.Element {
                                     value={newAdresse.complement}
                                     onChange={handleInputChangeAdress}
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                />
+                                /> 
                             </div>
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Rue</label>
@@ -414,6 +421,7 @@ export default function EventPage(): JSX.Element {
                         </form>
                     )}
                     <FullCalendar
+                        key={filteredEvents.length}  
                         plugins={[dayGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
                         editable={true}
@@ -423,8 +431,8 @@ export default function EventPage(): JSX.Element {
                         events={filteredEvents.map(event => ({
                             id: event.idEvenement?.toString() ?? '',
                             title: event.nom,
-                            start: event.dateDebut,
-                            end: event.dateFin
+                            start: event.dateDebut,//.toISOString(),
+                            end: event.dateFin//.toISOString(),
                         }))}
                         height="auto"
                         dateClick={handleDateClick}
@@ -440,3 +448,4 @@ export default function EventPage(): JSX.Element {
 
 // Il faudrait rajouter le fait que si on est administrateur on puisse voir tous les inscrits à un évènements
 // Rajouter fait qu'on puisse voir le nombre d'inscrits
+// Ajouter une barre de recherche pour les adresses ?

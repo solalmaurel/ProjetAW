@@ -28,6 +28,7 @@ public class EvenementController {
     @Autowired
     private EvenementRepository evenementRepository;
 
+    @Autowired
     private AdresseRepository adresseRepository;
 
     @GetMapping
@@ -40,6 +41,7 @@ public class EvenementController {
         Adresse adresse = evenement.getAdresse();
         if (adresse != null) {
             adresseRepository.save(adresse);
+            //evenement.setAdresse(adresse);
         }
         evenementRepository.save(evenement);
         return ResponseHandler.generateResponse("Evenement created successfully", HttpStatus.OK);
