@@ -43,7 +43,22 @@ const getAllEvenements = async (): Promise<Evenement[]> => {
         cache: "no-store",
     });
 
-    return await response.json();
+    const contentType = response.headers.get("content-type");
+    const rawText = await response.text();
+
+    console.log("Réponse brute du serveur :", rawText);
+
+    if (contentType && contentType.includes("application/json")) {
+        try {
+            return JSON.parse(rawText);
+        } catch (e) {
+            console.error("Erreur lors du parsing JSON :", e);
+            throw e;
+        }
+    } else {
+        console.error("Réponse non-JSON :", contentType);
+        throw new Error("Réponse non-JSON : " + rawText);
+    }
 };
 
 

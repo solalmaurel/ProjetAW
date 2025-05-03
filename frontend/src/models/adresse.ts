@@ -3,7 +3,7 @@ import { Etablissement } from './etablissement';
 export interface Adresse {
     idAdresse: number | null;
     numero: string;
-    complement: string;
+    complement?: string; 
     rue: string;
     codePostal: string;
     ville: string;
@@ -14,19 +14,28 @@ export interface Adresse {
 const SPRING_API = process.env.REACT_APP_SPRING_URL_ENDPOINT;
 
 const createAdresse = async (adresse: Adresse): Promise<any> => {
-    const url = `${SPRING_API}/adresse/create`;
-    const response = await fetch(url, {
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        cache: "no-store",
-        body: JSON.stringify(adresse)
-    });
-
-    return await response.json();
-};
+        const response = await fetch(`${SPRING_API}/adresse/create`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(adresse),
+        });
+    
+        // 🔍 Ajoute ceci pour voir la réponse brute
+        const text = await response.text();
+        console.log("Réponse brute du serveur :", text);
+        
+    
+        try {
+            const data = JSON.parse(text);
+            return data;
+        } catch (err) {
+            console.error("Erreur lors du parsing JSON :", err);
+            throw err;
+        }
+    };
+    
 
 const getAllAdresses = async (): Promise<Adresse[]> => {
     const url = `${SPRING_API}/adresse`;

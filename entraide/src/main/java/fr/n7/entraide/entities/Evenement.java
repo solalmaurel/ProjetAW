@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Evenement {
 
@@ -21,15 +23,15 @@ public class Evenement {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "idAdresse")
+    @JsonBackReference
     Adresse adresse;
 
     @ManyToMany
-    @JoinTable(
-        name = "evenement_utilisateur",
-        joinColumns = @JoinColumn(name = "evenement_id"),
-        inverseJoinColumns = @JoinColumn(name = "utilisateur_id")
-    )
+    // @JoinTable(
+    //     name = "evenement_utilisateur",
+    //     joinColumns = @JoinColumn(name = "evenement_id"),
+    //     inverseJoinColumns = @JoinColumn(name = "utilisateur_id")
+    // )
     List<User> utilisateurs;
 
     public Evenement() {

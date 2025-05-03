@@ -2,6 +2,8 @@ package fr.n7.entraide.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,6 +29,7 @@ public class Adresse {
     private Etablissement etablissement;
 
     @OneToMany(mappedBy = "adresse")
+    @JsonIgnore
     private List<Evenement> evenements;
 
     public long getIdAdresse() {
