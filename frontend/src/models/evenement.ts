@@ -11,6 +11,7 @@ export interface Evenement {
     prixNormal: number;
     prixAdherent: number;
     description: string;
+    lien: string;
     adresse?: Adresse;  // A revoir peut être, et peut dire que pas d'adresse si evenement online par exemple
     utilisateurs?: User[]; // Utilisez l'interface User pour les utilisateurs? et pas forcemment d'inscrits donc pas obligatoire aussi?
 }

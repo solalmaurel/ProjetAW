@@ -15,13 +15,20 @@ const themeValues = ['SPORT',
     'METIERS',
     'LOISIR']
 
-
+const themeColors = {
+    SPORT: 'red',
+    LANGUES: 'blue',
+    ETUDE: 'green',
+    METIERS: 'orange',
+    LOISIR: 'purple'
+};
 
 export default function EventPage(): JSX.Element {
     const [events, setEvents] = useState<Evenement[]>([]);
     const [adresses, setAdresses] = useState<Adresse[]>([]);
     const [showForm, setShowForm] = useState<boolean>(false);
     const [showAdresseForm, setShowAdresseForm] = useState<boolean>(false);
+    const [hoveredEvent, setHoveredEvent] = useState<Evenement | null>(null);
     const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
     const [filteredEvents, setFilteredEvents] = useState<Evenement[]>([]);
     const [newEvent, setNewEvent] = useState<Evenement>({
@@ -33,6 +40,7 @@ export default function EventPage(): JSX.Element {
         prixNormal: 0,
         prixAdherent: 0,
         description: '' ,
+        lien: '',
         idEvenement: null,
         adresse: undefined,
     });
@@ -76,8 +84,7 @@ export default function EventPage(): JSX.Element {
         try {
             const createdEvent = await createEvenement(newEvent);
             console.log("Adresse associée à l'événement : ", newEvent.adresse);
-
-            console.log("Created event:", createdEvent);
+            console.log("A créé évènement :", createdEvent);
             setEvents([...events, createdEvent]);
             setShowForm(false);
             setNewEvent({
@@ -89,6 +96,7 @@ export default function EventPage(): JSX.Element {
                 prixNormal: 0,
                 prixAdherent: 0,
                 description: '' ,
+                lien: '',
                 idEvenement: null,
                 adresse: undefined,
             });
@@ -178,6 +186,18 @@ export default function EventPage(): JSX.Element {
             }
         };
 
+        const handleEventMouseEnter = (arg: any) => {
+            const eventId = parseInt(arg.event.id);
+            const event = events.find(e => e.idEvenement === eventId);
+            if (event) {
+                setHoveredEvent(event);
+            }
+        };
+    
+        const handleEventMouseLeave = () => {
+            setHoveredEvent(null);
+        };
+
     return (
         <div className="flex flex-col min-h-screen">
             <NavBar />
@@ -237,6 +257,18 @@ export default function EventPage(): JSX.Element {
                                     </label>
                                 </div>
                                 </div>
+                            {newEvent.isOnline && (
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2">Lien</label>
+                                <input
+                                    type="text"
+                                    name="lien"
+                                    value={newEvent.lien}
+                                    onChange={handleInputChangeEvent}
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    required
+                                />
+                            </div> )}
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Thème</label>
                                 <select
@@ -305,6 +337,7 @@ export default function EventPage(): JSX.Element {
                                     required
                                 />
                             </div>
+                            {!newEvent.isOnline && (
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Adresse</label>
                                 <select
@@ -323,6 +356,8 @@ export default function EventPage(): JSX.Element {
 
                                 </select>
                             </div>
+                            )}
+                            {!newEvent.isOnline && (
                             <button
                                 type="button"
                                 className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -330,6 +365,7 @@ export default function EventPage(): JSX.Element {
                             >
                                 Nouvelle adresse
                             </button>
+                            )}
                             <div className="flex items-center justify-between mt-4">
                                 <button
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -432,12 +468,29 @@ export default function EventPage(): JSX.Element {
                             id: event.idEvenement?.toString() ?? '',
                             title: event.nom,
                             start: event.dateDebut,//.toISOString(),
-                            end: event.dateFin//.toISOString(),
+                            end: event.dateFin,//.toISOString(),
+                            color: themeColors[event.theme as keyof typeof themeColors]
                         }))}
                         height="auto"
                         dateClick={handleDateClick}
                         eventClick={handleEventClick}
+                        eventMouseEnter={handleEventMouseEnter} // Ajout de l'événement de survol
+                        eventMouseLeave={handleEventMouseLeave} // Ajout de l'événement de sortie de survol
                     />
+                    {hoveredEvent && (
+                        <div className="fixed bg-white border p-4 rounded shadow-lg z-50" style={{ top: '10px', left: '10px' }}>
+                            <h2 className="font-bold">{hoveredEvent.nom}</h2>
+                            <p><strong>Thème:</strong> {hoveredEvent.theme}</p>
+                            <p><strong>Date de début:</strong> {new Date(hoveredEvent.dateDebut).toLocaleDateString()}</p>
+                            <p><strong>Date de fin:</strong> {new Date(hoveredEvent.dateFin).toLocaleDateString()}</p>
+                            <p><strong>Prix Normal:</strong> {hoveredEvent.prixNormal} €</p>
+                            <p><strong>Prix Adhérent:</strong> {hoveredEvent.prixAdherent} €</p>
+                            <p><strong>Description:</strong> {hoveredEvent.description}</p>
+                            {hoveredEvent.adresse && (
+                                <p><strong>Adresse:</strong> {hoveredEvent.adresse.numero} {hoveredEvent.adresse.rue}, {hoveredEvent.adresse.codePostal} {hoveredEvent.adresse.ville}</p>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
             <Footer />

@@ -20,6 +20,9 @@ public class Evenement {
     private float prixNormal;
     private float prixAdherent;
     private String nom;
+    private String lien;
+    
+
     private String description;
 
     @ManyToOne
@@ -42,7 +45,7 @@ public class Evenement {
     }
 
     public Evenement(long idEvenement, String nom, boolean isOnline, LocalDate dateDebut, LocalDate dateFin, Theme theme,
-                     float prixNormal, float prixAdherent, String description, Adresse adresse, List<User> utilisateurs) {
+                     float prixNormal, float prixAdherent, String description, Adresse adresse, List<User> utilisateurs, String lien) {
         this.idEvenement = idEvenement;
         this.nom = nom;
         this.isOnline = isOnline;
@@ -54,7 +57,16 @@ public class Evenement {
         this.description = description;
         this.adresse = adresse;
         this.utilisateurs = utilisateurs;
+        this.lien = lien;
 
+    }
+
+    public String getLien() {
+        return lien;
+    }
+
+    public void setLien(String lien) {
+        this.lien = lien;
     }
 
     public long getIdEvenement() {
