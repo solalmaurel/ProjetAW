@@ -100,21 +100,28 @@ const updateUser = async (user: User): Promise<any> => {
     return response;
 }
 
-
-const findUserById = async (id: number) : Promise<User> => {
-
-    const url = `${SPRING_API}/user/${id}`;
+const deleteUser = async (user: User): Promise<any> => {
+    const url = `${SPRING_API}/user/delete`;
     const response = await fetch(url, {
-        method: "GET",
+        method: "POST",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         cache: "no-store",
+        body: JSON.stringify(user)
     });
 
-    return await response.json();
+    if (!response.ok) {
+        if(response.status === 404) {
+            throw new Error('Utilisateur supprimé !');
+        }
+        throw new Error('Unknown error');
+    }
+
+    return response;
 }
+
 const findUserByCredentials = async (username: string, password: string): Promise<User> => {
     const url = `${SPRING_API}/user/login`;
 
@@ -147,4 +154,4 @@ const findUserByCredentials = async (username: string, password: string): Promis
     return await response.json();
 };
 
-export { createUser, updateUser, findUserById, findUserByCredentials }
+export { createUser, updateUser, deleteUser, findUserByCredentials }
