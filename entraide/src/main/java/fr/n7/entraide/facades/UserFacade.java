@@ -31,6 +31,16 @@ public class UserFacade {
         return ResponseHandler.generateResponse("User created successfully", HttpStatus.OK);
     }
 
+    @PostMapping(path = "/update", produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> updateUser(@RequestBody User user) {
+        Optional<User> userFound = userRepository.findByEmail(user.getEmail());
+        if (userFound.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        userRepository.save(user);
+        return ResponseHandler.generateResponse("User data updated successfully", HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public User getUser(@PathVariable("id") long id) {
         Optional<User> optionalUser = userRepository.findById(id);
