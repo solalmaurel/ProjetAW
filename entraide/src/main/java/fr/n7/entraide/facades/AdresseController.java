@@ -15,40 +15,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.n7.entraide.entities.Offre;
-import fr.n7.entraide.repositories.OffreRepository;
+import fr.n7.entraide.entities.Adresse;
+import fr.n7.entraide.repositories.AdresseRepository;
 import fr.n7.entraide.utils.ResponseHandler;
 
 @RestController
-@RequestMapping("/offre")
-public class OffreController {
+@RequestMapping("/adresse")
+public class AdresseController {
     @Autowired
-    private OffreRepository offreRepository;
+    private AdresseRepository adresseRepository;
 
     @GetMapping
-    public List<Offre> getAllOffres() {
-        return offreRepository.findAll();
+    public List<Adresse> getAllAdresses() {
+        return adresseRepository.findAll();
     }
 
     @PostMapping(path = "/create", produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> createOffre(@RequestBody Offre offre) {
-        offreRepository.save(offre);
-        return ResponseHandler.generateResponse("Offer created successfully", HttpStatus.OK);
+    public ResponseEntity<Object> createAdresse(@RequestBody Adresse adresse) {
+        adresseRepository.save(adresse);
+        return ResponseHandler.generateResponse("Adresse created successfully", HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOffreById(@PathVariable("id") Long id) {
-        Optional<Offre> optionalOffre = offreRepository.findById(id);
+        Optional<Adresse> optionalOffre = adresseRepository.findById(id);
         if (optionalOffre.isPresent()) {
-            return ResponseHandler.generateResponse("Offer found successfully", HttpStatus.OK);
+            return ResponseHandler.generateResponse("Adresse found successfully", HttpStatus.OK);
         } else {
-            return ResponseHandler.generateResponse("Offer not found", HttpStatus.NOT_FOUND);
+            return ResponseHandler.generateResponse("Adresse not found", HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteOffer(@PathVariable("id") Long id) {
-        offreRepository.deleteById(id);
-        return ResponseHandler.generateResponse("Offer deleted successfully", HttpStatus.OK);
+    public ResponseEntity<Object> deleteAdresse(@PathVariable("id") Long id) {
+        adresseRepository.deleteById(id);
+        return ResponseHandler.generateResponse("Adresse deleted successfully", HttpStatus.OK);
     }
 }

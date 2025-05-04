@@ -1,18 +1,17 @@
-export interface Offer {
-    idOffre: number | null;
+import { Adresse } from './adresse'; // Assurez-vous que le chemin d'importation est correct
+//import { User } from './user'; 
+
+export interface Etablissement {
+    idEtablissement: number | null;
     nom: string;
-    lien: string;
-    typeOffre: string; 
-    description: string;
-    dateDebut: Date;
-    dateFin: Date;
-    //entreprise: string| undefined; // ??? 
+    //users?: User[]; 
+    adresse?: Adresse; 
 }
 
 const SPRING_API = process.env.REACT_APP_SPRING_URL_ENDPOINT;
 
-const createOffer = async (offer: Offer): Promise<any> => {
-    const url = `${SPRING_API}/offre/create`;
+const createEtablissement = async (etablissement: Etablissement): Promise<any> => {
+    const url = `${SPRING_API}/etablissement/create`;
     const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -20,14 +19,14 @@ const createOffer = async (offer: Offer): Promise<any> => {
             'Content-Type': 'application/json'
         },
         cache: "no-store",
-        body: JSON.stringify(offer)
+        body: JSON.stringify(etablissement)
     });
 
     return await response.json();
 };
 
-const getAllOffers = async (): Promise<Offer[]> => {
-    const url = `${SPRING_API}/offre`;
+const getAllEtablissements = async (): Promise<Etablissement[]> => {
+    const url = `${SPRING_API}/etablissement`;
     const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -40,8 +39,8 @@ const getAllOffers = async (): Promise<Offer[]> => {
     return await response.json();
 };
 
-const getOfferById = async (id: number): Promise<Offer> => {
-    const url = `${SPRING_API}/offre/${id}`;
+const getEtablissementById = async (id: number): Promise<Etablissement> => {
+    const url = `${SPRING_API}/etablissement/${id}`;
     const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -54,8 +53,8 @@ const getOfferById = async (id: number): Promise<Offer> => {
     return await response.json();
 };
 
-export const deleteOffer = async (id: number): Promise<void> => {
-    const url = `${SPRING_API}/offre/${id}`;
+export const deleteEtablissement = async (id: number): Promise<void> => {
+    const url = `${SPRING_API}/etablissement/${id}`;
     const response = await fetch(url, {
         method: "DELETE",
         headers: {
@@ -71,4 +70,4 @@ export const deleteOffer = async (id: number): Promise<void> => {
     }
 };
 
-export { createOffer, getAllOffers, getOfferById };
+export { createEtablissement, getAllEtablissements, getEtablissementById };

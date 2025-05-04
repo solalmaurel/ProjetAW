@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Evenement {
 
@@ -17,12 +19,22 @@ public class Evenement {
     private Theme theme;
     private float prixNormal;
     private float prixAdherent;
+    private String nom;
+    private String lien;
+    
+
     private String description;
 
     @ManyToOne
+    @JsonBackReference
     Adresse adresse;
 
     @ManyToMany
+    // @JoinTable(
+    //     name = "evenement_utilisateur",
+    //     joinColumns = @JoinColumn(name = "evenement_id"),
+    //     inverseJoinColumns = @JoinColumn(name = "utilisateur_id")
+    // )
     List<User> utilisateurs;
 
     public Evenement() {
@@ -32,9 +44,10 @@ public class Evenement {
         this.idEvenement = idEvenement;
     }
 
-    public Evenement(long idEvenement, boolean isOnline, LocalDate dateDebut, LocalDate dateFin, Theme theme,
-                     float prixNormal, float prixAdherent, String description, Adresse adresse, List<User> utilisateurs) {
+    public Evenement(long idEvenement, String nom, boolean isOnline, LocalDate dateDebut, LocalDate dateFin, Theme theme,
+                     float prixNormal, float prixAdherent, String description, Adresse adresse, List<User> utilisateurs, String lien) {
         this.idEvenement = idEvenement;
+        this.nom = nom;
         this.isOnline = isOnline;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
@@ -44,6 +57,16 @@ public class Evenement {
         this.description = description;
         this.adresse = adresse;
         this.utilisateurs = utilisateurs;
+        this.lien = lien;
+
+    }
+
+    public String getLien() {
+        return lien;
+    }
+
+    public void setLien(String lien) {
+        this.lien = lien;
     }
 
     public long getIdEvenement() {
@@ -52,6 +75,14 @@ public class Evenement {
 
     public void setIdEvenement(long idEvenement) {
         this.idEvenement = idEvenement;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public boolean isOnline() {
