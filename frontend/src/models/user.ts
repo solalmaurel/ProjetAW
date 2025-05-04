@@ -77,6 +77,29 @@ const createUser = async (user: User): Promise<any> => {
     return response;
 };
 
+const updateUser = async (user: User): Promise<any> => {
+    const url = `${SPRING_API}/user/update`;
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        cache: "no-store",
+        body: JSON.stringify(user)
+    });
+
+    if (!response.ok) {
+        if(response.status === 404) {
+            throw new Error('Utilisateur inconnu !');
+        }
+
+        throw new Error('Unknown error');
+    }
+
+    return response;
+}
+
 
 const findUserById = async (id: number) : Promise<User> => {
 
@@ -124,4 +147,4 @@ const findUserByCredentials = async (username: string, password: string): Promis
     return await response.json();
 };
 
-export { createUser, findUserById, findUserByCredentials }
+export { createUser, updateUser, findUserById, findUserByCredentials }
