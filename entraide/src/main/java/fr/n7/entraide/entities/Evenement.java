@@ -29,12 +29,8 @@ public class Evenement {
     @JsonBackReference
     Adresse adresse;
 
-    @ManyToMany
-    // @JoinTable(
-    //     name = "evenement_utilisateur",
-    //     joinColumns = @JoinColumn(name = "evenement_id"),
-    //     inverseJoinColumns = @JoinColumn(name = "utilisateur_id")
-    // )
+    @ManyToMany(mappedBy = "evenements")
+    @JsonBackReference
     List<User> utilisateurs;
 
     public Evenement() {

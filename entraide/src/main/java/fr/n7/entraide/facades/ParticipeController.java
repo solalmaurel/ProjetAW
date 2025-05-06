@@ -15,41 +15,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.n7.entraide.entities.Adresse;
 import fr.n7.entraide.entities.Evenement;
 import fr.n7.entraide.repositories.EvenementRepository;
-import fr.n7.entraide.entities.Adresse;
-import fr.n7.entraide.repositories.AdresseRepository;
+import fr.n7.entraide.entities.User;
+import fr.n7.entraide.repositories.UserRepository;
 import fr.n7.entraide.utils.ResponseHandler;
 
 @RestController
-@RequestMapping("/evenement")
-public class EvenementController {
+@RequestMapping("/participe")
+public class ParticipeController {
 
     @Autowired
     private EvenementRepository evenementRepository;
 
     @Autowired
-    private AdresseRepository adresseRepository;
+    private UserRepository userRepository;
 
-    @GetMapping
-    public List<Evenement> getAllEvenements() {
-        return evenementRepository.findAll();
-    }
+    @PostMapping(path = "/participe", produces=MediaType.APPLICATION_JSON_VALUE ) 
+    public ResponseEntity<Object> participer(@RequestBody Long idEvenement, Long idUser) {
 
-    @PostMapping(path = "/create", produces=MediaType.APPLICATION_JSON_VALUE ) 
-    public ResponseEntity<Object> createEvenement(@RequestBody Evenement evenement) {
-        Adresse adresse = evenement.getAdresse();
-        if (adresse != null) {
-            adresseRepository.save(adresse);
-            evenement.setAdresse(adresse);
+        User user = userRepository.findById(idUser).get();
+        Evenement evenement = evenementRepository.findById(idEvenement).get();
+
+        if (evenement.getUtilisateurs().contains(user)){
+            return ResponseHandler.generateResponse("User is already participating to this event", HttpStatus.OK);
         }
+
+        evenement.getUtilisateurs().add(user);
         evenementRepository.save(evenement);
-        return ResponseHandler.generateResponse("Evenement created successfully", HttpStatus.OK);
+        
+        return ResponseHandler.generateResponse("User is participating to the event successfully", HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteOffer(@PathVariable("id") Long id) {
-        evenementRepository.deleteById(id);
-        return ResponseHandler.generateResponse("Offer deleted successfully", HttpStatus.OK);
-    }
 }
