@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Message {
@@ -17,6 +18,7 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name="idDiscussion")
+    @JsonBackReference
     private Discussion discussion;
 
     public Message() {
@@ -52,4 +54,10 @@ public class Message {
         this.message = message;
     }
 
+    public Discussion getDiscussion() {
+        return discussion;
+    }
+    public void setDiscussion(Discussion discussion) {
+        this.discussion = discussion;
+    }
 }
