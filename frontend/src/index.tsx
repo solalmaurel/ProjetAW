@@ -7,7 +7,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/authentification/login";
 import RegisterPage from "./pages/authentification/register";
 import HomePage from "./pages/home/home";
-import TestPage from "./pages/test";
 import OfferPage from "./pages/offers/offers";
 import ProfilePage from "./pages/profile/profile";
 import ForumPage from "./pages/forum/forum";
@@ -17,6 +16,7 @@ import CreateForm from './pages/forum/create-post';
 
 import {AuthProvider} from './context/AuthContext';
 import ProtectedRoute from './context/ProtectedRoute';
+import PaymentPage from "./pages/payment/payment";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -29,7 +29,6 @@ root.render(
                 <Routes>
                     {/* --- Routes Publiques --- */}
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/test" element={<TestPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/offers" element={<OfferPage />} />
@@ -41,6 +40,7 @@ root.render(
                         </Route>
                     </Route>
                     <Route path="/events" element={<EventPage />} />
+                    <Route path="/payment" element={<PaymentPage />} />
 
                     {/* --- Routes Protégées --- */}
                     <Route element={<ProtectedRoute />}>
