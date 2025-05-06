@@ -50,6 +50,7 @@ export interface User {
     dateCotisation: Date | undefined;
     notifOffre: boolean;
     notifEvenement: boolean;
+    etablissement: number | undefined;
 }
 
 const SPRING_API = process.env.REACT_APP_SPRING_URL_ENDPOINT;

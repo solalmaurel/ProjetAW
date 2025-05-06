@@ -51,7 +51,8 @@ export default function RegisterPage(): JSX.Element {
         typeEtude: undefined as TypeEtude | undefined,
         email: "",
         password: "",
-        confirmPwd: ""
+        confirmPwd: "",
+        etablissement: -1
     });
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -106,7 +107,8 @@ export default function RegisterPage(): JSX.Element {
             isAdherent: false,
             dateCotisation: undefined,
             notifOffre: false,
-            notifEvenement: false
+            notifEvenement: false,
+            etablissement: formData.etablissement
         };
 
         try {

@@ -29,7 +29,8 @@ function createUserListener() {
         isAdherent: false,
         dateCotisation: undefined,
         notifOffre: false,
-        notifEvenement: false
+        notifEvenement: false,
+        etablissement: 1
     }
 
     const promise = createUser(user); // on envoie la requete à spring

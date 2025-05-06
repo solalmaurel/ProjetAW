@@ -250,7 +250,7 @@ function ProfileEdit({ user }: { user: User }) {
                     <input className="border border-1 rounded-md px-3 py-1"
                            type="text"
                            name="etablissement"
-                           value={ ''}
+                           value={ formData.etablissement || '' } // TODO: Gérer établissement avec carrousel et api liste
                            onChange={handleChange}
                     />
                 </div>
