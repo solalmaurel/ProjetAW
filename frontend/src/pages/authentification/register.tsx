@@ -10,7 +10,7 @@ interface DepartmentSelectorProps {
     name?: string;
 }
 
-const DepartmentSelector: React.FC<DepartmentSelectorProps> = ({ value, onChange, id = "department", name = "department" }) => {
+export const DepartmentSelector: React.FC<DepartmentSelectorProps> = ({ value, onChange, id = "department", name = "department" }) => {
     const handleDepartmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const numValue = Number(e.target.value);
         if (!isNaN(numValue) && numValue in TypeEtude) {

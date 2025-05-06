@@ -31,11 +31,24 @@ public class UserFacade {
         return ResponseHandler.generateResponse("User created successfully", HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public User getUser(@PathVariable("id") long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if(optionalUser.isEmpty()) throw new RuntimeException("User not found");
-        return optionalUser.get();
+    @PostMapping(path = "/update", produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> updateUser(@RequestBody User user) {
+        Optional<User> userFound = userRepository.findByEmail(user.getEmail());
+        if (userFound.isPresent() && BCrypt.checkpw(userFound.get().getPassword(), user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        userRepository.save(user);
+        return ResponseHandler.generateResponse("User data updated successfully", HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/delete", produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> deleteUser(@RequestBody User user) {
+        Optional<User> userFound = userRepository.findByEmail(user.getEmail());
+        if (userFound.isPresent() && BCrypt.checkpw(userFound.get().getPassword(), user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        userRepository.delete(user);
+        return ResponseHandler.generateResponse("User data removed successfully", HttpStatus.OK);
     }
 
     @PostMapping("/login")
