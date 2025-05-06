@@ -4,8 +4,8 @@ import "./index.css";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import LoginPage from "./pages/authentication/login";
-import RegisterPage from "./pages/authentication/register";
+import LoginPage from "./pages/authentification/login";
+import RegisterPage from "./pages/authentification/register";
 import HomePage from "./pages/home/home";
 import TestPage from "./pages/test";
 import OfferPage from "./pages/offers/offers";

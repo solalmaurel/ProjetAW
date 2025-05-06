@@ -1,4 +1,4 @@
-import {createUser, findUserById, User} from "../models/user";
+import {createUser, findUserByCredentials, User} from "../models/user";
 
 export default function TestPage() {
 
@@ -39,7 +39,7 @@ function createUserListener() {
 
 function getUserListener() {
 
-    const promise = findUserById(1); // on get l'user avec l'id 1, envoi de la requete
+    const promise = findUserByCredentials("alexandre.perrot54@proton.me", "unmotdepassesecurise"); // on get l'user avec l'id 1, envoi de la requete
     promise.then(data => console.log(data)).catch(err => console.error(err)); // afficher l'user 1 s'il existe
 
 }
