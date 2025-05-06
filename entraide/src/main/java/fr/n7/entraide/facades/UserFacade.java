@@ -2,6 +2,7 @@ package fr.n7.entraide.facades;
 
 import fr.n7.entraide.entities.User;
 import fr.n7.entraide.repositories.UserRepository;
+import fr.n7.entraide.utils.MailSender;
 import fr.n7.entraide.utils.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ public class UserFacade {
         }
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         userRepository.save(user);
+        MailSender.sendWelcomeMail(user.getEmail(), user.getPrenom());
         return ResponseHandler.generateResponse("User created successfully", HttpStatus.OK);
     }
 
