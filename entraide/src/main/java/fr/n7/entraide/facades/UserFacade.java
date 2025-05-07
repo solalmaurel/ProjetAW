@@ -21,7 +21,7 @@ public class UserFacade {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping(path = "/create", produces=MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> createUser(@RequestBody User user) {
         Optional<User> userFound = userRepository.findByEmail(user.getEmail());
         if (userFound.isPresent()) {
@@ -33,7 +33,7 @@ public class UserFacade {
         return ResponseHandler.generateResponse("User created successfully", HttpStatus.OK);
     }
 
-    @PostMapping(path = "/update", produces=MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> updateUser(@RequestBody User user) {
         Optional<User> userFound = userRepository.findByEmail(user.getEmail());
         if (userFound.isPresent() && BCrypt.checkpw(userFound.get().getPassword(), user.getPassword())) {
@@ -43,7 +43,7 @@ public class UserFacade {
         return ResponseHandler.generateResponse("User data updated successfully", HttpStatus.OK);
     }
 
-    @PostMapping(path = "/delete", produces=MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> deleteUser(@RequestBody User user) {
         Optional<User> userFound = userRepository.findByEmail(user.getEmail());
         if (userFound.isPresent() && BCrypt.checkpw(userFound.get().getPassword(), user.getPassword())) {
@@ -59,19 +59,18 @@ public class UserFacade {
 
         Optional<User> userFound = userRepository.findByEmail(credentials.get("username"));
 
-        if(userFound.isEmpty()) {
+        if (userFound.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         String storedHashedPassword = userFound.get().getPassword();
 
-        if(BCrypt.checkpw(typedPassword, storedHashedPassword)) {
+        if (BCrypt.checkpw(typedPassword, storedHashedPassword)) {
             return ResponseEntity.ok(userFound.get());
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-
 
 
 }

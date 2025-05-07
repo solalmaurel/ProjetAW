@@ -121,10 +121,6 @@ export default function PaymentPage(): JSX.Element {
                 <h1 className="text-2xl">Payer avec votre carte bancaire</h1>
                 <form className="flex flex-col space-y-5 mt-10" onSubmit={handleSubmit}>
                     <div className="flex flex-col">
-                        <label htmlFor="email" className="text-[#595959] font-semibold">E-mail</label>
-                        <input className="border rounded-md px-3 py-1" type="email" name="email"/>
-                    </div>
-                    <div className="flex flex-col">
                         <label htmlFor="cb" className="text-[#595959] font-semibold">Détails de la carte</label>
                         <div className="relative">
                             <input
