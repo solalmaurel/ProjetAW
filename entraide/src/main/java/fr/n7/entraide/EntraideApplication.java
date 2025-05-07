@@ -35,5 +35,4 @@ public class EntraideApplication {
 				.csrf(AbstractHttpConfigurer::disable);
 		return http.build();
 	}
-
 }

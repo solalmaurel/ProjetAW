@@ -4,10 +4,11 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import Footer from "../../layout/footer";
 import NavBar from "../../layout/navbar";
-import { Evenement } from '../../models/evenement';
+import { Evenement } from '../../models/evenement'; //, participerEvenement
 import { createEvenement, getAllEvenements, deleteEvenement } from '../../models/evenement'; 
 import { Adresse, createAdresse, getAllAdresses } from "../../models/adresse";
 import { JSX } from 'react/jsx-runtime';
+import { useAuth } from '../../context/AuthContext';
 
 const themeValues = ['SPORT',
     'LANGUES',
@@ -222,6 +223,28 @@ export default function EventPage(): JSX.Element {
             setSearchAddress('');
             setShowAddressResults(false);
         };
+
+        const { login } = useAuth();
+        
+
+        const handleParticiper = async (eventId: number) => {
+            if (!userId) {
+                alert("Veuillez vous connecter pour participer à cet événement.");
+                return;
+            }
+    
+            try {
+                const response = await participerEvenement(eventId, userId);
+                alert(response.message);
+            } catch (error) {
+                console.error("Erreur lors de l'inscription à l'événement:", error);
+                alert("Une erreur est survenue. Veuillez réessayer.");
+            }
+        };
+        
+    
+        
+    
 
     return (
         <div className="flex flex-col min-h-screen">

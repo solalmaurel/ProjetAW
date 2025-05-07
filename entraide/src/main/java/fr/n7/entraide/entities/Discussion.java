@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Discussion {
@@ -15,7 +17,13 @@ public class Discussion {
     private LocalDate dateCreation;
     private String sujet;
 
+    @ManyToOne
+    @JoinColumn(name = "idUser")
+    @JsonIgnoreProperties("discussionsCrees")
+    private User user;
+
     @OneToMany(mappedBy = "discussion")
+    @JsonManagedReference
     private List<Message> messages = new ArrayList<>();
 
     public Discussion() {
@@ -35,8 +43,16 @@ public class Discussion {
         return sujet;
     }
 
+    public void setSujet(String sujet) {
+        this.sujet = sujet;
+    }
+
     public LocalDate getDateCreation() {
         return dateCreation;
+    }
+
+    public void setDateCreation(LocalDate dateCreation) {
+        this.dateCreation = dateCreation;
     }
 
     public void addMessage(Message message) {
@@ -45,6 +61,14 @@ public class Discussion {
 
     public List<Message> getMessages() {
         return messages;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

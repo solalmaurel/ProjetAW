@@ -12,8 +12,8 @@ export interface Evenement {
     prixAdherent: number;
     description: string;
     lien: string;
-    adresse?: Adresse;  // A revoir peut être, et peut dire que pas d'adresse si evenement online par exemple
-    utilisateurs?: User[]; // Utilisez l'interface User pour les utilisateurs? et pas forcemment d'inscrits donc pas obligatoire aussi?
+    adresse?: Adresse;  
+    utilisateurs?: User[]; 
 }
 
 const SPRING_API = process.env.REACT_APP_SPRING_URL_ENDPOINT;
@@ -78,6 +78,26 @@ export const deleteEvenement = async (id: number): Promise<void> => {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(`Erreur lors de la suppression (code ${response.status}): ${errorData.message || 'inconnue'}`);
     }
+};
+
+export const participerEvenement = async (idEvenement: number, idUser: number): Promise<any> => {
+    const url = `${SPRING_API}/participe/`;
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        cache: "no-store",
+        body: JSON.stringify({ idEvenement, idUser })
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`Erreur lors de la participation (code ${response.status}): ${errorData.message || 'inconnue'}`);
+    }
+
+    return await response.json();
 };
 
 export { createEvenement, getAllEvenements };
