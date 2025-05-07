@@ -40,11 +40,11 @@ root.render(
                         </Route>
                     </Route>
                     <Route path="/events" element={<EventPage />} />
-                    <Route path="/payment" element={<PaymentPage />} />
 
                     {/* --- Routes Protégées --- */}
                     <Route element={<ProtectedRoute />}>
                         <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/payment" element={<PaymentPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

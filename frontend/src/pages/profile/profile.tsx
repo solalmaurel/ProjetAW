@@ -3,9 +3,10 @@ import {updateUser, User, TypeEtude, deleteUser} from "../../models/user";
 import {useAuth} from "../../context/AuthContext";
 import {useNavigate} from "react-router-dom";
 import {DepartmentSelector} from '../authentification/register';
+import {Link} from "react-router";
 
-function NavBar({ user }: { user: User }) {
-    const { logout } = useAuth();
+function NavBar({user}: { user: User }) {
+    const {logout} = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -22,7 +23,7 @@ function NavBar({ user }: { user: User }) {
                     <div className="bg-amber-300 rounded-full w-6 h-6"/>
                     <a href="/profile" className="font-semibold">Informations personnelles</a>
                 </span>
-                { user && user.isAdmin && <>
+                {user && user.admin && <>
                     <hr/>
                     <span className="flex flex-row items-center space-x-3 p-2 rounded-lg">
                         <div className="bg-green-300 rounded-full w-6 h-6"/>
@@ -36,11 +37,11 @@ function NavBar({ user }: { user: User }) {
                     <div className="bg-green-300 rounded-full w-6 h-6"/>
                     <a href="/admin/events" className="font-semibold">Gérer les évenements</a>
                     </span>
-                </> }
+                </>}
             </div>
             <div className="flex flex-col h-full justify-end">
                 <span className="flex flex-row items-center space-x-3 p-2 rounded-lg">
-                    <div className="bg-red-300 rounded-full w-6 h-6" />
+                    <div className="bg-red-300 rounded-full w-6 h-6"/>
                     <button
                         type="button"
                         onClick={handleLogout}
@@ -55,10 +56,10 @@ function NavBar({ user }: { user: User }) {
 }
 
 
-function ProfileEdit({ user }: { user: User }) {
+function ProfileEdit({user}: { user: User }) {
     const navigate = useNavigate();
     const [formData, setFormData] = useState<User>(user);
-    const { login, logout } = useAuth(); // Récupérer la fonction login du contexte
+    const {login, logout} = useAuth(); // Récupérer la fonction login du contexte
 
     useEffect(() => {
         setFormData(user);
@@ -75,7 +76,7 @@ function ProfileEdit({ user }: { user: User }) {
             console.log("Tentative de mise à jour de l'utilisateur :", formData);
             await updateUser(formData);
             console.log("Utilisateur maj avec succès.");
-            login(formData,"token"); // MAJ Contexte de connexion
+            login(formData, "token"); // MAJ Contexte de connexion
             navigate('/');
         } catch (err: unknown) {
             console.error("Erreur lors de la maj de l'utilisateur:", err);
@@ -89,28 +90,27 @@ function ProfileEdit({ user }: { user: User }) {
         if (window.confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
             console.log("DELETE ACCOUNT for user ID:", formData.id);
             try {
-              await deleteUser(formData);
-              logout();
-              navigate('/');
+                await deleteUser(formData);
+                logout();
+                navigate('/');
             } catch (err) {
-               console.error("Error deleting account:", err);
-               alert("Erreur lors de la suppression du compte.");
+                console.error("Error deleting account:", err);
+                alert("Erreur lors de la suppression du compte.");
             }
         }
     }
 
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type } = e.target;
+        const {name, value, type} = e.target;
 
         if (type === 'checkbox') {
-            const { checked } = e.target as HTMLInputElement;
+            const {checked} = e.target as HTMLInputElement;
             setFormData(prevData => ({
                 ...prevData,
                 [name]: checked,
             }));
-        }
-        else {
+        } else {
             let processedValue: string | number = value;
             if (name === 'anneeDiplome') {
                 processedValue = parseInt(value, 10) || 0;
@@ -144,7 +144,7 @@ function ProfileEdit({ user }: { user: User }) {
     const currentYear = new Date().getFullYear();
     const startYear = 1990;
     const endYear = currentYear + 10;
-    const years = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i);
+    const years = Array.from({length: endYear - startYear + 1}, (_, i) => startYear + i);
 
     const formatDate = (dateInput: string | Date | undefined | null): string => {
         if (!dateInput) return "N/A";
@@ -222,22 +222,15 @@ function ProfileEdit({ user }: { user: User }) {
                 <div className="flex flex-col space-y-1 pt-2">
                     <label className="text-md font-semibold text-gray-700">Statut de la cotisation</label>
                     {needsCotisationPayment ? (
-                        <button
-                            type="button"
-                            onClick={() => {
-                                formData.dateCotisation = new Date();
-                                setFormData(formData);
-                                navigate('/profile');
-                            }} // Navigate on click
-                            className="w-full md:w-auto px-4 py-2 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition duration-150 ease-in-out"
-                        >
-                            {formData.dateCotisation ? 'Renouveler ma cotisation' : 'Payer ma cotisation'}
-                        </button>
+                        <Link to="/payment"
+                              className="w-full md:w-auto px-4 py-2 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition duration-150 ease-in-out"
+                        >{formData.dateCotisation ? 'Renouveler ma cotisation' : 'Payer ma cotisation'}</Link>
                     ) : (
                         <div
                             className="border border-gray-200 bg-gray-100 rounded-md px-3 py-1 text-gray-600 min-h-[38px] flex items-center"
                         >
-                            ✅ À jour (Expire le {formatDate(new Date(new Date(formData.dateCotisation!).setFullYear(new Date(formData.dateCotisation!).getFullYear() + 1)))})
+                            ✅ À jour (Expire
+                            le {formatDate(new Date(new Date(formData.dateCotisation!).setFullYear(new Date(formData.dateCotisation!).getFullYear() + 1)))})
                         </div>
                     )}
                 </div>
@@ -250,7 +243,7 @@ function ProfileEdit({ user }: { user: User }) {
                     <input className="border border-1 rounded-md px-3 py-1"
                            type="text"
                            name="etablissement"
-                           value={ ''}
+                           value={''}
                            onChange={handleChange}
                     />
                 </div>
@@ -263,7 +256,8 @@ function ProfileEdit({ user }: { user: User }) {
                     />
                 </div>
                 <div className="flex flex-col">
-                    <label htmlFor="anneeDiplome" className="font-semibold text-sm text-gray-700 mb-1">Année de diplôme (prévue)</label>
+                    <label htmlFor="anneeDiplome" className="font-semibold text-sm text-gray-700 mb-1">Année de diplôme
+                        (prévue)</label>
                     <select
                         className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                         id="anneeDiplome"
@@ -316,13 +310,14 @@ function ProfileEdit({ user }: { user: User }) {
                 </button>
             </div>
         </div>
-    );
+    )
+        ;
 }
 
 
 export default function ProfilePage(): JSX.Element | null {
     const navigate = useNavigate();
-    const { user, isAuthenticated } = useAuth();
+    const {user, isAuthenticated} = useAuth();
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -341,9 +336,9 @@ export default function ProfilePage(): JSX.Element | null {
 
     return (
         <div className="w-dvw min-h-dvh flex flex-row">
-            <NavBar user={user} />
+            <NavBar user={user}/>
             <div className="w-full flex items-center justify-center">
-                <ProfileEdit user={user} />
+                <ProfileEdit user={user}/>
             </div>
         </div>
     );

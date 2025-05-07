@@ -100,10 +100,10 @@ export default function RegisterPage(): JSX.Element {
             prenom: formData.prenom,
             email: formData.email,
             password: formData.password,
-            isAdmin: false,
+            admin: false,
             anneeDiplome: Number(formData.anneeDiplome),
             typeEtude: formData.typeEtude,
-            isAdherent: false,
+            adherent: false,
             dateCotisation: undefined,
             notifOffre: false,
             notifEvenement: false

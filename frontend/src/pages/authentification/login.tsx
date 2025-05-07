@@ -1,5 +1,5 @@
 import {FormEvent, JSX, useState} from "react";
-import {findUserByCredentials} from "../../models/user";
+import {findUserByCredentials, User} from "../../models/user";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "../../context/AuthContext";
 
@@ -19,8 +19,9 @@ export default function LoginPage(): JSX.Element {
         e.preventDefault();
         try {
             // Vérification des identifiants
-            const user = await findUserByCredentials(email, password);
+            const user : User = await findUserByCredentials(email, password);
 
+            console.log(user);
             // Enregistrer l'utilisateur dans le contexte
             login(user, String(user.id));
 
