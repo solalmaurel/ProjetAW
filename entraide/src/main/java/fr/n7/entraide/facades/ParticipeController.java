@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.n7.entraide.entities.Adresse;
 import fr.n7.entraide.entities.Evenement;
+import fr.n7.entraide.entities.Offre;
 import fr.n7.entraide.repositories.EvenementRepository;
 import fr.n7.entraide.entities.User;
 import fr.n7.entraide.repositories.UserRepository;
@@ -44,13 +45,21 @@ public class ParticipeController {
         if (evenement.getUtilisateurs().contains(user)){
             return ResponseHandler.generateResponse("User is already participating to this event", HttpStatus.OK);
         }
-
         evenement.getUtilisateurs().add(user);
         user.getEvenements().add(evenement);
         evenementRepository.save(evenement);
         userRepository.save(user);
-
         return ResponseHandler.generateResponse("User is participating to the event successfully", HttpStatus.OK);
     }
 
-}
+    @GetMapping("/evenement/{id}/participants")
+    public ResponseEntity<Object> getParticipants(@PathVariable Long idEvenement) {
+        Optional<Evenement> evenementOpt = evenementRepository.findById(idEvenement);
+        if (evenementOpt.isPresent()) {
+            List<User> participants = evenementOpt.get().getUtilisateurs();
+            return ResponseEntity.ok(participants);
+        }else {
+            return ResponseHandler.generateResponse("Event not found", HttpStatus.OK);
+        }
+    }
+}  

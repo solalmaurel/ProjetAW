@@ -47,6 +47,22 @@ const getAllEvenements = async (): Promise<Evenement[]> => {
     return await response.json();
 };
 
+const getAllParticipants = async (idEvenement: number): Promise<User[]> => {
+    const url = `${SPRING_API}/evenement/${idEvenement}/participants`;
+    const response = await fetch(url, {
+        method: "GET",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        cache: "no-store",
+    });
+
+    return await response.json();
+};
+
+
+
 export const deleteEvenement = async (id: number): Promise<void> => {
     const url = `${SPRING_API}/evenement/${id}`;
     const response = await fetch(url, {
@@ -86,4 +102,4 @@ export const participerEvenement = async (idEvenement: number, idUser: number): 
     return await response.json();
 };
 
-export { createEvenement, getAllEvenements };
+export { createEvenement, getAllEvenements, getAllParticipants };

@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -33,6 +35,7 @@ public class User {
     private List<Discussion> discussionsCrees;
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(name = "participe", joinColumns = @JoinColumn(name = "idUser"), inverseJoinColumns = @JoinColumn(name = "idEvenement"))
     private List<Evenement> evenements;
 
