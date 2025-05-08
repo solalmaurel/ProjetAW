@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.n7.entraide.entities.Adresse;
@@ -32,8 +33,10 @@ public class ParticipeController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping(path = "/participe", produces=MediaType.APPLICATION_JSON_VALUE ) 
-    public ResponseEntity<Object> participer(@RequestBody Long idEvenement, Long idUser) {
+    @PostMapping(produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> participer(@RequestParam Long idEvenement, @RequestParam Long idUser) {
+
+        System.out.println("Participating with eventId: " + idEvenement + " and userId: " + idUser);
 
         User user = userRepository.findById(idUser).get();
         Evenement evenement = evenementRepository.findById(idEvenement).get();
@@ -43,8 +46,10 @@ public class ParticipeController {
         }
 
         evenement.getUtilisateurs().add(user);
+        user.getEvenements().add(evenement);
         evenementRepository.save(evenement);
-        
+        userRepository.save(user);
+
         return ResponseHandler.generateResponse("User is participating to the event successfully", HttpStatus.OK);
     }
 

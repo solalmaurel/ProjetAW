@@ -44,24 +44,8 @@ const getAllEvenements = async (): Promise<Evenement[]> => {
         cache: "no-store",
     });
 
-    const contentType = response.headers.get("content-type");
-    const rawText = await response.text();
-
-    console.log("Réponse brute du serveur :", rawText);
-
-    if (contentType && contentType.includes("application/json")) {
-        try {
-            return JSON.parse(rawText);
-        } catch (e) {
-            console.error("Erreur lors du parsing JSON :", e);
-            throw e;
-        }
-    } else {
-        console.error("Réponse non-JSON :", contentType);
-        throw new Error("Réponse non-JSON : " + rawText);
-    }
+    return await response.json();
 };
-
 
 export const deleteEvenement = async (id: number): Promise<void> => {
     const url = `${SPRING_API}/evenement/${id}`;
@@ -81,20 +65,22 @@ export const deleteEvenement = async (id: number): Promise<void> => {
 };
 
 export const participerEvenement = async (idEvenement: number, idUser: number): Promise<any> => {
-    const url = `${SPRING_API}/participe/`;
-    const response = await fetch(url, {
+    const url = `${SPRING_API}/participe`;
+    const params = new URLSearchParams();
+    params.append('idEvenement', idEvenement.toString());
+    params.append('idUser', idUser.toString());
+
+    const response = await fetch(`${url}?${params.toString()}`, {
         method: "POST",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        cache: "no-store",
-        body: JSON.stringify({ idEvenement, idUser })
+        cache: "no-store"
     });
 
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(`Erreur lors de la participation (code ${response.status}): ${errorData.message || 'inconnue'}`);
     }
 
     return await response.json();

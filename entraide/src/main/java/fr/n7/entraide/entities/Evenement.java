@@ -30,7 +30,12 @@ public class Evenement {
     Adresse adresse;
 
     @ManyToMany(mappedBy = "evenements")
-    @JsonBackReference
+    //@JsonBackReference
+    // @JoinTable(
+    //     name = "participe",
+    //     joinColumns = @JoinColumn(name = "id_evenement"),
+    //     inverseJoinColumns = @JoinColumn(name = "id_user")
+    // )
     List<User> utilisateurs;
 
     public Evenement() {

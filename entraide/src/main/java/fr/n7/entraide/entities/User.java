@@ -97,6 +97,15 @@ public class User {
         this.prenom = prenom;
     }
 
+    public List<Evenement> getEvenements() {
+        return evenements;
+    }
+
+    public void setEvenements(List<Evenement> evenements) {
+        this.evenements = evenements;
+    }
+
+
     public String getEmail() {
         return email;
     }
