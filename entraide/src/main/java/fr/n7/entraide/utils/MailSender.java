@@ -1,23 +1,13 @@
-package fr.n7.entraide.facades;
+package fr.n7.entraide.utils;
 
 import com.resend.Resend;
 import com.resend.core.exception.ResendException;
 import com.resend.services.emails.model.CreateEmailOptions;
 import com.resend.services.emails.model.CreateEmailResponse;
-import fr.n7.entraide.utils.ResponseHandler;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("mail")
-public class MailController {
+public class MailSender {
 
-    @GetMapping("send")
-    public ResponseEntity<Object> sendMail(@RequestParam String mail, @RequestParam String username) {
+    public static void sendWelcomeMail(String mail, String username) {
 
         Resend resend = new Resend("re_AruLfBBP_Js4HmdhG1xUYH5YERRaXutYR");
 
@@ -25,7 +15,7 @@ public class MailController {
                 .from("Entraide Étudiante <welcome@entraide.alexandreperrot.fr>")
                 .to(mail)
                 .subject("Bienvenue sur Entraide Étudiante !")
-                .html(mail(username))
+                .html(welcomeMail(username))
                 .build();
 
         try {
@@ -35,11 +25,9 @@ public class MailController {
             e.printStackTrace();
         }
 
-        return ResponseHandler.generateResponse("Mail sent to " + mail, HttpStatus.OK);
-
     }
 
-    public String mail(String username) {
+    public static String welcomeMail(String username) {
         String html = """
                 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
                 <html dir="ltr" lang="fr">

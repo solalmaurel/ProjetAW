@@ -181,6 +181,14 @@ public class User {
         this.notifEvenement = notifEvenement;
     }
 
+    public List<Discussion> getDiscussionsCrees() {
+        return discussionsCrees;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
     @Override
     public String toString() {
         return "User{" +

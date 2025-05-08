@@ -43,10 +43,10 @@ export interface User {
     prenom: string;
     email: string;
     password: string;
-    isAdmin: boolean;
+    admin: boolean;
     anneeDiplome: number;
     typeEtude: TypeEtude;
-    isAdherent: boolean;
+    adherent: boolean;
     dateCotisation: Date | undefined;
     notifOffre: boolean;
     notifEvenement: boolean;
@@ -78,6 +78,7 @@ const createUser = async (user: User): Promise<any> => {
 };
 
 const updateUser = async (user: User): Promise<any> => {
+    console.log(user)
     const url = `${SPRING_API}/user/update`;
     const response = await fetch(url, {
         method: "POST",
@@ -151,7 +152,7 @@ const findUserByCredentials = async (username: string, password: string): Promis
         throw new Error('Unknown error');
     }
 
-    return await response.json();
+    return await response.json() as User;
 };
 
 export { createUser, updateUser, deleteUser, findUserByCredentials }
