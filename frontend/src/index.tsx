@@ -17,6 +17,7 @@ import CreateForm from "./pages/forum/create-post";
 import {AuthProvider} from './context/AuthContext';
 import ProtectedRoute from './context/ProtectedRoute';
 import PaymentPage from "./pages/payment/payment";
+import ParticipantsPage from "./pages/events/participants";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -40,6 +41,8 @@ root.render(
                         </Route>
                     </Route>
                     <Route path="/events" element={<EventPage />} />
+                    <Route path="/evenement/:id/participants" element={<ParticipantsPage />} />
+
 
                     {/* --- Routes Protégées --- */}
                     <Route element={<ProtectedRoute />}>
