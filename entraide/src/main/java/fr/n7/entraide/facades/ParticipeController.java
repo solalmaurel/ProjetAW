@@ -53,8 +53,8 @@ public class ParticipeController {
     }
 
     @GetMapping("/evenement/{id}/participants")
-    public ResponseEntity<Object> getParticipants(@PathVariable Long idEvenement) {
-        Optional<Evenement> evenementOpt = evenementRepository.findById(idEvenement);
+    public ResponseEntity<Object> getParticipants(@PathVariable Long id) {
+        Optional<Evenement> evenementOpt = evenementRepository.findById(id);
         if (evenementOpt.isPresent()) {
             List<User> participants = evenementOpt.get().getUtilisateurs();
             return ResponseEntity.ok(participants);

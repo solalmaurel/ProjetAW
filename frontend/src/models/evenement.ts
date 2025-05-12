@@ -48,7 +48,7 @@ const getAllEvenements = async (): Promise<Evenement[]> => {
 };
 
 const getAllParticipants = async (idEvenement: number): Promise<User[]> => {
-    const url = `${SPRING_API}/evenement/${idEvenement}/participants`;
+    const url = `${SPRING_API}/participe/evenement/${idEvenement}/participants`;
     const response = await fetch(url, {
         method: "GET",
         headers: {
