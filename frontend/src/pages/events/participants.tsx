@@ -18,6 +18,7 @@ export default function ParticipantsPage() {
                 
                 const participants = await getAllParticipants(Number(id));
                 console.log("Participants:", participants);
+
                 setParticipants(participants);
                 
             } catch (err: any) {
