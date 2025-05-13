@@ -78,11 +78,6 @@ public class DiscussionController {
     @GetMapping("/{id}/messages")
     public ResponseEntity<List<Message>> getMessagesByDiscussion(@PathVariable Long id) {
         List<Message> messages = messageRepository.findByDiscussionIdDiscussionOrderByDateAsc(id);
-        if (messages.isEmpty()) {
-            logger.warn("No messages found for discussion with id: {}", id);
-        } else {
-            logger.info("Messages found for discussion with id {}: {}", id, messages);
-        }
         return ResponseEntity.ok(messages);
     }
 
@@ -115,5 +110,50 @@ public class DiscussionController {
         public void setUserId(Long userId) {
             this.userId = userId;
         }
+    }
+
+    @PostMapping("/{id}/createMessage")
+    public ResponseEntity<Message> createMessage(@RequestBody MessageRequest req) {
+        logger.info("Received message creation request: message={}, userId={}, discussionId={}",
+                req.getMessage(), req.getIdUser(), req.getIdDiscussion());
+        User user = userRepository.findById(req.getIdUser()).orElseThrow();
+        Discussion discussion = discussionRepository.findById(req.getIdDiscussion()).orElseThrow();
+
+        Message message = new Message();
+        message.setMessage(req.getMessage());
+        message.setDate(LocalDate.now());
+        message.setUser(user);
+        message.setDiscussion(discussion);
+
+        messageRepository.save(message);
+
+        return ResponseEntity.ok(message);
+    }
+
+    public static class MessageRequest {
+        private String message;
+        private Long idUser;
+        private Long idDiscussion;
+        
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public Long getIdUser() {
+            return idUser;
+        }
+
+        public void setIdUser(Long idUser) {
+            this.idUser = idUser;
+        }   
+
+        public Long getIdDiscussion() {
+            return idDiscussion;
+        }
+        
     }
 }
