@@ -121,3 +121,21 @@ export const postMessage = async (message: {
 
   return await response.json();
 };
+
+export const getDiscussionById = async (id: number): Promise<Discussion> => {
+  const url = `${SPRING_API}/discussion/${id}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch discussion");
+  }
+
+  return await response.json();
+};

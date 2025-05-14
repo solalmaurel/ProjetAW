@@ -156,4 +156,10 @@ public class DiscussionController {
         }
         
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Discussion> getDiscussionById(@PathVariable Long id) {
+        Discussion discussion = discussionRepository.findById(id).orElseThrow();
+        return ResponseEntity.ok(discussion);
+    }
 }
