@@ -5,11 +5,13 @@ import { getLatestDiscussions, Discussion } from "../../models/discussion";
 
 export default function ForumPage(): JSX.Element {
   const [discussions, setDiscussions] = useState<Discussion[]>([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchDiscussions = async () => {
       try {
         const data = await getLatestDiscussions();
+        console.log(data);
         setDiscussions(data);
       } catch (error) {
         console.error("Error fetching latest discussions:", error);
@@ -18,6 +20,10 @@ export default function ForumPage(): JSX.Element {
 
     fetchDiscussions();
   }, []);
+
+  const filteredDiscussions = discussions.filter((discussion) =>
+    discussion.sujet.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -28,6 +34,8 @@ export default function ForumPage(): JSX.Element {
             className="border border-1 rounded-lg p-3 w-full"
             type="text"
             placeholder="Rechercher une discussion"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
           <a
             href="/forum/create"
@@ -36,7 +44,7 @@ export default function ForumPage(): JSX.Element {
             Créer un nouveau post
           </a>
         </span>
-        {discussions.map((discussion) => (
+        {filteredDiscussions.map((discussion) => (
           <DiscussionPreview
             key={discussion.idDiscussion}
             discussion={discussion}
@@ -69,7 +77,9 @@ function DiscussionPreview({
           <p className="text-gray-500">
             Postée le {new Date(discussion.dateCreation).toLocaleDateString()}
           </p>
-          <p className="text-gray-500">{discussion.messages.length} réponses</p>
+          <p className="text-gray-500">
+            {discussion.messages?.length ?? 0} réponses
+          </p>
         </div>
       </div>
       <h1 className="text-xl font-semibold">{discussion.sujet}</h1>

@@ -10,7 +10,7 @@ export interface Message {
   idMessage: number;
   message: string;
   date: Date;
-  username: string;
+  user: User;
 }
 
 export interface User {
@@ -75,6 +75,66 @@ export const getLatestDiscussions = async (): Promise<Discussion[]> => {
 
   if (!response.ok) {
     throw new Error("Failed to fetch latest discussions");
+  }
+
+  return await response.json();
+};
+
+export const getMessagesByDiscussion = async (
+  discussionId: number
+): Promise<Message[]> => {
+  const url = `${SPRING_API}/discussion/${discussionId}/messages`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch messages");
+  }
+
+  return await response.json();
+};
+
+export const postMessage = async (message: {
+  idDiscussion: number;
+  message: string;
+  idUser: number;
+}): Promise<Message[]> => {
+  const url = `${SPRING_API}/discussion/${message.idDiscussion}/createMessage`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(message),
+  });
+  console.log(response);
+  if (!response.ok) {
+    throw new Error("Failed to post message");
+  }
+
+  return await response.json();
+};
+
+export const getDiscussionById = async (id: number): Promise<Discussion> => {
+  const url = `${SPRING_API}/discussion/${id}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch discussion");
   }
 
   return await response.json();
