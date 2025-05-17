@@ -18,7 +18,7 @@ public class Facture {
     private User user;
 
     private TypeFacture typeFacture;
-    private long idObject; // correspond à l'id d'un événement ou autre...
+    private String nomFacture; // correspond à un nom de facture
     private double pricePaid;
     private LocalDate dateFacture;
 
@@ -29,11 +29,11 @@ public class Facture {
         this.idFacture = idFacture;
     }
 
-    public Facture(long idFacture, User user, TypeFacture typeFacture, long idObject, double pricePaid, LocalDate dateFacture) {
+    public Facture(long idFacture, User user, TypeFacture typeFacture, String nomFacture, double pricePaid, LocalDate dateFacture) {
         this.idFacture = idFacture;
         this.user = user;
         this.typeFacture = typeFacture;
-        this.idObject = idObject;
+        this.nomFacture = nomFacture;
         this.pricePaid = pricePaid;
         this.dateFacture = dateFacture;
     }
@@ -62,12 +62,12 @@ public class Facture {
         this.typeFacture = typeFacture;
     }
 
-    public long getIdObject() {
-        return idObject;
+    public String getNomFacture() {
+        return nomFacture;
     }
 
-    public void setIdObject(long idObject) {
-        this.idObject = idObject;
+    public void setNomFacture(String nomFacture) {
+        this.nomFacture = nomFacture;
     }
 
     public double getPricePaid() {
@@ -92,7 +92,7 @@ public class Facture {
                 "idFacture=" + idFacture +
                 ", user=" + user +
                 ", typeFacture=" + typeFacture +
-                ", idObject=" + idObject +
+                ", nomFacture=" + nomFacture +
                 ", pricePaid=" + pricePaid +
                 ", dateFacture=" + dateFacture +
                 '}';

@@ -81,7 +81,7 @@ export default function PaymentPage(): JSX.Element {
 
             const facture : Facture = {
                 user: user,
-                idObject: item.idObject,
+                nomFacture: item.itemName,
                 dateFacture: new Date(),
                 typeFacture: item.typeFacture,
                 pricePaid: item.unitPrice * item.amount

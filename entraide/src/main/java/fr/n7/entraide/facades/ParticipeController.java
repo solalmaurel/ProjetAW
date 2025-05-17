@@ -43,7 +43,7 @@ public class ParticipeController {
         Evenement evenement = evenementRepository.findById(idEvenement).get();
 
         if (evenement.getUtilisateurs().contains(user)){
-            return ResponseHandler.generateResponse("User is already participating to this event", HttpStatus.OK);
+            return ResponseHandler.generateResponse("User is already participating to this event", HttpStatus.FORBIDDEN);
         }
         evenement.getUtilisateurs().add(user);
         user.getEvenements().add(evenement);

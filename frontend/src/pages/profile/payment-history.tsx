@@ -109,7 +109,7 @@ function PaymentHistory({user}: { user: User }) {
 function HistoryTile({facture}: {facture: Facture}): JSX.Element {
     return (
       <div className="bg-red-200">
-          <p>Facture n°{facture.idFacture} type {facture.typeFacture} payée {facture.pricePaid}€ </p>
+          <p>Facture n°{facture.idFacture} ({facture.nomFacture}) type {facture.typeFacture} payée {facture.pricePaid}€ </p>
       </div>
     );
 }

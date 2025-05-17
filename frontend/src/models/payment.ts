@@ -9,7 +9,7 @@ export interface Facture {
     idFacture?: number;
     user: User;
     typeFacture: TypeFacture;
-    idObject?: number;
+    nomFacture: string;
     pricePaid: number;
     dateFacture: Date | undefined;
 }
@@ -19,7 +19,6 @@ export interface Item {
     amount: number;
     unitPrice: number;
     typeFacture: TypeFacture;
-    idObject?: number;
     urlCallback: string;
 }
 

@@ -585,7 +585,6 @@ function EventPopup({event, onClose, setEvents}: {
             amount: 1,
             unitPrice: user.adherent ? event.prixAdherent : event.prixNormal,
             typeFacture: TypeFacture.EVENEMENT,
-            idObject: event.idEvenement!,
             urlCallback: `/callback?type=${TypeFacture.EVENEMENT}&idEvenement=${event.idEvenement}`,
         };
 
