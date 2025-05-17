@@ -46,11 +46,21 @@ export default function Callback(): JSX.Element {
             } else {
                 setError("L'événement n'existe pas");
             }
+        } else {
+            setError("Erreur dans le callback, merci de réessayer")
         }
 
     }, [user, location]);
 
-    return error === null ? <></> :
+    return error === null ?
+        (<div className="w-dvw h-dvh flex items-center justify-center bg-white">
+            <div className="flex space-x-4">
+                <span className="w-6 h-6 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                <span className="w-6 h-6 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                <span className="w-6 h-6 bg-blue-500 rounded-full animate-bounce"></span>
+            </div>
+        </div>)
+        :
         (<div className="flex flex-col space-y-5 justify-center items-center w-dvh h-dvh">
             <h1 className="text-3xl font-bold">Une erreur est survenue...</h1>
             <h1 className="text-xl text-red-500">{error}</h1>

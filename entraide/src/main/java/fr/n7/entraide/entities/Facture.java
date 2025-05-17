@@ -14,7 +14,7 @@ public class Facture {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
-    @JsonIgnoreProperties({"messages", "discussionsCrees", "evenements", "discussionsAbonnes", "etablissement", "password", "email"})
+    @JsonIgnoreProperties({"messages", "discussionsCrees", "evenements", "discussionsAbonnes", "etablissement", "password"})
     private User user;
 
     private TypeFacture typeFacture;
