@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 import LoginPage from "./pages/authentification/login";
 import RegisterPage from "./pages/authentification/register";
@@ -18,39 +18,43 @@ import {AuthProvider} from './context/AuthContext';
 import ProtectedRoute from './context/ProtectedRoute';
 import PaymentPage from "./pages/payment/payment";
 import ParticipantsPage from "./pages/events/participants";
+import PaymentHistoryPage from "./pages/profile/payment-history";
+import Callback from "./pages/payment/callback";
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+    document.getElementById("root") as HTMLElement
 );
 
 root.render(
-    <React.StrictMode>
-        <AuthProvider>
-            <BrowserRouter>
-                <Routes>
-                    {/* --- Routes Publiques --- */}
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<RegisterPage />} />
-                    <Route path="/offers" element={<OfferPage />} />
-                    <Route path="/forum">
-                        <Route index element={<ForumPage />} />
-                        <Route path="discussion/:id" element={<Discussion />} />
-                        <Route element={<ProtectedRoute />}>
-                          <Route path="create" element={<CreateForm />} />
-                        </Route>
+    <AuthProvider>
+        <BrowserRouter>
+            <Routes>
+                {/* --- Routes Publiques --- */}
+                <Route path="/" element={<HomePage/>}/>
+                <Route path="/login" element={<LoginPage/>}/>
+                <Route path="/register" element={<RegisterPage/>}/>
+                <Route path="/offers" element={<OfferPage/>}/>
+                <Route path="/forum">
+                    <Route index element={<ForumPage/>}/>
+                    <Route path="discussion/:id" element={<Discussion/>}/>
+                    <Route element={<ProtectedRoute/>}>
+                        <Route path="create" element={<CreateForm/>}/>
                     </Route>
-                    <Route path="/events" element={<EventPage />} />
-                    <Route path="/evenement/:id/participants" element={<ParticipantsPage />} />
+                </Route>
+                <Route path="/events" element={<EventPage/>}/>
+                <Route path="/evenement/:id/participants" element={<ParticipantsPage/>}/>
 
 
-                    {/* --- Routes Protégées --- */}
-                    <Route element={<ProtectedRoute />}>
-                        <Route path="/profile" element={<ProfilePage />} />
-                        <Route path="/payment" element={<PaymentPage />} />
+                {/* --- Routes Protégées --- */}
+                <Route element={<ProtectedRoute/>}>
+                    <Route path="/profile">
+                        <Route index element={<ProfilePage/>}/>
+                        <Route path="payment-history" element={<PaymentHistoryPage/>}/>
                     </Route>
-                </Routes>
-            </BrowserRouter>
-        </AuthProvider>
-    </React.StrictMode>
+                    <Route path="/payment" element={<PaymentPage/>}/>
+                    <Route path="/callback" element={<Callback/>}/>
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    </AuthProvider>
 );

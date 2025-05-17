@@ -1,18 +1,19 @@
-import {useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import Footer from "../../layout/footer";
 import NavBar from "../../layout/navbar";
-import { Evenement, getAllParticipants, participerEvenement } from '../../models/evenement'; 
-import { User } from '../../models/user'; 
+import {Evenement, participerEvenement} from '../../models/evenement';
 import allLocales from '@fullcalendar/core/locales-all'
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
-import { createEvenement, getAllEvenements, deleteEvenement } from '../../models/evenement'; 
-import { Adresse, createAdresse, getAllAdresses } from "../../models/adresse";
-import { JSX } from 'react/jsx-runtime';
-import { useAuth } from '../../context/AuthContext';
+import {createEvenement, getAllEvenements, deleteEvenement} from '../../models/evenement';
+import {Adresse, createAdresse, getAllAdresses} from "../../models/adresse";
+import {JSX} from 'react/jsx-runtime';
+import {useAuth} from '../../context/AuthContext';
+import {Item, TypeFacture} from "../../models/payment";
+import {User} from "../../models/user";
 
 const themeValues = ['SPORT',
     'LANGUES',
@@ -40,17 +41,16 @@ export default function EventPage(): JSX.Element {
     const [showAddressResults, setShowAddressResults] = useState<boolean>(false);
     const [showPopup, setShowPopup] = useState<boolean>(false);
     const [filteredEvents, setFilteredEvents] = useState<Evenement[]>([]);
-    const [participants, setParticipants] = useState<User[]>([]);
     const [selectedEvent, setSelectedEvent] = useState<Evenement | null>(null);
     const [newEvent, setNewEvent] = useState<Evenement>({
-        nom : '',
+        nom: '',
         isOnline: false,
         dateDebut: new Date(),
         dateFin: new Date(),
         theme: themeValues[0],
         prixNormal: 0,
         prixAdherent: 0,
-        description: '' ,
+        description: '',
         lien: '',
         idEvenement: null,
         adresse: undefined,
@@ -66,15 +66,15 @@ export default function EventPage(): JSX.Element {
     });
 
     const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'dateDebut' | 'dateFin') => {
-            const value = new Date(e.target.value);
-            setNewEvent({
-                ...newEvent,
-                [field]: value,
-            });
-        };
-    
+        const value = new Date(e.target.value);
+        setNewEvent({
+            ...newEvent,
+            [field]: value,
+        });
+    };
+
     const handleInputChangeEvent = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setNewEvent({
             ...newEvent,
             [name]: value,
@@ -82,7 +82,7 @@ export default function EventPage(): JSX.Element {
     };
 
     const handleInputChangeAdress = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setNewAdress({
             ...newAdresse,
             [name]: value,
@@ -99,14 +99,14 @@ export default function EventPage(): JSX.Element {
             setEvents([...events, newEvent]);
             setShowForm(false);
             setNewEvent({
-                nom : '',
+                nom: '',
                 isOnline: false,
                 dateDebut: new Date(),
                 dateFin: new Date(),
                 theme: themeValues[0],
                 prixNormal: 0,
                 prixAdherent: 0,
-                description: '' ,
+                description: '',
                 lien: '',
                 idEvenement: null,
                 adresse: undefined,
@@ -149,10 +149,10 @@ export default function EventPage(): JSX.Element {
             setFilteredEvents(events);
         };
         const fetchAdresses = async () => {
-        const adressesData = await getAllAdresses();
-        console.log("adressesData:", adressesData);
-        setAdresses(adressesData);
-        setFilteredAdresses(adressesData);
+            const adressesData = await getAllAdresses();
+            console.log("adressesData:", adressesData);
+            setAdresses(adressesData);
+            setFilteredAdresses(adressesData);
         };
 
         fetchEvents();
@@ -162,14 +162,14 @@ export default function EventPage(): JSX.Element {
     // Est ce qu'on a besoin de faire un fetch pour les adresses aussi ?? Je sais pas...
 
     useEffect(() => {
-            let filtered = events;
-    
-            if (selectedTheme) {
-                filtered = filtered.filter((event) => event.theme === selectedTheme);
-            }
-    
-            setFilteredEvents(filtered); 
-        }, [selectedTheme, events]);
+        let filtered = events;
+
+        if (selectedTheme) {
+            filtered = filtered.filter((event) => event.theme === selectedTheme);
+        }
+
+        setFilteredEvents(filtered);
+    }, [selectedTheme, events]);
 
     useEffect(() => {
         if (searchAddress) {
@@ -186,46 +186,46 @@ export default function EventPage(): JSX.Element {
         }
     }, [searchAddress, adresses]);
 
-        const handleDateClick = (arg: any) => {
-            setNewEvent({
-                ...newEvent,
-                dateDebut: new Date(arg.dateStr),
-                dateFin: new Date(arg.dateStr),
-            });
-            setShowForm(true);
-        };
-    
-        const handleEventClick = (arg: any) => {
-            const eventId = parseInt(arg.event.id);
-            const event = events.find(e => e.idEvenement === eventId);
-            if (event) {
-                setSelectedEvent(event);
-                setShowPopup(true);
-            }
-        };
+    const handleDateClick = (arg: any) => {
+        setNewEvent({
+            ...newEvent,
+            dateDebut: new Date(arg.dateStr),
+            dateFin: new Date(arg.dateStr),
+        });
+        setShowForm(true);
+    };
 
-        const handleEventMouseEnter = (arg: any) => {
-            const eventId = parseInt(arg.event.id);
-            const event = events.find(e => e.idEvenement === eventId);
-            if (event) {
-                setHoveredEvent(event);
-            }
-        };
-    
-        const handleEventMouseLeave = () => {
-            setHoveredEvent(null);
-        };
+    const handleEventClick = (arg: any) => {
+        const eventId = parseInt(arg.event.id);
+        const event = events.find(e => e.idEvenement === eventId);
+        if (event) {
+            setSelectedEvent(event);
+            setShowPopup(true);
+        }
+    };
 
-        const handleAddressSelect = (adresse: Adresse) => {
-            setNewEvent({ ...newEvent, adresse });
-            setSearchAddress('');
-            setShowAddressResults(false);
-        };
-    
+    const handleEventMouseEnter = (arg: any) => {
+        const eventId = parseInt(arg.event.id);
+        const event = events.find(e => e.idEvenement === eventId);
+        if (event) {
+            setHoveredEvent(event);
+        }
+    };
+
+    const handleEventMouseLeave = () => {
+        setHoveredEvent(null);
+    };
+
+    const handleAddressSelect = (adresse: Adresse) => {
+        setNewEvent({...newEvent, adresse});
+        setSearchAddress('');
+        setShowAddressResults(false);
+    };
+
 
     return (
         <div className="flex flex-col min-h-screen">
-            <NavBar />
+            <NavBar/>
             <div className="flex flex-col flex-grow p-5 w-dvw">
                 <h1 className="font-semibold text-3xl">Événements</h1>
                 <div className="flex flex-col space-y-8 w-full justify-center items-center mt-10">
@@ -262,38 +262,38 @@ export default function EventPage(): JSX.Element {
                                 </label>
                                 <div className="flex space-x-4">
                                     <label className="flex items-center space-x-1">
-                                    <input
-                                        type="radio"
-                                        name="isOnline"
-                                        checked={newEvent.isOnline === true}
-                                        onChange={() => setNewEvent((prev) => ({ ...prev, isOnline: true }))}
-                                    />
-                                    <span>Oui</span>
+                                        <input
+                                            type="radio"
+                                            name="isOnline"
+                                            checked={newEvent.isOnline === true}
+                                            onChange={() => setNewEvent((prev) => ({...prev, isOnline: true}))}
+                                        />
+                                        <span>Oui</span>
                                     </label>
 
                                     <label className="flex items-center space-x-1">
-                                    <input
-                                        type="radio"
-                                        name="isOnline"
-                                        checked={newEvent.isOnline === false}
-                                        onChange={() => setNewEvent((prev) => ({ ...prev, isOnline: false }))}
-                                    />
-                                    <span>Non</span>
+                                        <input
+                                            type="radio"
+                                            name="isOnline"
+                                            checked={newEvent.isOnline === false}
+                                            onChange={() => setNewEvent((prev) => ({...prev, isOnline: false}))}
+                                        />
+                                        <span>Non</span>
                                     </label>
                                 </div>
-                                </div>
+                            </div>
                             {newEvent.isOnline && (
-                            <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Lien</label>
-                                <input
-                                    type="text"
-                                    name="lien"
-                                    value={newEvent.lien}
-                                    onChange={handleInputChangeEvent}
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    required
-                                />
-                            </div> )}
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">Lien</label>
+                                    <input
+                                        type="text"
+                                        name="lien"
+                                        value={newEvent.lien}
+                                        onChange={handleInputChangeEvent}
+                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        required
+                                    />
+                                </div>)}
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Thème</label>
                                 <select
@@ -392,20 +392,21 @@ export default function EventPage(): JSX.Element {
                                         </ul>
                                     )}
                                     {newEvent.adresse && (
-                                    <div className="mt-2">
-                                        <strong>Adresse sélectionnée :</strong> {newEvent.adresse.numero} {newEvent.adresse.rue}, {newEvent.adresse.codePostal} {newEvent.adresse.ville}
-                                     </div>
+                                        <div className="mt-2">
+                                            <strong>Adresse sélectionnée
+                                                :</strong> {newEvent.adresse.numero} {newEvent.adresse.rue}, {newEvent.adresse.codePostal} {newEvent.adresse.ville}
+                                        </div>
                                     )}
                                 </div>
                             )}
                             {!newEvent.isOnline && (
-                            <button
-                                type="button"
-                                className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                onClick={() => setShowAdresseForm(true)}
-                            >
-                                Nouvelle adresse
-                            </button>
+                                <button
+                                    type="button"
+                                    className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                    onClick={() => setShowAdresseForm(true)}
+                                >
+                                    Nouvelle adresse
+                                </button>
                             )}
                             <div className="flex items-center justify-between mt-4">
                                 <button
@@ -436,7 +437,7 @@ export default function EventPage(): JSX.Element {
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     required
                                 />
-                             </div>
+                            </div>
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Complément</label>
                                 <input
@@ -445,7 +446,7 @@ export default function EventPage(): JSX.Element {
                                     value={newAdresse.complement}
                                     onChange={handleInputChangeAdress}
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                /> 
+                                />
                             </div>
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Rue</label>
@@ -500,7 +501,7 @@ export default function EventPage(): JSX.Element {
                     <FullCalendar
                         locales={allLocales}
                         locale={'fr'}
-                        key={filteredEvents.length}  
+                        key={filteredEvents.length}
                         plugins={[dayGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
                         editable={true}
@@ -521,38 +522,46 @@ export default function EventPage(): JSX.Element {
                         eventMouseLeave={handleEventMouseLeave} // Ajout de l'événement de sortie de survol
                     />
                     {hoveredEvent && (
-                        <div className="fixed bg-white border p-4 rounded shadow-lg z-50" style={{ top: '10px', left: '10px' }}>
-                            <h2 className="font-bold pb-2" style={{ fontSize: '1.1rem' }}>{hoveredEvent.nom}</h2>
+                        <div className="fixed bg-white border p-4 rounded shadow-lg z-50"
+                             style={{top: '10px', left: '10px'}}>
+                            <h2 className="font-bold pb-2" style={{fontSize: '1.1rem'}}>{hoveredEvent.nom}</h2>
                             <p><strong>Thème:</strong> {hoveredEvent.theme}</p>
-                            <p><strong>Date de début:</strong> {new Date(hoveredEvent.dateDebut).toLocaleDateString()}</p>
+                            <p><strong>Date de début:</strong> {new Date(hoveredEvent.dateDebut).toLocaleDateString()}
+                            </p>
                             <p><strong>Date de fin:</strong> {new Date(hoveredEvent.dateFin).toLocaleDateString()}</p>
                             <p><strong>Prix Normal:</strong> {hoveredEvent.prixNormal} €</p>
                             <p><strong>Prix Adhérent:</strong> {hoveredEvent.prixAdherent} €</p>
                             <p><strong>Description:</strong> {hoveredEvent.description}</p>
                             {hoveredEvent.adresse && (
-                                <p><strong>Adresse:</strong> {hoveredEvent.adresse.numero} {hoveredEvent.adresse.rue}, {hoveredEvent.adresse.codePostal} {hoveredEvent.adresse.ville}</p>
+                                <p>
+                                    <strong>Adresse:</strong> {hoveredEvent.adresse.numero} {hoveredEvent.adresse.rue}, {hoveredEvent.adresse.codePostal} {hoveredEvent.adresse.ville}
+                                </p>
                             )}
                         </div>
                     )}
                 </div>
             </div>
-            <Footer />
+            <Footer/>
             {showPopup && selectedEvent && (
-            <EventPopup
-                event={selectedEvent}
-                onClose={() => setShowPopup(false)}
-                setEvents={setEvents}
-            />
-        )}
+                <EventPopup
+                    event={selectedEvent}
+                    onClose={() => setShowPopup(false)}
+                    setEvents={setEvents}
+                />
+            )}
         </div>
     );
 }
 
-function EventPopup({ event, onClose, setEvents }: { event: Evenement; onClose: () => void; setEvents: React.Dispatch<React.SetStateAction<Evenement[]>> }) {
+function EventPopup({event, onClose, setEvents}: {
+    event: Evenement;
+    onClose: () => void;
+    setEvents: React.Dispatch<React.SetStateAction<Evenement[]>>
+}) {
 
     const handleDeleteEvent = async (id: number | null) => {
         try {
-            if (id != null){
+            if (id != null) {
                 await deleteEvenement(id);
                 setEvents(prev => prev.filter(event => event.idEvenement !== id));
             }
@@ -560,67 +569,91 @@ function EventPopup({ event, onClose, setEvents }: { event: Evenement; onClose: 
             console.error("Erreur lors de la suppression :", err);
         }
     };
-    
-    const { user } = useAuth();
+
+    const {user}: { user: User } = useAuth();
     const navigate = useNavigate();
-        
-        const handleParticiper = async (eventId: number | null) => {
-            if (user == null) {
-                //alert("Veuillez vous connecter pour participer à cet événement.");
-                navigate('/login');
-                return;
-            }
-            try {
-                if (eventId != null){
-                    const response = await participerEvenement(eventId, user.idUser);
-                    alert(response.message);
-                }
-            } catch (error) {
-                console.error("Erreur lors de l'inscription à l'événement:", error);
-                alert("Une erreur est survenue. Veuillez réessayer.");
-            }
+
+    const handleParticiper = async (eventId: number | null) => {
+        if (user == null) {
+            //alert("Veuillez vous connecter pour participer à cet événement.");
+            navigate('/login');
+            return;
+        }
+
+        const eventItem: Item = {
+            itemName: "Participation à un évenement : " + event.nom,
+            amount: 1,
+            unitPrice: user.adherent ? event.prixAdherent : event.prixNormal,
+            typeFacture: TypeFacture.EVENEMENT,
+            urlCallback: `/callback?type=${TypeFacture.EVENEMENT}&idEvenement=${event.idEvenement}`,
         };
+
+        if (eventItem.unitPrice > 0) {
+            navigate('/payment', {state: eventItem});
+        } else {
+            navigate(eventItem.urlCallback);
+        }
+
+    };
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="relative p-4 w-full max-w-2xl max-h-full">
                 <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <div
+                        className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                {event.nom}
-                            </h3>
-                            <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={onClose}>
-                                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                </svg>
-                                <span className="sr-only">Close modal</span>
-                            </button>
-                        </div>
-                        <div className="p-4 md:p-5 space-y-4">
-                            <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400">
-                                {event.description}
-                            </p>
-                            <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400">
-                                L'évènement aura lieu du {new Date(event.dateDebut).toLocaleDateString()} au {new Date(event.dateDebut).toLocaleDateString()}.
-                            </p> 
-                            <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400">
-                                Le coût d'inscription à cet évènement est de {event.prixNormal} € pour les adhérents et {event.prixAdherent} € sinon.
-                            </p> 
-                            <p className="text-base leading-relaxed text-gray-400 dark:text-gray-400" style={{ fontSize: '0.8rem' }}>
-                                Une fois payé, le montant ne pourra pas être remboursé, y compris en cas de désinscription, ou absence.
-                                Vous recevrez un mail confirmant votre participation, après payement.
-                            </p>
-                        </div>
-                        <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                            <button onClick={() => handleParticiper(event.idEvenement)} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Participer</button>
-                            { user!=null && user.isAdmin && (
-                            <button onClick={() => handleDeleteEvent(event.idEvenement)} className="ms-6 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-red-600 dark:focus:ring-red-700">Supprimer</button>
-                            )}
-                            <button onClick={() => navigate(`/evenement/${event.idEvenement}/participants`)} className=" ms-6 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Voir les participants</button>
-                            <button onClick={onClose} className="py-2.5 px-5 ms-6 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Annuler</button>
-                        </div>
+                            {event.nom}
+                        </h3>
+                        <button type="button"
+                                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                onClick={onClose}>
+                            <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                 viewBox="0 0 14 14">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                            <span className="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <div className="p-4 md:p-5 space-y-4">
+                        <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400">
+                            {event.description}
+                        </p>
+                        <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400">
+                            L'évènement aura lieu
+                            du {new Date(event.dateDebut).toLocaleDateString()} au {new Date(event.dateDebut).toLocaleDateString()}.
+                        </p>
+                        <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400">
+                            Le coût d'inscription à cet évènement est de {event.prixNormal} € pour les adhérents
+                            et {event.prixAdherent} € sinon.
+                        </p>
+                        <p className="text-base leading-relaxed text-gray-400 dark:text-gray-400"
+                           style={{fontSize: '0.8rem'}}>
+                            Une fois payé, le montant ne pourra pas être remboursé, y compris en cas de désinscription,
+                            ou absence.
+                            Vous recevrez un mail confirmant votre participation, après payement.
+                        </p>
+                    </div>
+                    <div
+                        className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <button onClick={() => handleParticiper(event.idEvenement)}
+                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Participer
+                        </button>
+                        {user != null && user.admin && (
+                            <button onClick={() => handleDeleteEvent(event.idEvenement)}
+                                    className="ms-6 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-red-600 dark:focus:ring-red-700">Supprimer</button>
+                        )}
+                        <button onClick={() => navigate(`/evenement/${event.idEvenement}/participants`)}
+                                className=" ms-6 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Voir
+                            les participants
+                        </button>
+                        <button onClick={onClose}
+                                className="py-2.5 px-5 ms-6 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Annuler
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
     );
 }

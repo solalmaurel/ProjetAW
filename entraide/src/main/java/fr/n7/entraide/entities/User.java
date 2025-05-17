@@ -1,6 +1,5 @@
 package fr.n7.entraide.entities;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
