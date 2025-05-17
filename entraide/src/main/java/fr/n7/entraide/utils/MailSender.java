@@ -4,6 +4,9 @@ import com.resend.Resend;
 import com.resend.core.exception.ResendException;
 import com.resend.services.emails.model.CreateEmailOptions;
 import com.resend.services.emails.model.CreateEmailResponse;
+import fr.n7.entraide.entities.Evenement;
+import fr.n7.entraide.entities.Facture;
+import fr.n7.entraide.entities.User;
 
 public class MailSender {
 
@@ -16,6 +19,46 @@ public class MailSender {
                 .to(mail)
                 .subject("Bienvenue sur Entraide Étudiante !")
                 .html(welcomeMail(username))
+                .build();
+
+        try {
+            CreateEmailResponse data = resend.emails().send(params);
+            System.out.println(data.getId());
+        } catch (ResendException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void sendParticipateMail(User user, Evenement evenement) {
+
+        Resend resend = new Resend("re_AruLfBBP_Js4HmdhG1xUYH5YERRaXutYR");
+
+        CreateEmailOptions params = CreateEmailOptions.builder()
+                .from("Entraide Étudiante <event@entraide.alexandreperrot.fr>")
+                .to(user.getEmail())
+                .subject("Votre participation a été enregistrée")
+                .html(eventConfirmationMail(user, evenement))
+                .build();
+
+        try {
+            CreateEmailResponse data = resend.emails().send(params);
+            System.out.println(data.getId());
+        } catch (ResendException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void sendInvoiceMail(User user, Facture facture) {
+
+        Resend resend = new Resend("re_AruLfBBP_Js4HmdhG1xUYH5YERRaXutYR");
+
+        CreateEmailOptions params = CreateEmailOptions.builder()
+                .from("Entraide Étudiante <invoice@entraide.alexandreperrot.fr>")
+                .to(user.getEmail())
+                .subject("Votre facture")
+                .html(invoiceMail(user, facture))
                 .build();
 
         try {
@@ -209,6 +252,205 @@ public class MailSender {
                 </html>
                 """;
         return String.format(html, username);
+    }
+
+    public static String eventConfirmationMail(User user, Evenement evenement) {
+        String html = """
+            <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+            <html dir=\"ltr\" lang=\"fr\">
+              <head>
+                <meta content=\"text/html; charset=UTF-8\" http-equiv=\"Content-Type\" />
+                <meta name=\"x-apple-disable-message-reformatting\" />
+                <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+                <style>
+                  /* Styles identiques au mail de bienvenue */
+                  body {
+                    margin: 0;
+                    padding: 0;
+                    background-color: #ffffff;
+                  }
+                  table {
+                    border-collapse: collapse;
+                  }
+                  .main-table {
+                    max-width: 37.5em;
+                    width: 100%%;
+                    margin: 0 auto;
+                    padding: 20px 10px 48px 10px;
+                    box-sizing: border-box;
+                  }
+                  .content-cell {
+                    padding: 0 10px;
+                    box-sizing: border-box;
+                  }
+                  .logo-text {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #333333;
+                    text-align: center;
+                    margin: 20px 0;
+                    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif;
+                  }
+                  p {
+                    font-size: 16px;
+                    line-height: 26px;
+                    margin: 16px 0;
+                    color: #333333;
+                    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif;
+                  }
+                  .footer-text {
+                    font-size: 12px;
+                    line-height: 24px;
+                    color: #8898aa;
+                    margin: 16px 0;
+                    text-align: center;
+                    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif;
+                  }
+                  hr {
+                    width: 100%%;
+                    border: none;
+                    border-top: 1px solid #eaeaea;
+                    border-color: #cccccc;
+                    margin: 20px 0;
+                  }
+                </style>
+              </head>
+              <body style='background-color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Oxygen-Sans,Ubuntu,Cantarell,\"Helvetica Neue\",sans-serif; margin: 0; padding: 0;'>
+                <table align=\"center\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" class=\"main-table\">
+                  <tbody>
+                    <tr>
+                      <td class=\"content-cell\">
+                        <div class=\"logo-text\">Entraide Étudiante</div>
+
+                        <p>Bonjour %s,</p>
+
+                        <p>Nous avons bien enregistré votre participation à l'événement suivant :</p>
+
+                        <p><strong>Nom de l'événement :</strong> %s<br/>
+                        <strong>Date :</strong> %s au %s <br/>
+                        <strong>Lieu :</strong> %s</p>
+
+                        <p>Merci pour votre inscription ! Nous avons hâte de vous y retrouver.</p>
+
+                        <p>À très bientôt !<br/>L'équipe Entraide Étudiante</p>
+
+                        <hr />
+
+                        <p class=\"footer-text\">© 2025 Entraide Étudiante. Tous droits réservés.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </body>
+            </html>
+            """;
+        return String.format(html, user.getPrenom(), evenement.getNom(), evenement.getDateDebut(), evenement.getDateFin(), evenement.getAdresse());
+    }
+
+    public static String invoiceMail(User user, Facture facture) {
+        String html = """
+            <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+            <html dir=\"ltr\" lang=\"fr\">
+              <head>
+                <meta content=\"text/html; charset=UTF-8\" http-equiv=\"Content-Type\" />
+                <meta name=\"x-apple-disable-message-reformatting\" />
+                <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+                <style>
+                  body {
+                    margin: 0;
+                    padding: 0;
+                    background-color: #ffffff;
+                  }
+                  table {
+                    border-collapse: collapse;
+                  }
+                  .main-table {
+                    max-width: 37.5em;
+                    width: 100%%;
+                    margin: 0 auto;
+                    padding: 20px 10px 48px 10px;
+                    box-sizing: border-box;
+                  }
+                  .content-cell {
+                    padding: 0 10px;
+                    box-sizing: border-box;
+                  }
+                  .logo-text {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #333333;
+                    text-align: center;
+                    margin: 20px 0;
+                    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif;
+                  }
+                  p {
+                    font-size: 16px;
+                    line-height: 26px;
+                    margin: 16px 0;
+                    color: #333333;
+                    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif;
+                  }
+                  .button-link {
+                    line-height: 100%%;
+                    text-decoration: none;
+                    display: inline-block;
+                    max-width: 100%%;
+                    background-color: #5F51E8;
+                    border-radius: 3px;
+                    color: #fff;
+                    font-size: 16px;
+                    text-align: center;
+                    padding: 12px 25px;
+                    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif;
+                    box-sizing: border-box;
+                  }
+                  .footer-text {
+                    font-size: 12px;
+                    line-height: 24px;
+                    color: #8898aa;
+                    margin: 16px 0;
+                    text-align: center;
+                    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif;
+                  }
+                  hr {
+                    width: 100%%;
+                    border: none;
+                    border-top: 1px solid #eaeaea;
+                    border-color: #cccccc;
+                    margin: 20px 0;
+                  }
+                </style>
+              </head>
+              <body>
+                <table align=\"center\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" class=\"main-table\">
+                  <tbody>
+                    <tr>
+                      <td class=\"content-cell\">
+                        <div class=\"logo-text\">Entraide Étudiante</div>
+
+                        <p>Bonjour %s,</p>
+
+                        <p>Nous vous remercions pour votre paiement. Vous trouverez ci-dessous les détails de votre facture :</p>
+
+                        <p><strong>Numéro de facture :</strong> %s<br/>
+                        <strong>Date :</strong> %s<br/>
+                        <strong>Montant :</strong> %s €</p>
+
+                        <p>Si vous avez des questions, n'hésitez pas à nous contacter.</p>
+
+                        <p>À très bientôt !<br/>L'équipe Entraide Étudiante</p>
+
+                        <hr />
+
+                        <p class=\"footer-text\">© 2025 Entraide Étudiante. Tous droits réservés.</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </body>
+            </html>
+            """;
+        return String.format(html, user.getPrenom(), facture.getIdFacture(), facture.getDateFacture(), facture.getPricePaid());
     }
 
 }

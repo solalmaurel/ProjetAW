@@ -96,4 +96,8 @@ public class Adresse {
         this.evenements = evenements;
     }
 
+    @Override
+    public String toString() {
+        return numero + " " + rue + ", " + codePostal + " " + ville;
+    }
 }
