@@ -1,16 +1,30 @@
-import {JSX, useState} from "react";
+import {JSX, useEffect, useState} from "react";
 import {Link} from "react-router";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "../../context/AuthContext";
-import {createFacture, Facture, Item} from "../../models/payment";
+import {createFacture, Facture, Item, TypeFacture} from "../../models/payment";
 
 export default function PaymentPage(): JSX.Element {
 
     const location = useLocation();
     const navigate = useNavigate();
     const {user} = useAuth();
+    const [item, setItem] = useState<Item>({
+        itemName: "Dummy",
+        typeFacture: TypeFacture.COTISATION,
+        amount: 0,
+        unitPrice: 0,
+        urlCallback: '/',
+    });
 
-    const item: Item = location.state;
+    useEffect(() => {
+        const itemState: Item = location.state
+        if (itemState === undefined || itemState === null) {
+            navigate('/');
+        } else {
+            setItem(itemState);
+        }
+    }, []);
 
     const [paymentDetails, setPaymentDetails] = useState({
         numCC: "",
@@ -19,6 +33,7 @@ export default function PaymentPage(): JSX.Element {
     });
 
     const [isProcessing, setIsProcessing] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const classNumCC = (!isCreditCardValid(paymentDetails.numCC) &&
         paymentDetails.numCC.length > 0) ? "bg-red-200" : undefined;
@@ -77,9 +92,25 @@ export default function PaymentPage(): JSX.Element {
         e.preventDefault();
         setIsProcessing(true);
 
+        if (paymentDetails.numCC.length !== 19) {
+            setIsProcessing(false);
+            setError("Veuillez mettre les 16 chiffres de la carte")
+            return;
+        }
+        if (paymentDetails.cvc.length !== 3) {
+            setIsProcessing(false);
+            setError("Veuillez mettre le CVC de la carte")
+            return;
+        }
+        if (paymentDetails.expire_date.length !== 5) {
+            setIsProcessing(false);
+            setError("Veuillez mettre la date d'expiration de la carte")
+            return;
+        }
+
         setTimeout(() => {
 
-            const facture : Facture = {
+            const facture: Facture = {
                 user: user,
                 nomFacture: item.itemName,
                 dateFacture: new Date(),
@@ -95,7 +126,7 @@ export default function PaymentPage(): JSX.Element {
 
             navigate(item.urlCallback);
 
-        }, 3000);
+        }, 1000);
 
     }
 
@@ -162,6 +193,24 @@ export default function PaymentPage(): JSX.Element {
                         <input className="border rounded-md px-3 py-1" type="text" placeholder="John Doe"/>
                     </div>
 
+                    <div
+                        className="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-xl shadow-sm flex items-center space-x-3">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 mt-1 text-red-500"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M18 10c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8zm-7-4a1 1 0 10-2 0v4a1 1 0 002 0V6zm-1 8a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                        <p className="text-sm font-medium">
+                            {error || "Veuillez renseigner toutes les informations de votre carte bancaire."}
+                        </p>
+                    </div>
                     <button type="submit"
                             className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg w-full flex flex-row items-center justify-center">
                         {isProcessing ?

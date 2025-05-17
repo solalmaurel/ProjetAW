@@ -3,6 +3,7 @@ package fr.n7.entraide.facades;
 import java.util.List;
 import java.util.Optional;
 
+import fr.n7.entraide.utils.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,6 +50,7 @@ public class ParticipeController {
         user.getEvenements().add(evenement);
         evenementRepository.save(evenement);
         userRepository.save(user);
+        MailSender.sendParticipateMail(user, evenement);
         return ResponseHandler.generateResponse("User is participating to the event successfully", HttpStatus.OK);
     }
 
