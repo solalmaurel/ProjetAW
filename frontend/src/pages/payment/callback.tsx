@@ -34,7 +34,7 @@ export default function Callback(): JSX.Element {
         } else if (type === "1") {
             const idEvenement = queryParams.get('idEvenement');
 
-            if (idEvenement != null) {
+            if (idEvenement!) {
                 const id = parseInt(idEvenement);
                 participerEvenement(id, user.idUser).then(_ => {
                     login(user, String(user.idUser));
