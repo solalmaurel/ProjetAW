@@ -23,7 +23,7 @@ export default function LoginPage(): JSX.Element {
 
             console.log(user);
             // Enregistrer l'utilisateur dans le contexte
-            login(user, String(user.id));
+            login(user, String(user.idUser));
 
             // Naviguer vers la page voulue
             navigate(from, { replace: true });

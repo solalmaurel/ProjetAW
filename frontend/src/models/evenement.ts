@@ -95,11 +95,13 @@ export const participerEvenement = async (idEvenement: number, idUser: number): 
         cache: "no-store"
     });
 
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+    const value = await response.json();
+
+    if(!response.ok){
+        throw new Error(value.message);
     }
 
-    return await response.json();
+    return value;
 };
 
 export { createEvenement, getAllEvenements, getAllParticipants };

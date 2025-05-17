@@ -1,9 +1,9 @@
 import React, {ChangeEvent, JSX, useEffect, useState} from "react";
-import {updateUser, User, TypeEtude, deleteUser} from "../../models/user";
+import {deleteUser, TypeEtude, updateUser, User} from "../../models/user";
 import {useAuth} from "../../context/AuthContext";
 import {useNavigate} from "react-router-dom";
 import {DepartmentSelector} from '../authentification/register';
-import {Link} from "react-router";
+import CotisationWidget from "./cotisation";
 
 function NavBar({user}: { user: User }) {
     const {logout} = useAuth();
@@ -22,6 +22,10 @@ function NavBar({user}: { user: User }) {
                 <span className="flex flex-row items-center space-x-3 bg-gray-200 p-2 rounded-lg">
                     <div className="bg-amber-300 rounded-full w-6 h-6"/>
                     <a href="/profile" className="font-semibold">Informations personnelles</a>
+                </span>
+                <span className="flex flex-row items-center space-x-3 p-2 rounded-lg">
+                    <div className="bg-amber-300 rounded-full w-6 h-6"/>
+                    <a href="/profile/payment-history" className="font-semibold">Historique de paiements</a>
                 </span>
                 {user && user.admin && <>
                     <hr/>
@@ -55,7 +59,6 @@ function NavBar({user}: { user: User }) {
     );
 }
 
-
 function ProfileEdit({user}: { user: User }) {
     const navigate = useNavigate();
     const [formData, setFormData] = useState<User>(user);
@@ -88,7 +91,7 @@ function ProfileEdit({user}: { user: User }) {
         e.preventDefault();
         if (!formData) return;
         if (window.confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
-            console.log("DELETE ACCOUNT for user ID:", formData.id);
+            console.log("DELETE ACCOUNT for user ID:", formData.idUser);
             try {
                 await deleteUser(formData);
                 logout();
@@ -99,7 +102,6 @@ function ProfileEdit({user}: { user: User }) {
             }
         }
     }
-
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const {name, value, type} = e.target;
@@ -146,47 +148,7 @@ function ProfileEdit({user}: { user: User }) {
     const endYear = currentYear + 10;
     const years = Array.from({length: endYear - startYear + 1}, (_, i) => startYear + i);
 
-    const formatDate = (dateInput: string | Date | undefined | null): string => {
-        if (!dateInput) return "N/A";
-        try {
-            const date = new Date(dateInput);
-            if (isNaN(date.getTime())) {
-                console.warn("Date invalide :", dateInput);
-                return "Date invalide";
-            }
-            return date.toLocaleDateString('fr-FR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-        } catch (error) {
-            console.error("Error formatting date:", error);
-            return "Erreur de format de date";
-        }
-    };
 
-    const isCotisationRecent = (dateInput: string | Date | undefined | null): boolean => {
-        if (!dateInput) return false;
-
-        try {
-            const cotisationDate = new Date(dateInput);
-            if (isNaN(cotisationDate.getTime())) {
-                return false;
-            }
-
-            const currentDate = new Date();
-            const oneYearAgo = new Date();
-            oneYearAgo.setFullYear(currentDate.getFullYear() - 1);
-
-            return cotisationDate >= oneYearAgo;
-
-        } catch (error) {
-            console.error("Error checking cotisation date:", error);
-            return false; // Error means we can't confirm it's recent
-        }
-    };
-
-    const needsCotisationPayment = !isCotisationRecent(formData.dateCotisation);
 
     return (
         <div className="w-5/6 h-fit p-5 rounded-lg border-2 space-y-5 max-w-screen-lg">
@@ -219,21 +181,7 @@ function ProfileEdit({user}: { user: User }) {
                            onChange={handleChange}
                     />
                 </div>
-                <div className="flex flex-col space-y-1 pt-2">
-                    <label className="text-md font-semibold text-gray-700">Statut de la cotisation</label>
-                    {needsCotisationPayment ? (
-                        <Link to="/payment"
-                              className="w-full md:w-auto px-4 py-2 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 transition duration-150 ease-in-out"
-                        >{formData.dateCotisation ? 'Renouveler ma cotisation' : 'Payer ma cotisation'}</Link>
-                    ) : (
-                        <div
-                            className="border border-gray-200 bg-gray-100 rounded-md px-3 py-1 text-gray-600 min-h-[38px] flex items-center"
-                        >
-                            ✅ À jour (Expire
-                            le {formatDate(new Date(new Date(formData.dateCotisation!).setFullYear(new Date(formData.dateCotisation!).getFullYear() + 1)))})
-                        </div>
-                    )}
-                </div>
+                <CotisationWidget dateCotisation={formData.dateCotisation}/>
             </div>
             <hr className="border-gray-300"/>
             <div className="flex flex-col space-y-3">

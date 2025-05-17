@@ -78,7 +78,7 @@ export default function ParticipantsPage() {
                 </thead>
                 <tbody>
                     {participants.map(user => (
-                        <tr key={user.id}>
+                        <tr key={user.idUser}>
                             <td>{user.nom}</td>
                             <td>{user.prenom}</td>
                             <td>{user.email}</td>

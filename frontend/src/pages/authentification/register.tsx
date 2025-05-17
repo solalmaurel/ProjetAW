@@ -95,7 +95,6 @@ export default function RegisterPage(): JSX.Element {
 
         // --- Création de l'objet User ---
         const user: User = {
-            id: 0,
             nom: formData.nom,
             prenom: formData.prenom,
             email: formData.email,

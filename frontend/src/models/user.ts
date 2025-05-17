@@ -38,7 +38,7 @@ export const TypeEtudeNames: { [key in TypeEtude]: string } = {
 };
 
 export interface User {
-    id: number;
+    idUser?: number;
     nom: string;
     prenom: string;
     email: string;
@@ -78,7 +78,6 @@ const createUser = async (user: User): Promise<any> => {
 };
 
 const updateUser = async (user: User): Promise<any> => {
-    console.log(user)
     const url = `${SPRING_API}/user/update`;
     const response = await fetch(url, {
         method: "POST",
