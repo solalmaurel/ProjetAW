@@ -38,7 +38,8 @@ export default function Callback(): JSX.Element {
                 const id = parseInt(idEvenement);
                 participerEvenement(id, user.idUser).then(_ => {
                     login(user, String(user.idUser));
-                    navigate(`/evenement/${id}/participants`);
+                    alert("Votre participation à l'évenement est bien enregistrée")
+                    navigate(`/events`);
                 }).catch(reason => {
                     console.error("Error during processing: " + reason.message);
                     setError(reason.message);

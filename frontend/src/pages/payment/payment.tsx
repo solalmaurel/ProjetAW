@@ -193,7 +193,7 @@ export default function PaymentPage(): JSX.Element {
                         <input className="border rounded-md px-3 py-1" type="text" placeholder="John Doe"/>
                     </div>
 
-                    <div
+                    {error !== null && <div
                         className="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-xl shadow-sm flex items-center space-x-3">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -210,7 +210,7 @@ export default function PaymentPage(): JSX.Element {
                         <p className="text-sm font-medium">
                             {error || "Veuillez renseigner toutes les informations de votre carte bancaire."}
                         </p>
-                    </div>
+                    </div>}
                     <button type="submit"
                             className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg w-full flex flex-row items-center justify-center">
                         {isProcessing ?
