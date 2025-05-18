@@ -4,6 +4,7 @@ import {User} from "../models/user";
 interface AuthContextType {
     user: any;
     isAuthenticated: boolean;
+    isAdmin: boolean;
     login: (userData: User, token: string) => void;
     logout: () => void;
 }
@@ -45,6 +46,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     };
 
     const isAuthenticated = !!user;
+    const isAdmin = user?.admin ?? false;
 
     // Ne pas rendre les enfants tant que la vérification initiale n'est pas terminée
     if (isLoading) {
@@ -52,7 +54,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, isAdmin, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
