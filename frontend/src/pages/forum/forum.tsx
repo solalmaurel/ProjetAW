@@ -1,11 +1,16 @@
 import { JSX, useState, useEffect } from "react";
 import NavBar from "../../layout/navbar";
 import Footer from "../../layout/footer";
-import { getLatestDiscussions, Discussion } from "../../models/discussion";
+import {
+  getLatestDiscussions,
+  Discussion,
+  discussionThemes,
+} from "../../models/discussion";
 
 export default function ForumPage(): JSX.Element {
   const [discussions, setDiscussions] = useState<Discussion[]>([]);
   const [search, setSearch] = useState("");
+  const [selectedTheme, setSelectedTheme] = useState<string>("");
 
   useEffect(() => {
     const fetchDiscussions = async () => {
@@ -21,9 +26,13 @@ export default function ForumPage(): JSX.Element {
     fetchDiscussions();
   }, []);
 
-  const filteredDiscussions = discussions.filter((discussion) =>
-    discussion.sujet.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredDiscussions = discussions.filter((discussion) => {
+    const matchesSearch = discussion.sujet
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchesTheme = !selectedTheme || discussion.theme === selectedTheme;
+    return matchesSearch && matchesTheme;
+  });
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -37,6 +46,18 @@ export default function ForumPage(): JSX.Element {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+          <select
+            className="border border-1 rounded-lg p-3"
+            value={selectedTheme}
+            onChange={(e) => setSelectedTheme(e.target.value)}
+          >
+            <option value="">Tous les thèmes</option>
+            {discussionThemes.map((theme) => (
+              <option key={theme} value={theme}>
+                {theme.charAt(0) + theme.slice(1).toLowerCase()}
+              </option>
+            ))}
+          </select>
           <a
             href="/forum/create"
             className="text-nowrap p-3 rounded-lg bg-blue-500 hover:bg-blue-800 text-white"
