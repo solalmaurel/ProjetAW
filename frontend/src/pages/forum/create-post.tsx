@@ -31,7 +31,7 @@ export default function CreateForm(): JSX.Element {
   return (
     <div className="flex flex-col min-h-screen">
       <NavBar />
-      <div className="p-5 flex flex-col flex-grow space-y-10">
+      <div className="p-5 flex flex-col flex-grow space-y-10 mt-20">
         <span className="flex flex-row justify-between items-center">
           <h1 className="text-2xl">Créer un nouveau post</h1>
           <a

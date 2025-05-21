@@ -67,7 +67,7 @@ export default function Discussion(): JSX.Element {
   return (
     <div className="flex flex-col min-h-screen">
       <NavBar />
-      <div className="p-5 flex flex-col flex-grow space-y-2">
+      <div className="p-5 flex flex-col flex-grow space-y-2 mt-20">
         <span className="flex flex-row justify-between items-center">
           <div>
             <h1 className="text-2xl">Sujet : {discussion?.sujet}</h1>
