@@ -68,11 +68,14 @@ export default function Discussion(): JSX.Element {
     <div className="flex flex-col min-h-screen">
       <NavBar />
       <div className="p-5 flex flex-col flex-grow space-y-2">
-        <span className="flex flex-row justify-between">
-          <h1 className="text-2xl">Sujet : {discussion?.sujet}</h1>
+        <span className="flex flex-row justify-between items-center">
+          <div>
+            <h1 className="text-2xl">Sujet : {discussion?.sujet}</h1>
+            <h1 className="text-2xl">Thème : {discussion?.theme}</h1>
+          </div>
           <a
             href="/forum/create"
-            className="px-3 py-2 rounded-lg bg-blue-500 hover:bg-blue-800 text-white"
+            className="px-3 py-2 h-fit rounded-lg bg-blue-500 hover:bg-blue-800 text-white"
           >
             Créer un nouveau post
           </a>

@@ -16,6 +16,7 @@ public class Discussion {
     private long idDiscussion;
     private LocalDate dateCreation;
     private String sujet;
+    private Theme theme;
 
     @ManyToOne
     @JoinColumn(name = "idUser")
@@ -29,10 +30,11 @@ public class Discussion {
     public Discussion() {
     }
 
-    public Discussion(long idDiscussion, String sujet, LocalDate dateCreation) {
+    public Discussion(long idDiscussion, String sujet, LocalDate dateCreation, Theme theme) {
         this.idDiscussion = idDiscussion;
         this.sujet = sujet;
         this.dateCreation = dateCreation;
+        this.theme = theme;
     }
 
     public long getIdDiscussion() {
@@ -69,6 +71,14 @@ public class Discussion {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public void setTheme(Theme theme) {
+        this.theme = theme;
     }
 
     @Override

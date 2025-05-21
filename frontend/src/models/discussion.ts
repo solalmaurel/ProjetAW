@@ -4,6 +4,7 @@ export interface Discussion {
   dateCreation: Date;
   messages: Message[];
   user: User; // Added user property to represent the creator of the discussion
+  theme: string;
 }
 
 export interface Message {
@@ -43,6 +44,7 @@ export const createDiscussion = async (discussion: {
   sujet: string;
   description: string;
   userId: number;
+  theme: string;
 }): Promise<Discussion> => {
   const url = `${SPRING_API}/discussion/create`;
   const response = await fetch(url, {
@@ -139,3 +141,11 @@ export const getDiscussionById = async (id: number): Promise<Discussion> => {
 
   return await response.json();
 };
+
+export const discussionThemes = [
+  "SPORT",
+  "LANGUES",
+  "ETUDE",
+  "METIERS",
+  "LOISIR",
+];

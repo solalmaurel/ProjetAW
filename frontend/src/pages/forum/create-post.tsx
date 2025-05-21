@@ -1,6 +1,6 @@
 import { JSX } from "react";
 import React, { useState } from "react";
-import { createDiscussion } from "../../models/discussion";
+import { createDiscussion, discussionThemes } from "../../models/discussion";
 import NavBar from "../../layout/navbar";
 import Footer from "../../layout/footer";
 import { useAuth } from "../../context/AuthContext";
@@ -8,6 +8,7 @@ import { useAuth } from "../../context/AuthContext";
 export default function CreateForm(): JSX.Element {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [theme, setTheme] = useState(discussionThemes[0]);
   const { user } = useAuth(); // Use useAuth to get the logged-in user
 
   const handleSubmit = async () => {
@@ -16,6 +17,7 @@ export default function CreateForm(): JSX.Element {
         sujet: title,
         description: description, // Add description at the top level
         userId: user?.idUser, // Include the userId in the request
+        theme: theme,
       };
       await createDiscussion(newDiscussion);
       alert("Discussion créée avec succès !");
@@ -49,6 +51,18 @@ export default function CreateForm(): JSX.Element {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
+          <h1 className="text-xl">Thème</h1>
+          <select
+            className="border border-1 rounded-lg p-2"
+            value={theme}
+            onChange={(e) => setTheme(e.target.value)}
+          >
+            {discussionThemes.map((theme) => (
+              <option key={theme} value={theme}>
+                {theme.charAt(0) + theme.slice(1).toLowerCase()}
+              </option>
+            ))}
+          </select>
           <h1 className="text-xl">Description de votre post</h1>
           <textarea
             className="border border-1 rounded-lg min-h-52 resize-none p-2"

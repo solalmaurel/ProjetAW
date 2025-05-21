@@ -2,6 +2,7 @@ package fr.n7.entraide.facades;
 
 import fr.n7.entraide.entities.Discussion;
 import fr.n7.entraide.entities.Message;
+import fr.n7.entraide.entities.Theme;
 import fr.n7.entraide.entities.User;
 import fr.n7.entraide.repositories.DiscussionRepository;
 import fr.n7.entraide.repositories.MessageRepository;
@@ -34,9 +35,6 @@ public class DiscussionController {
 
     @PostMapping("/create")
     public ResponseEntity<Discussion> createDiscussion(@RequestBody DiscussionRequest discussionRequest) {
-        logger.info("Received discussion creation request: sujet={}, description={}, userId={}",
-                discussionRequest.getSujet(), discussionRequest.getDescription(), discussionRequest.getUserId());
-
         // Retrieve the user who is creating the discussion
         User user = userRepository.findById(discussionRequest.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -44,6 +42,7 @@ public class DiscussionController {
         Discussion discussion = new Discussion();
         discussion.setSujet(discussionRequest.getSujet());
         discussion.setDateCreation(LocalDate.now());
+        discussion.setTheme(Theme.valueOf(discussionRequest.getTheme()));
 
         // Associate the user with the discussion
         discussion.setUser(user);
@@ -59,7 +58,7 @@ public class DiscussionController {
         firstMessage.setDate(LocalDate.now());
         firstMessage.setMessage(discussionRequest.getDescription());
         firstMessage.setDiscussion(discussion);
-        logger.info("Saving first message: {}", firstMessage.getMessage());
+        //logger.info("Saving first message: {}", firstMessage.getMessage());
         messageRepository.save(firstMessage);
 
         // Associate the user with the created message
@@ -86,6 +85,7 @@ public class DiscussionController {
         private String sujet;
         private String description;
         private Long userId;
+        private String theme;
 
         public String getSujet() {
             return sujet;
@@ -110,12 +110,21 @@ public class DiscussionController {
         public void setUserId(Long userId) {
             this.userId = userId;
         }
+
+        public String getTheme() {
+            return theme;
+        }
+
+        public void setTheme(String theme) {
+            this.theme = theme;
+        }
+        
     }
 
     @PostMapping("/{id}/createMessage")
     public ResponseEntity<Message> createMessage(@RequestBody MessageRequest req) {
-        logger.info("Received message creation request: message={}, userId={}, discussionId={}",
-                req.getMessage(), req.getIdUser(), req.getIdDiscussion());
+        //logger.info("Received message creation request: message={}, userId={}, discussionId={}",
+        //        req.getMessage(), req.getIdUser(), req.getIdDiscussion());
         User user = userRepository.findById(req.getIdUser()).orElseThrow();
         Discussion discussion = discussionRepository.findById(req.getIdDiscussion()).orElseThrow();
 
