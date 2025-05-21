@@ -16,7 +16,7 @@ export default function CreateForm(): JSX.Element {
       const newDiscussion = {
         sujet: title,
         description: description, // Add description at the top level
-        userId: user?.idUser, // Include the userId in the request
+        userId: user.idUser, // Include the userId in the request
         theme: theme,
       };
       await createDiscussion(newDiscussion);

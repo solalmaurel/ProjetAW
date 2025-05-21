@@ -58,6 +58,7 @@ public class DiscussionController {
         firstMessage.setDate(LocalDate.now());
         firstMessage.setMessage(discussionRequest.getDescription());
         firstMessage.setDiscussion(discussion);
+        firstMessage.setUser(user);
         //logger.info("Saving first message: {}", firstMessage.getMessage());
         messageRepository.save(firstMessage);
 
