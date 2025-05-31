@@ -2,41 +2,34 @@ import { JSX } from 'react/jsx-runtime';
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getAllParticipants } from "../../models/evenement";
-import { User } from "../../models/user";
+import { getAllUsers, User } from "../../models/user";
 import Navbar from '../../layout/navbar';
 
-export default function ParticipantsPage() {
-    const { id } = useParams<{ id: string }>();
-    const [participants, setParticipants] = useState<User[]>([]);
+export default function RegisteredPage() {
+    const [registered, setRegistered] = useState<User[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        console.log("Page chargée");
-        console.log("ID évènement:", id);
-        const fetchParticipants = async () => {
+        const fetchUsers = async () => {
             try {
-                
-                const participants = await getAllParticipants(Number(id));
-                console.log("Participants:", participants);
-
-                setParticipants(participants);
-                
-            } catch (err: any) {
-                setError("Erreur lors du chargement des participants");
+                const registered = await getAllUsers();
+                setRegistered(registered);
+            } catch (err) {
+                setError("Erreur lors du chargement des inscrits");
             }
         };
 
-        if (id) {
-            fetchParticipants();
-        }
-    }, [id]);
+        fetchUsers();
+    }, []);
 
-    return (
+     return (
         <div className="flex flex-col min-h-screen">
+
             <Navbar />
-            <div className="flex flex-col flex-grow p-5 w-dvw">
-                <h1 className="font-semibold text-3xl">Liste des participants</h1>
+                <div className="flex flex-col flex-grow p-5 w-dvw">
+
+            <h1 className="font-semibold text-3xl">Liste des inscrits</h1>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <style>
                 {`
                     .styled-table {
@@ -67,7 +60,7 @@ export default function ParticipantsPage() {
                     }
                     .styled-table tbody tr.active-row {
                         font-weight: bold;
-                        color:solid #1E90FF;
+                        color: #1E90FF;
                     }
                 `}
             </style>
@@ -77,14 +70,28 @@ export default function ParticipantsPage() {
                         <th>Nom</th>
                         <th>Prénom</th>
                         <th>Email</th>
+                        <th>Admin</th>
+                        <th>Année de Diplôme</th>
+                        <th>Type d'Étude</th>
+                        <th>Adhérent</th>
+                        <th>Date de Cotisation</th>
+                        <th>Notifications Offres</th>
+                        <th>Notifications Événements</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {participants.map(user => (
+                    {registered.map(user => (
                         <tr key={user.idUser}>
                             <td>{user.nom}</td>
                             <td>{user.prenom}</td>
                             <td>{user.email}</td>
+                            <td>{user.admin ? 'Oui' : 'Non'}</td>
+                            <td>{user.anneeDiplome}</td>
+                            <td>{user.typeEtude}</td>
+                            <td>{user.adherent ? 'Oui' : 'Non'}</td>
+                            <td>{user.dateCotisation ? new Date(user.dateCotisation).toLocaleDateString() : 'N/A'}</td>
+                            <td>{user.notifOffre ? 'Oui' : 'Non'}</td>
+                            <td>{user.notifEvenement ? 'Oui' : 'Non'}</td>
                         </tr>
                     ))}
                 </tbody>

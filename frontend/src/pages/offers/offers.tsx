@@ -3,6 +3,8 @@ import { createOffer, deleteOffer, getAllOffers, Offer } from '../../models/offe
 import Footer from "../../layout/footer";
 import NavBar from "../../layout/navbar";
 import { JSX } from 'react/jsx-runtime';
+import { useAuth } from '../../context/AuthContext';
+import { User } from '../../models/user';
 
 const typeOffreValues = ['REDUCTION', 'EVENEMENT'];
 
@@ -102,6 +104,8 @@ export default function OfferPage(): JSX.Element {
             console.error("Erreur lors de la suppression :", err);
         }
     };
+
+    
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -239,7 +243,10 @@ export default function OfferPage(): JSX.Element {
     );
 }
 
-function OfferCard({ offer, onDelete }: { offer: Offer; onDelete: (id: number) => void }) {    
+function OfferCard({ offer, onDelete }: { offer: Offer; onDelete: (id: number) => void }) {
+
+    const {user}: { user: User } = useAuth();
+    
     return (
             <a href={offer.lien} className="flex flex-row border border-1 rounded-lg w-5/6 min-h-48 hover:border-black">
                 <div className="w-1/6 rounded-l-lg bg-amber-300" />
@@ -254,6 +261,7 @@ function OfferCard({ offer, onDelete }: { offer: Offer; onDelete: (id: number) =
                             <span className="bg-[#f6f6f6] px-2 rounded-sm">{new Date(offer.dateDebut).toLocaleDateString()}</span>
                             <span className="bg-[#f6f6f6] px-2 rounded-sm">{new Date(offer.dateFin).toLocaleDateString()}</span>
                         </div>
+                        {user != null && user.admin && (
                         <button className="bg-red-500 text-white border border-black rounded-full px-3 py-1.5 hover:bg-black hover:text-red"
                             onClick={(e) => {
                                 e.preventDefault(); // pour éviter le rediriger vers offer.lien
@@ -261,6 +269,7 @@ function OfferCard({ offer, onDelete }: { offer: Offer; onDelete: (id: number) =
                             }}>
                             Supprimer
                         </button>
+                        )}
                     </div>
     
                     <div className="flex flex-row justify-between items-center">

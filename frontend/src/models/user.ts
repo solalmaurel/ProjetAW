@@ -122,6 +122,20 @@ const deleteUser = async (user: User): Promise<any> => {
     return response;
 }
 
+const getAllUsers = async (): Promise<User[]> => {
+    const url = `${SPRING_API}/user`;
+    const response = await fetch(url, {
+        method: "GET",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        cache: "no-store",
+    });
+
+    return await response.json();
+};
+
 const findUserByCredentials = async (username: string, password: string): Promise<User> => {
     const url = `${SPRING_API}/user/login`;
 
@@ -154,4 +168,4 @@ const findUserByCredentials = async (username: string, password: string): Promis
     return await response.json() as User;
 };
 
-export { createUser, updateUser, deleteUser, findUserByCredentials }
+export { getAllUsers, createUser, updateUser, deleteUser, findUserByCredentials }

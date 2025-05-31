@@ -1,6 +1,8 @@
 package fr.n7.entraide.facades;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import fr.n7.entraide.entities.Adresse;
 import fr.n7.entraide.entities.Facture;
 import fr.n7.entraide.entities.User;
 import fr.n7.entraide.repositories.UserRepository;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,6 +25,11 @@ public class UserFacade {
 
     @Autowired
     private UserRepository userRepository;
+
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 
     @PostMapping(path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> createUser(@RequestBody User user) {

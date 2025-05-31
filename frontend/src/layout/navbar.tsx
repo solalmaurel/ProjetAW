@@ -1,15 +1,20 @@
 import { JSX } from "react";
 import { Link } from "react-router";
 import {useAuth} from "../context/AuthContext";
+import { User } from "../models/user";
 
 export default function NavBar(): JSX.Element {
     const { isAuthenticated } = useAuth();
+    const {user}: { user: User } = useAuth();
 
     return (
         <header className="bg-[#2196F3] text-white p-5 flex items-center justify-between">
             <Link to="/" className="text-2xl font-bold">Entraide Étudiante</Link>
             <nav className="flex items-center space-x-10 font-semibold">
                 <Link to="/">Accueil</Link>
+                 {user != null && user.admin && (
+                <Link to="/registered">Inscrits</Link>
+                 )}
                 <Link to="/forum">Forum</Link>
                 <Link to="/events">Évenements</Link>
                 <Link to="/offers">Offres</Link>

@@ -17,7 +17,8 @@ import PaymentPage from "./pages/payment/payment";
 import ParticipantsPage from "./pages/events/participants";
 import PaymentHistoryPage from "./pages/profile/payment-history";
 import Callback from "./pages/payment/callback";
-import UnauthorizedPage from "./unauthorized"; // Create this component
+import UnauthorizedPage from "./unauthorized";
+import RegisteredPage from "./pages/administrator/registered-list";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
@@ -57,6 +58,7 @@ root.render(
                 {/* --- Admin Routes --- */}
                 <Route element={<ProtectedRoute requiredRole="admin" />}>
                     {/* Ajouter les pages pour les admins ici */}
+                    <Route path="/registered" element={<RegisteredPage />} />
                 </Route>
             </Routes>
         </BrowserRouter>
