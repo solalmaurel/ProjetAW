@@ -37,7 +37,7 @@ export default function ForumPage(): JSX.Element {
   return (
     <div className="flex flex-col min-h-screen">
       <NavBar />
-      <div className="p-5 flex flex-col flex-grow space-y-3 mt-20">
+      <div className="p-5 flex flex-col flex-grow space-y-3">
         <span className="flex flex-row space-x-6">
           <input
             className="border border-1 rounded-lg p-3 w-full"
