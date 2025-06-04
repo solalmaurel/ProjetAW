@@ -42,6 +42,7 @@ export default function MessageBox({
         <p className="text-gray-500">
           Postée le {new Date(message.date).toLocaleDateString()}
         </p>
+        <span  className="flex flex-row items-center space-x-3">
         <a
           href="#reply"
           className="bg-green-300 w-fit p-3 py-2 rounded-lg font-semibold hover:bg-green-400"
@@ -52,9 +53,10 @@ export default function MessageBox({
         >
           Répondre
         </a>
+        
         {user != null && user.admin && (
                         <button
-            className="bg-red-500 text-white border border-black rounded-full px-3 py-1.5 hover:bg-black hover:text-red"
+            className="bg-red-500 w-fit p-3 py-2 rounded-lg font-semibold px-3 py-1.5 hover:bg-black hover:text-red"
             onClick={(e) => {
               e.preventDefault();
               onDelete && onDelete(message.idMessage!);
@@ -63,6 +65,7 @@ export default function MessageBox({
             Supprimer
           </button>
         )}
+        </span>
       </span>
     </div>
   );

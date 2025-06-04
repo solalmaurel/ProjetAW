@@ -6,6 +6,7 @@ import java.util.List;
 
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -19,6 +20,7 @@ public class Discussion {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
+    @JsonBackReference
     @JsonIgnoreProperties("discussionsCrees")
     private User user;
 

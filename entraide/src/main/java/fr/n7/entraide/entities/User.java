@@ -3,6 +3,7 @@ package fr.n7.entraide.entities;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
@@ -30,7 +31,8 @@ public class User {
     @JoinTable(name = "aEcrit", joinColumns = @JoinColumn(name = "idUser"), inverseJoinColumns = @JoinColumn(name = "idMessage"))
     private List<Message> messages;
 
-    @ManyToMany
+    @OneToMany
+    @JsonBackReference
     @JoinTable(name = "aCree", joinColumns = @JoinColumn(name = "idUser"), inverseJoinColumns = @JoinColumn(name = "idDiscussion"))
     private List<Discussion> discussionsCrees;
 

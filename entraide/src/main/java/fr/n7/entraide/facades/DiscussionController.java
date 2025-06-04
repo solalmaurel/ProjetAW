@@ -172,4 +172,10 @@ public class DiscussionController {
         return ResponseHandler.generateResponse("Message deleted successfully", HttpStatus.OK);
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> deleteDiscussion(@PathVariable("id") Long id) {
+        discussionRepository.deleteById(id);
+        return ResponseHandler.generateResponse("Message deleted successfully", HttpStatus.OK);
+    }
+
 }
