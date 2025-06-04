@@ -2,15 +2,17 @@ import { JSX } from 'react/jsx-runtime';
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { banUser, getAllUsers, User } from "../../models/user";
+import { banUser, getAllUsers, unbanUser, User } from "../../models/user";
 import Navbar from '../../layout/navbar';
 import BanUserModal from './bannirModal';
+import UnbanUserModal from './debannirModal';
 
 export default function RegisteredList() {
     const [registered, setRegistered] = useState<User[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalUnbanOpen, setIsModalUnbanOpen] = useState(false);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -28,7 +30,11 @@ export default function RegisteredList() {
     const handleBanUser = (user: User) => {
         console.log("User selected for banning:", user);
         setSelectedUser(user);
-        setIsModalOpen(true);
+        if (user.banned){
+            setIsModalUnbanOpen(true);
+        }else {
+            setIsModalOpen(true);
+        }
     };
 
     const confirmBanUser = async () => {
@@ -43,6 +49,22 @@ export default function RegisteredList() {
                 setError("Erreur lors du bannissement de l'utilisateur");
             } finally {
                 setIsModalOpen(false);
+                setSelectedUser(null);
+            }
+        }
+    };
+
+    const confirmUnbanUser = async () => {
+        if (selectedUser) {
+            try {
+                await unbanUser(selectedUser.idUser);
+                setRegistered(registered.map(user =>
+                    user.idUser === selectedUser.idUser ? { ...user, isBanned: false } : user
+                ));
+            } catch (err) {
+                setError("Erreur lors du bannissement de l'utilisateur");
+            } finally {
+                setIsModalUnbanOpen(false);
                 setSelectedUser(null);
             }
         }
@@ -131,6 +153,12 @@ export default function RegisteredList() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={confirmBanUser}
+                userName={selectedUser ? `${selectedUser.prenom} ${selectedUser.nom}` : ''}
+            />
+        <UnbanUserModal
+                isOpen={isModalUnbanOpen}
+                onClose={() => setIsModalUnbanOpen(false)}
+                onConfirm={confirmUnbanUser}
                 userName={selectedUser ? `${selectedUser.prenom} ${selectedUser.nom}` : ''}
             />
     </div>

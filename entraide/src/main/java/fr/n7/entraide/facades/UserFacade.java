@@ -119,5 +119,21 @@ public class UserFacade {
         return ResponseHandler.generateResponse("User banned successfully", HttpStatus.OK);
     }
 
+    @PostMapping("/unban")
+    public ResponseEntity<Object> unbanUser(@RequestBody Map<String, Long> request) {
+        Long userId = request.get("userId");
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        User user = userOptional.get();
+        user.setBanned(false);
+        userRepository.save(user);
+
+        return ResponseHandler.generateResponse("User banned successfully", HttpStatus.OK);
+    }
+
 
 }

@@ -214,4 +214,23 @@ export const banUser = async (userId: any) => {
     return response.json();
 };
 
+export const unbanUser = async (userId: any) => {
+    const url = `${SPRING_API}/user/unban`;
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to ban user');
+    }
+
+    return response.json();
+};
+
+
 export { getAllUsers, isUserBanned, createUser, updateUser, deleteUser, findUserByCredentials }
