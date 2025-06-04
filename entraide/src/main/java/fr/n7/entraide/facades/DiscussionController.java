@@ -6,7 +6,10 @@ import fr.n7.entraide.entities.User;
 import fr.n7.entraide.repositories.DiscussionRepository;
 import fr.n7.entraide.repositories.MessageRepository;
 import fr.n7.entraide.repositories.UserRepository;
+import fr.n7.entraide.utils.ResponseHandler;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -162,4 +165,11 @@ public class DiscussionController {
         Discussion discussion = discussionRepository.findById(id).orElseThrow();
         return ResponseEntity.ok(discussion);
     }
+
+    @DeleteMapping("message/{id}")
+    public ResponseEntity<Object> deleteMessage(@PathVariable("id") Long id) {
+        messageRepository.deleteById(id);
+        return ResponseHandler.generateResponse("Message deleted successfully", HttpStatus.OK);
+    }
+
 }

@@ -1,29 +1,32 @@
 import { JSX } from 'react/jsx-runtime';
 
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { banUser, getAllUsers, unbanUser, User } from "../../models/user";
 import Navbar from '../../layout/navbar';
 import BanUserModal from './bannirModal';
 import UnbanUserModal from './debannirModal';
 
 export default function RegisteredList() {
+
+    const navigate = useNavigate();
+
     const [registered, setRegistered] = useState<User[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalUnbanOpen, setIsModalUnbanOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const registered = await getAllUsers();
-                setRegistered(registered);
-            } catch (err) {
-                setError("Erreur lors du chargement des inscrits");
-            }
-        };
+    const fetchUsers = async () => {
+        try {
+            const registered = await getAllUsers();
+            setRegistered(registered);
+        } catch (err) {
+            setError("Erreur lors du chargement des inscrits");
+        }
+    };
 
+    useEffect(() => {
         fetchUsers();
     }, []);
 
@@ -42,9 +45,11 @@ export default function RegisteredList() {
             try {
                 console.log("User selected for banning:", selectedUser.idUser);
                 await banUser(selectedUser.idUser);
+                await fetchUsers();
                 setRegistered(registered.map(user =>
                     user.idUser === selectedUser.idUser ? { ...user, isBanned: true } : user
                 ));
+                window.location.reload()
             } catch (err) {
                 setError("Erreur lors du bannissement de l'utilisateur");
             } finally {
@@ -58,9 +63,11 @@ export default function RegisteredList() {
         if (selectedUser) {
             try {
                 await unbanUser(selectedUser.idUser);
+                await fetchUsers();
                 setRegistered(registered.map(user =>
                     user.idUser === selectedUser.idUser ? { ...user, isBanned: false } : user
                 ));
+                window.location.reload()
             } catch (err) {
                 setError("Erreur lors du bannissement de l'utilisateur");
             } finally {

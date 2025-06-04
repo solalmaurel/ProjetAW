@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { JSX } from "react";
 import MessageBox from "./message";
-import { Message, Discussion as DiscussionType } from "../../models/discussion";
+import { Message, Discussion as DiscussionType, deleteMessage } from "../../models/discussion";
 import NavBar from "../../layout/navbar";
 import Footer from "../../layout/footer";
 import {
@@ -64,6 +64,16 @@ export default function Discussion(): JSX.Element {
     }
   };
 
+  const handleDeleteOffer = async (id: number) => {
+          try {
+              await deleteMessage(id);
+              setMessages(prev => prev.filter(offer => offer.idMessage !== id));
+          } catch (err) {
+              console.error("Erreur lors de la suppression :", err);
+          }
+      };
+
+
   return (
     <div className="flex flex-col min-h-screen">
       <NavBar />
@@ -104,6 +114,7 @@ export default function Discussion(): JSX.Element {
                 setQuote(`[quote]\n${dateStr}\n${mainText.trim()}\n[/quote]`);
                 document.getElementById("reply")?.focus();
               }}
+              onDelete={handleDeleteOffer}
             />
           ))}
           <hr />

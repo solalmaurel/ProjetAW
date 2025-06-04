@@ -22,7 +22,7 @@ public class Discussion {
     @JsonIgnoreProperties("discussionsCrees")
     private User user;
 
-    @OneToMany(mappedBy = "discussion")
+    @OneToMany(mappedBy = "discussion", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Message> messages = new ArrayList<>();
 

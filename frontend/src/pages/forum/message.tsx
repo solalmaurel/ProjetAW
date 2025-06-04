@@ -1,16 +1,20 @@
 import { JSX } from "react";
 import { Message } from "../../models/discussion";
+import { useAuth } from "../../context/AuthContext";
 
 export default function MessageBox({
   message,
   onReply,
+  onDelete,
 }: {
   message: Message;
   onReply?: () => void;
+  onDelete?: (id: number) => void;
 }): JSX.Element {
   // Détecte la citation au format [quote]...[/quote]
   const quoteRegex = /^\[quote\]([\s\S]*?)\[\/quote\]\n*/;
   const match = message.message.match(quoteRegex);
+  const { user } = useAuth();
   let citation = null;
   let reste = message.message;
   if (match) {
@@ -48,6 +52,17 @@ export default function MessageBox({
         >
           Répondre
         </a>
+        {user != null && user.admin && (
+                        <button
+            className="bg-red-500 text-white border border-black rounded-full px-3 py-1.5 hover:bg-black hover:text-red"
+            onClick={(e) => {
+              e.preventDefault();
+              onDelete && onDelete(message.idMessage!);
+            }}
+          >
+            Supprimer
+          </button>
+        )}
       </span>
     </div>
   );

@@ -139,3 +139,37 @@ export const getDiscussionById = async (id: number): Promise<Discussion> => {
 
   return await response.json();
 };
+
+export const deleteDiscussion = async (id: number): Promise<void> => {
+    const url = `${SPRING_API}/discussion/${id}`;
+    const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        cache: "no-store",
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`Erreur lors de la suppression (code ${response.status}): ${errorData.message || 'inconnue'}`);
+    }
+};
+
+export const deleteMessage = async (id: number): Promise<void> => {
+    const url = `${SPRING_API}/discussion/message/${id}`;
+    const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        cache: "no-store",
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`Erreur lors de la suppression (code ${response.status}): ${errorData.message || 'inconnue'}`);
+    }
+};
