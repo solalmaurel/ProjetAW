@@ -45,6 +45,9 @@ public class UserFacade {
 
     @PostMapping(path = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> updateUser(@RequestBody User user) {
+
+        System.out.println("HEHOOOOOOOOOOOOOOOOOOOOOOO " + user);
+
         Optional<User> userFound = userRepository.findByEmail(user.getEmail());
         if (userFound.isPresent() && BCrypt.checkpw(userFound.get().getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -80,6 +83,40 @@ public class UserFacade {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+
+    @PostMapping("/isBanned")
+    public ResponseEntity<Object> isBanned(@RequestBody Map<String, String> infos) {
+        String userId = infos.get("userId");
+
+        Optional<User> userFound = userRepository.findById(Long.parseLong(userId));
+
+        if(userFound.isPresent()){
+            User user = userFound.get();
+            return ResponseEntity.status(HttpStatus.OK).body(user.isBanned());
+
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+    }
+
+    
+    @PostMapping("/ban")
+    public ResponseEntity<Object> banUser(@RequestBody Map<String, Long> request) {
+        Long userId = request.get("userId");
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        User user = userOptional.get();
+        user.setBanned(true);
+        userRepository.save(user);
+
+        return ResponseHandler.generateResponse("User banned successfully", HttpStatus.OK);
     }
 
 

@@ -24,6 +24,7 @@ public class User {
     private LocalDate dateCotisation;
     private boolean notifOffre;
     private boolean notifEvenement;
+    private boolean isBanned;
 
     @ManyToMany
     @JoinTable(name = "aEcrit", joinColumns = @JoinColumn(name = "idUser"), inverseJoinColumns = @JoinColumn(name = "idMessage"))
@@ -54,13 +55,13 @@ public class User {
 
     public User(String nom, String prenom, String email, String password, boolean isAdmin,
                 int anneeDiplome, TypeEtude typeEtude, boolean isAdherent, LocalDate dateCotisation, boolean notifOffre,
-                boolean notifEvenement) {
-        this(0, nom, prenom, email, password, isAdmin, anneeDiplome, typeEtude, isAdherent, dateCotisation, notifOffre, notifEvenement);
+                boolean notifEvenement, boolean isBanned) {
+        this(0, nom, prenom, email, password, isAdmin, anneeDiplome, typeEtude, isAdherent, dateCotisation, notifOffre, notifEvenement, isBanned);
     }
 
     public User(long idUser, String nom, String prenom, String email, String password, boolean isAdmin,
                 int anneeDiplome, TypeEtude typeEtude, boolean isAdherent, LocalDate dateCotisation, boolean notifOffre,
-                boolean notifEvenement) {
+                boolean notifEvenement, boolean isBanned) {
         this.idUser = idUser;
         this.nom = nom;
         this.prenom = prenom;
@@ -73,6 +74,7 @@ public class User {
         this.dateCotisation = dateCotisation;
         this.notifOffre = notifOffre;
         this.notifEvenement = notifEvenement;
+        this.isBanned = isBanned;
     }
 
     public long getIdUser() {
@@ -188,23 +190,24 @@ public class User {
         return messages;
     }
 
+    public boolean isBanned() {
+        return isBanned;
+    }
+
+    public void setBanned(boolean isBanned) {
+        this.isBanned = isBanned;
+    }
+
     @Override
     public String toString() {
-        return "User{" +
-                "idUser=" + idUser +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", isAdmin=" + isAdmin +
-                ", anneeDiplome=" + anneeDiplome +
-                ", typeEtude='" + typeEtude + '\'' +
-                ", isAdherent=" + isAdherent +
-                ", dateCotisation=" + dateCotisation +
-                ", notifOffre=" + notifOffre +
-                ", notifEvenement=" + notifEvenement +
-                '}';
+        return "User [idUser=" + idUser + ", nom=" + nom + ", prenom=" + prenom + ", email=" + email + ", password="
+                + password + ", isAdmin=" + isAdmin + ", anneeDiplome=" + anneeDiplome + ", typeEtude=" + typeEtude
+                + ", isAdherent=" + isAdherent + ", dateCotisation=" + dateCotisation + ", notifOffre=" + notifOffre
+                + ", notifEvenement=" + notifEvenement + ", isBanned=" + isBanned + ", etablissement=" + etablissement
+                + "]";
     }
+
+    
 
 
 }

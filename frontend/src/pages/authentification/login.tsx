@@ -10,7 +10,7 @@ export default function LoginPage(): JSX.Element {
 
     const navigate = useNavigate();
     const location = useLocation(); // Pour savoir d'où vient l'utilisateur
-    const { login } = useAuth(); // Récupérer la fonction login du contexte
+    const { login, logout } = useAuth(); // Récupérer la fonction login du contexte
 
     // Déterminer où rediriger après connexion
     const from = location.state?.from?.pathname || "/profile";
@@ -20,6 +20,12 @@ export default function LoginPage(): JSX.Element {
         try {
             // Vérification des identifiants
             const user : User = await findUserByCredentials(email, password);
+
+            if (user.banned) {
+                logout(); //On deconnecte l'utilisateur s'il était déjà connecté
+                setError("Votre compte a été banni !! Vous avez du mal vous comporter... Envoyez un mail à pierre.saussereau@gmail.com pour vous plaindre.");
+                return;
+            }
 
             console.log(user);
             // Enregistrer l'utilisateur dans le contexte

@@ -21,9 +21,9 @@ public class Etablissement {
     @OneToMany(mappedBy = "etablissement")
     private List<User> users;
 
-    @OneToOne
-    @JoinColumn(name = "idAdresse")
-    private Adresse adresse;
+    // @OneToOne
+    // @JoinColumn(name = "idAdresse")
+    // private Adresse adresse;
 
     public Etablissement() {
     }
@@ -32,11 +32,10 @@ public class Etablissement {
         this.idEtablissement = idEtablissement;
     }
 
-    public Etablissement(long idEtablissement, String nom, List<User> users, Adresse adresse) {
+    public Etablissement(long idEtablissement, String nom, List<User> users) {
         this.idEtablissement = idEtablissement;
         this.nom = nom;
         this.users = users;
-        this.adresse = adresse;
     }
 
     public long getIdEtablissement() {
@@ -63,12 +62,12 @@ public class Etablissement {
         this.users = users;
     }
 
-    public Adresse getAdresse() {
-        return adresse;
-    }
+    // public Adresse getAdresse() {
+    //     return adresse;
+    // }
 
-    public void setAdresse(Adresse adresse) {
-        this.adresse = adresse;
-    }
+    // public void setAdresse(Adresse adresse) {
+    //     this.adresse = adresse;
+    // }
 
 }

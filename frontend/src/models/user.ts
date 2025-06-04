@@ -1,3 +1,4 @@
+import { Etablissement } from "./etablissement";
 
 export enum TypeEtude {
     Informatique = 0,
@@ -50,6 +51,9 @@ export interface User {
     dateCotisation: Date | undefined;
     notifOffre: boolean;
     notifEvenement: boolean;
+    banned: boolean;
+    etablissement?: Etablissement;
+    
 }
 
 const SPRING_API = process.env.REACT_APP_SPRING_URL_ENDPOINT;
@@ -168,4 +172,46 @@ const findUserByCredentials = async (username: string, password: string): Promis
     return await response.json() as User;
 };
 
-export { getAllUsers, createUser, updateUser, deleteUser, findUserByCredentials }
+const isUserBanned = async (userId: number): Promise<boolean> => {
+    const url = `${SPRING_API}/user/isBanned`;
+
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId }),
+        cache: "no-store",
+    });
+
+    if (!response.ok) {
+        if(response.status === 404) {
+            throw new Error('Utilisateur inconnu');
+        }
+
+        throw new Error('Unknown error');
+    }
+
+    return await response.json() as boolean;
+};
+
+export const banUser = async (userId: any) => {
+    const url = `${SPRING_API}/user/ban`;
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to ban user');
+    }
+
+    return response.json();
+};
+
+export { getAllUsers, isUserBanned, createUser, updateUser, deleteUser, findUserByCredentials }

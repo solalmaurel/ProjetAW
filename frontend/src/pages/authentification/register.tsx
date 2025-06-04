@@ -105,7 +105,8 @@ export default function RegisterPage(): JSX.Element {
             adherent: false,
             dateCotisation: undefined,
             notifOffre: false,
-            notifEvenement: false
+            notifEvenement: false,
+            banned : false
         };
 
         try {

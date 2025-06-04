@@ -2,12 +2,15 @@ import { JSX } from 'react/jsx-runtime';
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getAllUsers, User } from "../../models/user";
+import { banUser, getAllUsers, User } from "../../models/user";
 import Navbar from '../../layout/navbar';
+import BanUserModal from './bannirModal';
 
-export default function RegisteredPage() {
+export default function RegisteredList() {
     const [registered, setRegistered] = useState<User[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -21,6 +24,29 @@ export default function RegisteredPage() {
 
         fetchUsers();
     }, []);
+
+    const handleBanUser = (user: User) => {
+        console.log("User selected for banning:", user);
+        setSelectedUser(user);
+        setIsModalOpen(true);
+    };
+
+    const confirmBanUser = async () => {
+        if (selectedUser) {
+            try {
+                console.log("User selected for banning:", selectedUser.idUser);
+                await banUser(selectedUser.idUser);
+                setRegistered(registered.map(user =>
+                    user.idUser === selectedUser.idUser ? { ...user, isBanned: true } : user
+                ));
+            } catch (err) {
+                setError("Erreur lors du bannissement de l'utilisateur");
+            } finally {
+                setIsModalOpen(false);
+                setSelectedUser(null);
+            }
+        }
+    };
 
      return (
         <div className="flex flex-col min-h-screen">
@@ -77,26 +103,36 @@ export default function RegisteredPage() {
                         <th>Date de Cotisation</th>
                         <th>Notifications Offres</th>
                         <th>Notifications Événements</th>
+                        <th>Banni</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {registered.map(user => (
-                        <tr key={user.idUser}>
-                            <td>{user.nom}</td>
-                            <td>{user.prenom}</td>
-                            <td>{user.email}</td>
-                            <td>{user.admin ? 'Oui' : 'Non'}</td>
-                            <td>{user.anneeDiplome}</td>
-                            <td>{user.typeEtude}</td>
-                            <td>{user.adherent ? 'Oui' : 'Non'}</td>
-                            <td>{user.dateCotisation ? new Date(user.dateCotisation).toLocaleDateString() : 'N/A'}</td>
-                            <td>{user.notifOffre ? 'Oui' : 'Non'}</td>
-                            <td>{user.notifEvenement ? 'Oui' : 'Non'}</td>
-                        </tr>
-                    ))}
-                </tbody>
+                        {registered.map(user => (
+                            <tr key={user.idUser}>
+                                <td onClick={() => handleBanUser(user)} style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
+                                    {user.nom}
+                                </td>
+                                <td>{user.prenom}</td>
+                                <td>{user.email}</td>
+                                <td>{user.admin ? 'Oui' : 'Non'}</td>
+                                <td>{user.anneeDiplome}</td>
+                                <td>{user.typeEtude}</td>
+                                <td>{user.adherent ? 'Oui' : 'Non'}</td>
+                                <td>{user.dateCotisation ? new Date(user.dateCotisation).toLocaleDateString() : 'N/A'}</td>
+                                <td>{user.notifOffre ? 'Oui' : 'Non'}</td>
+                                <td>{user.notifEvenement ? 'Oui' : 'Non'}</td>
+                                <td>{user.banned ? 'Oui' : 'Non'}</td>
+                            </tr>
+                        ))}
+                    </tbody>
             </table>
         </div>
+        <BanUserModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={confirmBanUser}
+                userName={selectedUser ? `${selectedUser.prenom} ${selectedUser.nom}` : ''}
+            />
     </div>
     );
 }

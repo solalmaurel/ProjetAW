@@ -5,7 +5,7 @@ export interface Etablissement {
     idEtablissement: number | null;
     nom: string;
     //users?: User[]; 
-    adresse?: Adresse; 
+    //adresse?: Adresse; 
 }
 
 const SPRING_API = process.env.REACT_APP_SPRING_URL_ENDPOINT;

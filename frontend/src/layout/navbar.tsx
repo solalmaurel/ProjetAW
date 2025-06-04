@@ -1,11 +1,22 @@
-import { JSX } from "react";
+import { JSX, useEffect } from "react";
 import { Link } from "react-router";
 import {useAuth} from "../context/AuthContext";
-import { User } from "../models/user";
+import { isUserBanned, User } from "../models/user";
 
 export default function NavBar(): JSX.Element {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, logout } = useAuth();
     const {user}: { user: User } = useAuth();
+
+    useEffect(() => { 
+
+        console.log(user)
+        if(user === null) return;
+
+        isUserBanned(user.idUser!).then(val => {
+            if(val) logout();
+        }).catch(err => console.log(err));
+
+     }, [])
 
     return (
         <header className="bg-[#2196F3] text-white p-5 flex items-center justify-between">

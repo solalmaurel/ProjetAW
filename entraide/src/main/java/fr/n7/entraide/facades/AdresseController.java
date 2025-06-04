@@ -32,6 +32,10 @@ public class AdresseController {
 
     @PostMapping(path = "/create", produces=MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> createAdresse(@RequestBody Adresse adresse) {
+
+        if(adresseRepository.findAll().contains(adresse))
+         return ResponseHandler.generateResponse("Adresse déjà existante", HttpStatus.BAD_REQUEST);
+
         adresseRepository.save(adresse);
         return ResponseHandler.generateResponse("Adresse created successfully", HttpStatus.OK);
     }

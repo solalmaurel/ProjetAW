@@ -4,16 +4,14 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import Footer from "../../layout/footer";
 import NavBar from "../../layout/navbar";
-import {Evenement, participerEvenement} from '../../models/evenement';
+import {Evenement} from '../../models/evenement';
 import allLocales from '@fullcalendar/core/locales-all'
-import {useNavigate} from 'react-router-dom';
-
-import {createEvenement, getAllEvenements, deleteEvenement} from '../../models/evenement';
+import {createEvenement, getAllEvenements} from '../../models/evenement';
 import {Adresse, createAdresse, getAllAdresses} from "../../models/adresse";
 import {JSX} from 'react/jsx-runtime';
-import {useAuth} from '../../context/AuthContext';
-import {Item, TypeFacture} from "../../models/payment";
-import {User} from "../../models/user";
+
+import { AdresseForm } from './adressForm';
+import EventPopup from './eventPopUp';
 
 const themeValues = ['SPORT',
     'LANGUES',
@@ -379,7 +377,8 @@ export default function EventPage(): JSX.Element {
                                                     <li
                                                         key={adresse.idAdresse}
                                                         className="px-3 py-2 hover:bg-gray-200 cursor-pointer"
-                                                        onClick={() => handleAddressSelect(adresse)}
+                                                        onClick={() => 
+                                                            (adresse)}
                                                     >
                                                         {`${adresse.numero} ${adresse.rue}, ${adresse.codePostal} ${adresse.ville}`}
                                                     </li>
@@ -426,78 +425,12 @@ export default function EventPage(): JSX.Element {
                         </form>
                     )}
                     {showAdresseForm && (
-                        <form className="w-5/6 p-5 border border-1 rounded-lg" onSubmit={handleSubmitAdress}>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Numéro</label>
-                                <input
-                                    type="text"
-                                    name="numero"
-                                    value={newAdresse.numero}
-                                    onChange={handleInputChangeAdress}
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    required
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Complément</label>
-                                <input
-                                    type="text"
-                                    name="complement"
-                                    value={newAdresse.complement}
-                                    onChange={handleInputChangeAdress}
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Rue</label>
-                                <input
-                                    type="text"
-                                    name="rue"
-                                    value={newAdresse.rue}
-                                    onChange={handleInputChangeAdress}
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    required
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Code Postal</label>
-                                <input
-                                    type="text"
-                                    name="codePostal"
-                                    value={newAdresse.codePostal}
-                                    onChange={handleInputChangeAdress}
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    required
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2">Ville</label>
-                                <input
-                                    type="text"
-                                    name="ville"
-                                    value={newAdresse.ville}
-                                    onChange={handleInputChangeAdress}
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    required
-                                />
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <button
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                    type="submit"
-                                >
-                                    Créer
-                                </button>
-                                <button
-                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                    type="button"
-                                    onClick={() => setShowAdresseForm(false)}
-                                >
-                                    Annuler
-                                </button>
-                            </div>
-                        </form>
-                    )}
+                        <AdresseForm
+                        newAdresse={newAdresse}
+                        setNewAdress={setNewAdress}
+                        handleSubmitAdress={handleSubmitAdress}
+                        setShowAdresseForm={setShowAdresseForm}
+                    />)}
                     <FullCalendar
                         locales={allLocales}
                         locale={'fr'}
@@ -549,111 +482,6 @@ export default function EventPage(): JSX.Element {
                     setEvents={setEvents}
                 />
             )}
-        </div>
-    );
-}
-
-function EventPopup({event, onClose, setEvents}: {
-    event: Evenement;
-    onClose: () => void;
-    setEvents: React.Dispatch<React.SetStateAction<Evenement[]>>
-}) {
-
-    const handleDeleteEvent = async (id: number | null) => {
-        try {
-            if (id != null) {
-                await deleteEvenement(id);
-                setEvents(prev => prev.filter(event => event.idEvenement !== id));
-            }
-        } catch (err) {
-            console.error("Erreur lors de la suppression :", err);
-        }
-    };
-
-    const {user}: { user: User } = useAuth();
-    const navigate = useNavigate();
-
-    const handleParticiper = async (eventId: number | null) => {
-        if (user == null) {
-            //alert("Veuillez vous connecter pour participer à cet événement.");
-            navigate('/login');
-            return;
-        }
-
-        const eventItem: Item = {
-            itemName: "Participation à un évenement : " + event.nom,
-            amount: 1,
-            unitPrice: user.adherent ? event.prixAdherent : event.prixNormal,
-            typeFacture: TypeFacture.EVENEMENT,
-            urlCallback: `/callback?type=${TypeFacture.EVENEMENT}&idEvenement=${event.idEvenement}`,
-        };
-
-        if (eventItem.unitPrice > 0) {
-            navigate('/payment', {state: eventItem});
-        } else {
-            navigate(eventItem.urlCallback);
-        }
-
-    };
-
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="relative p-4 w-full max-w-2xl max-h-full">
-                <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <div
-                        className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                            {event.nom}
-                        </h3>
-                        <button type="button"
-                                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                onClick={onClose}>
-                            <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                 viewBox="0 0 14 14">
-                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                            </svg>
-                            <span className="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    <div className="p-4 md:p-5 space-y-4">
-                        <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400">
-                            {event.description}
-                        </p>
-                        <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400">
-                            L'évènement aura lieu
-                            du {new Date(event.dateDebut).toLocaleDateString()} au {new Date(event.dateDebut).toLocaleDateString()}.
-                        </p>
-                        <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400">
-                            Le coût d'inscription à cet évènement est de {event.prixNormal} € pour les adhérents
-                            et {event.prixAdherent} € sinon.
-                        </p>
-                        <p className="text-base leading-relaxed text-gray-400 dark:text-gray-400"
-                           style={{fontSize: '0.8rem'}}>
-                            Une fois payé, le montant ne pourra pas être remboursé, y compris en cas de désinscription,
-                            ou absence.
-                            Vous recevrez un mail confirmant votre participation, après payement.
-                        </p>
-                    </div>
-                    <div
-                        className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                        <button onClick={() => handleParticiper(event.idEvenement)}
-                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Participer
-                        </button>
-                        {user != null && user.admin && (
-                            <button onClick={() => handleDeleteEvent(event.idEvenement)}
-                                    className="ms-6 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-red-600 dark:focus:ring-red-700">Supprimer</button>
-                        )}
-                        <button onClick={() => navigate(`/evenement/${event.idEvenement}/participants`)}
-                                className=" ms-6 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Voir
-                            les participants
-                        </button>
-                        <button onClick={onClose}
-                                className="py-2.5 px-5 ms-6 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Annuler
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
     );
 }
